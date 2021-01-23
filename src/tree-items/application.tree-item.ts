@@ -15,6 +15,20 @@ export class ApplicationTreeItem extends vscode.TreeItem {
   }
 
   contextValue = "ApplicationTreeItem";
+}
+
+export class ApplicationRootTreeItem extends ApplicationTreeItem {
+  constructor(
+    public readonly label: string | undefined = '',
+    public readonly description: string | undefined = '',
+    public readonly clientId: string | undefined = '',
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly value?: string
+  ) {
+    super(label, description, clientId, collapsibleState, value);
+  }
+
+  contextValue = "ApplicationRootTreeItem";
 
   static fromClient(client: Client) {
     const appTypes: { [key: string]: string } = {
@@ -23,7 +37,7 @@ export class ApplicationTreeItem extends vscode.TreeItem {
       'non_interactive': 'Machine to Machine',
       'native': 'Native'
     };
-    return new ApplicationTreeItem(
+    return new ApplicationRootTreeItem(
       client.name || "",
       appTypes[client.app_type || ''],
       client.client_id || '',

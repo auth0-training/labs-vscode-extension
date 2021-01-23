@@ -59,6 +59,11 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`${e.label} copied to clipboard!`);
   });
 
+  vscode.commands.registerCommand("auth0.copyAsJson", (e) => {
+    const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
+    vscode.env.clipboard.writeText(JSON.stringify(client));
+    vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
+  });
 
   context.subscriptions.push(disposable);
 }

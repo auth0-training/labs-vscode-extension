@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { obfuscate, sortAlphabetically } from './../utils';
-import { ApplicationTreeItem } from '../tree-items/application.tree-item';
+import { ApplicationRootTreeItem, ApplicationTreeItem } from '../tree-items/application.tree-item';
 import { Client, ManagementClient } from 'auth0';
 import { buildCallbackUrlsChildren, buildRefreshTokenChildren, buildRootChildren } from '../tree-items/application.tree-item.builder';
 
@@ -50,7 +50,7 @@ export class ApplicationsTreeDataProvider
   private getTreeItems(parent?: ApplicationTreeItem): vscode.TreeItem[] {
 
     if (!parent) {
-      return this._clients.map((client) => ApplicationTreeItem.fromClient(client));
+      return this._clients.map((client) => ApplicationRootTreeItem.fromClient(client));
     }
 
     const client: any = parent && this._clients.find(({ client_id }) => client_id === parent.clientId)

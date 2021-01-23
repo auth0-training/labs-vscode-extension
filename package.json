@@ -28,6 +28,10 @@
         "command": "auth0.copyValue",
         "title": "Copy Value",
         "icon": "$(files)"
+      },
+      {
+        "command": "auth0.copyAsJson",
+        "title": "Copy as JSON"
       }
     ],
     "viewsContainers": {
@@ -68,6 +72,11 @@
           "when": "view == auth0-app-explorer && viewItem == ValueTreeItem",
           "command": "auth0.copyValue",
           "group": "inline"
+        },
+        {
+          "when": "view == auth0-app-explorer && viewItem == ApplicationRootTreeItem",
+          "command": "auth0.copyAsJson",
+          "group": "navigation"
         }
       ]
     }
