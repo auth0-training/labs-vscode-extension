@@ -62,9 +62,8 @@ export class ApplicationsTreeDataProvider
         return buildCallbackUrlsChildren(client);
       case client.name:
         return buildRootChildren(client);
-
       default:
-        return []
+        return [];
     }
   }
 }
