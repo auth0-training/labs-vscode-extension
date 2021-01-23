@@ -54,6 +54,10 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('refresh apps');
   });
 
+  vscode.commands.registerCommand("auth0.copyValue", (e) => {
+    vscode.env.clipboard.writeText(e.value);
+    vscode.window.showInformationMessage(`${e.label} copied to clipboard!`);
+  });
 
 
   context.subscriptions.push(disposable);

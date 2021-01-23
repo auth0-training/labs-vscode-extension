@@ -23,6 +23,11 @@
         "command": "auth0.refreshApps",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "auth0.copyValue",
+        "title": "Copy Value",
+        "icon": "$(files)"
       }
     ],
     "viewsContainers": {
@@ -56,6 +61,13 @@
           "command": "auth0.refreshApps",
           "when": "view == auth0-app-explorer",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "when": "view == auth0-app-explorer && viewItem == ValueTreeItem",
+          "command": "auth0.copyValue",
+          "group": "inline"
         }
       ]
     }

@@ -1,20 +1,19 @@
 import * as vscode from 'vscode';
 import { Client } from "auth0";
 import { ApplicationTreeItem } from "./application.tree-item";
+import { ValueTreeItem } from "./value.tree-item";
 import { obfuscate } from '../utils';
 
 export function buildRootChildren(client: Client & { refresh_token : any }) {
   const children = [
-    new ApplicationTreeItem(
+    new ValueTreeItem(
       'Client ID',
-      client.client_id,
       client.client_id,
       vscode.TreeItemCollapsibleState.None
     ),
-    new ApplicationTreeItem(
+    new ValueTreeItem(
       'Client Secret',
       obfuscate(client.client_secret),
-      client.client_id,
       vscode.TreeItemCollapsibleState.None,
       client.client_secret
     ),
@@ -44,10 +43,9 @@ export function buildRootChildren(client: Client & { refresh_token : any }) {
 }
 
 export function buildCallbackUrlsChildren(client: Client | undefined) {
-  return client?.callbacks?.map(callback => new ApplicationTreeItem(
+  return client?.callbacks?.map(callback => new ValueTreeItem(
     callback,
     '',
-    client.client_id,
     vscode.TreeItemCollapsibleState.None
   )) || [];
 }

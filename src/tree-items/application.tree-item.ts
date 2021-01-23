@@ -14,7 +14,7 @@ export class ApplicationTreeItem extends vscode.TreeItem {
     this.tooltip = `${this.label}`;
   }
 
-  contextValue = "auth0Item";
+  contextValue = "ApplicationTreeItem";
 
   static fromClient(client: Client) {
     const appTypes: { [key: string]: string } = {

@@ -10,7 +10,7 @@ const TREE_ITEM_LABELS = {
 }
 
 export class ApplicationsTreeDataProvider
-  implements vscode.TreeDataProvider<ApplicationTreeItem> {
+  implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
     ApplicationTreeItem | undefined | void
   > = new vscode.EventEmitter<ApplicationTreeItem | undefined | void>();
@@ -26,7 +26,7 @@ export class ApplicationsTreeDataProvider
     return element;
   }
 
-  getChildren(element?: ApplicationTreeItem): Thenable<ApplicationTreeItem[]> {
+  getChildren(element?: ApplicationTreeItem): Thenable<vscode.TreeItem[]> {
     return this.getClients().then(() => {
       if (element) {
         return this.getTreeItems(element);
@@ -47,7 +47,7 @@ export class ApplicationsTreeDataProvider
     return this._clients;
   }
 
-  private getTreeItems(parent?: ApplicationTreeItem): ApplicationTreeItem[] {
+  private getTreeItems(parent?: ApplicationTreeItem): vscode.TreeItem[] {
 
     if (!parent) {
       return this._clients.map((client) => ApplicationTreeItem.fromClient(client));
