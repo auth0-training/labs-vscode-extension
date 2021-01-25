@@ -1,11 +1,28 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { ManagementClient } from "auth0";
 import * as vscode from "vscode";
+import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
   let domain: string | undefined;
+
+  const client = new ManagementClient({
+    clientId: '',
+    clientSecret: '',
+    domain: ''
+  });
+
+  const applicationsTreeDataProvider = new ApplicationsTreeDataProvider(
+    client
+  );
+
+  vscode.window.registerTreeDataProvider(
+    "auth0-app-explorer",
+    applicationsTreeDataProvider
+  );
 
   let disposable = vscode.commands.registerCommand(
     "auth0.authenticate",
@@ -23,7 +40,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
       }
 
-      
+
 
       if (domain) {
         // Store basic auth details in global state
@@ -37,7 +54,16 @@ export async function activate(context: vscode.ExtensionContext) {
     console.log('refresh apps');
   });
 
-  
+  vscode.commands.registerCommand("auth0.copyValue", (e) => {
+    vscode.env.clipboard.writeText(e.value);
+    vscode.window.showInformationMessage(`${e.label} copied to clipboard!`);
+  });
+
+  vscode.commands.registerCommand("auth0.copyAsJson", (e) => {
+    const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
+    vscode.env.clipboard.writeText(JSON.stringify(client));
+    vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
+  });
 
   context.subscriptions.push(disposable);
 }
