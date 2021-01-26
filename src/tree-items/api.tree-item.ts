@@ -1,4 +1,4 @@
-import { Client, ResourceServer } from "auth0";
+import { ResourceServer } from "auth0";
 import * as vscode from "vscode";
 
 export class ApiTreeItem extends vscode.TreeItem {
@@ -23,19 +23,18 @@ export class ApiRootTreeItem extends ApiTreeItem {
     public readonly description: string | undefined = '',
     public readonly identifier: string | undefined = '',
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly value?: string
+    public readonly contextValue = "ApiRootTreeItem"
   ) {
-    super(label, description, identifier, collapsibleState, value);
+    super(label, description, identifier, collapsibleState, '');
   }
 
-  contextValue = "ApiRootTreeItem";
-
-  static fromResourceServer(resourceServer: ResourceServer) {
+  static fromResourceServer(resourceServer: ResourceServer & { is_system: boolean }) {
     return new ApiRootTreeItem(
       resourceServer.name || "",
       "",
       resourceServer.identifier || '',
       vscode.TreeItemCollapsibleState.Collapsed,
+      !resourceServer.is_system ? "ApiRootTreeItem" : "ApiRootTreeItem:System"
     );
   }
 }
