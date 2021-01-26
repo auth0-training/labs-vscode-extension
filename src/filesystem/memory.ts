@@ -76,7 +76,7 @@ export class MemFS implements vscode.FileSystemProvider {
   writeFile(
     uri: vscode.Uri,
     content: Uint8Array,
-    options: { create: boolean; overwrite: boolean, silent?: boolean }
+    options: { create: boolean; overwrite: boolean; silent?: boolean }
   ): void {
     const basename = path.posix.basename(uri.path);
     const parent = this._lookupParentDirectory(uri);

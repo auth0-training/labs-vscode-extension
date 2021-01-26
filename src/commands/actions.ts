@@ -10,8 +10,7 @@ export async function registerActionCommands(context: ExtensionContext) {
     });
   });
 
-  vscode.commands.registerCommand("auth0.refreshActions", () => {
+  vscode.commands.registerCommand('auth0.refreshActions', () => {
     actionsTreeDataProvider.refresh();
   });
-
 }

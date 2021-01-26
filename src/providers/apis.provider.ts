@@ -1,24 +1,22 @@
-import * as vscode from "vscode";
-import { sortAlphabetically } from "./../utils";
-import {
-  ApplicationTreeItem,
-} from "../tree-items/application.tree-item";
-import { Client, ManagementClient, ResourceServer } from "auth0";
-import { ApiRootTreeItem, ApiTreeItem } from "../tree-items/api.tree-item";
-import { buildRootChildren } from "../tree-items/api.tree-item.builder";
+import * as vscode from 'vscode';
+import { sortAlphabetically } from './../utils';
+import { ApplicationTreeItem } from '../tree-items/application.tree-item';
+import { Client, ManagementClient, ResourceServer } from 'auth0';
+import { ApiRootTreeItem, ApiTreeItem } from '../tree-items/api.tree-item';
+import { buildRootChildren } from '../tree-items/api.tree-item.builder';
 
-export class ApisTreeDataProvider
-  implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
     ApplicationTreeItem | undefined | void
   > = new vscode.EventEmitter<ApplicationTreeItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<
-    ApplicationTreeItem | undefined | void
-  > = this._onDidChangeTreeData.event;
+  readonly onDidChangeTreeData: vscode.Event<ApplicationTreeItem | undefined | void> = this
+    ._onDidChangeTreeData.event;
 
   public _resourceServers: ResourceServer[] = [];
 
-  constructor(private _client: ManagementClient) {}
+  constructor(private _client: ManagementClient) {
+    // noop
+  }
 
   getTreeItem(element: ApiTreeItem): vscode.TreeItem {
     return element;
@@ -40,7 +38,7 @@ export class ApisTreeDataProvider
     if (!this._resourceServers || !this._resourceServers.length) {
       const resourceServers = await this._client.getResourceServers();
       this._resourceServers = resourceServers.sort(
-        sortAlphabetically<Client>((item) => item.name || "")
+        sortAlphabetically<Client>((item) => item.name || '')
       );
     }
 
@@ -50,11 +48,15 @@ export class ApisTreeDataProvider
   private getTreeItems(parent?: ApiTreeItem): vscode.TreeItem[] {
     if (!parent) {
       return this._resourceServers.map((resourceServer) =>
-        ApiRootTreeItem.fromResourceServer(resourceServer as ResourceServer & { is_system: boolean })
+        ApiRootTreeItem.fromResourceServer(
+          resourceServer as ResourceServer & { is_system: boolean }
+        )
       );
     }
 
-    const resourceServer = this._resourceServers.find(({ identifier }) => identifier === parent.identifier) as ResourceServer & { is_system: boolean };
+    const resourceServer = this._resourceServers.find(
+      ({ identifier }) => identifier === parent.identifier
+    ) as ResourceServer & { is_system: boolean };
 
     if (!resourceServer) {
       return [];

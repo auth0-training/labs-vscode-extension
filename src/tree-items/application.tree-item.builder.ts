@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import { Client } from "auth0";
-import { ApplicationTreeItem } from "./application.tree-item";
-import { ApplicationValueTreeItem } from "./application-value.tree-item";
+import { Client } from 'auth0';
+import { ApplicationTreeItem } from './application.tree-item';
+import { ApplicationValueTreeItem } from './application-value.tree-item';
 import { obfuscate } from '../utils';
 
-export function buildRootChildren(client: Client & { refresh_token : any }) {
+export function buildRootChildren(client: Client & { refresh_token: any }) {
   const children = [
     new ApplicationValueTreeItem(
       'Client ID',
       client.client_id,
       client.client_id,
       vscode.TreeItemCollapsibleState.None,
-      client.client_id,
+      client.client_id
     ),
     new ApplicationValueTreeItem(
       'Client Secret',
@@ -48,14 +48,19 @@ export function buildRootChildren(client: Client & { refresh_token : any }) {
 }
 
 export function buildCallbackUrlsChildren(client: Client | undefined) {
-  return client?.callbacks?.map(callback => new ApplicationValueTreeItem(
-    callback,
-    '',
-    client.client_id,
-    vscode.TreeItemCollapsibleState.None,
-    callback,
-    'ApplicationValueTreeItem:CallbackUrl'
-  )) || [];
+  return (
+    client?.callbacks?.map(
+      (callback) =>
+        new ApplicationValueTreeItem(
+          callback,
+          '',
+          client.client_id,
+          vscode.TreeItemCollapsibleState.None,
+          callback,
+          'ApplicationValueTreeItem:CallbackUrl'
+        )
+    ) || []
+  );
 }
 
 export function buildRefreshTokenChildren(client: Client & { refresh_token: any }) {

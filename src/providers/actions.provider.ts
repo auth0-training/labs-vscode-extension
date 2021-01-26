@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { stringToByteArray, sortAlphabetically } from './../utils';
 import { ActionRootTreeItem, ActionTreeItem } from '../tree-items/action.tree-item';
 import { getActions, getActionVersionsDraft, upsertActionVersionsDraft } from '../store/api';
-import { fileSystemProvider } from "../filesystem";
+import { fileSystemProvider } from '../filesystem';
 import { buildRootChildren } from '../tree-items/action.tree-item.builder';
 import { store } from '../store';
 
@@ -17,7 +17,7 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
 
   constructor() {
     fileSystemProvider.onDidChangeFile(async (events) => {
-      for (let event of events) {
+      for (const event of events) {
         const action = store.actions.find((a: any) => {
           return a.uri.toString() === event.uri.toString();
         });
@@ -26,7 +26,7 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
           code: eventFile.toString(),
           runtime: action.draft.runtime,
           dependencies: action.draft.dependencies,
-          secrets: []
+          secrets: [],
         });
       }
     });
@@ -63,9 +63,15 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
 
       this._actions = actionsWithDraft.sort(sortAlphabetically<any>((item) => item.name || ''));
 
-      for (let action of this._actions) {
-        action.uri = vscode.Uri.parse(`auth0-actions://${action.id}/${encodeURIComponent(action.name)}.js`);
-        await fileSystemProvider.writeFile(action.uri, stringToByteArray(action.draft.code), { create: true, overwrite: true, silent: true });
+      for (const action of this._actions) {
+        action.uri = vscode.Uri.parse(
+          `auth0-actions://${action.id}/${encodeURIComponent(action.name)}.js`
+        );
+        await fileSystemProvider.writeFile(action.uri, stringToByteArray(action.draft.code), {
+          create: true,
+          overwrite: true,
+          silent: true,
+        });
       }
     }
 

@@ -1,5 +1,5 @@
-import { ResourceServer } from "auth0";
-import * as vscode from "vscode";
+import { ResourceServer } from 'auth0';
+import * as vscode from 'vscode';
 
 export class ApiTreeItem extends vscode.TreeItem {
   constructor(
@@ -14,7 +14,7 @@ export class ApiTreeItem extends vscode.TreeItem {
     this.tooltip = `${this.label}`;
   }
 
-  contextValue = "ApiTreeItem";
+  contextValue = 'ApiTreeItem';
 }
 
 export class ApiRootTreeItem extends ApiTreeItem {
@@ -23,18 +23,18 @@ export class ApiRootTreeItem extends ApiTreeItem {
     public readonly description: string | undefined = '',
     public readonly identifier: string | undefined = '',
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly contextValue = "ApiRootTreeItem"
+    public readonly contextValue = 'ApiRootTreeItem'
   ) {
     super(label, description, identifier, collapsibleState, '');
   }
 
   static fromResourceServer(resourceServer: ResourceServer & { is_system: boolean }) {
     return new ApiRootTreeItem(
-      resourceServer.name || "",
-      "",
+      resourceServer.name || '',
+      '',
       resourceServer.identifier || '',
       vscode.TreeItemCollapsibleState.Collapsed,
-      !resourceServer.is_system ? "ApiRootTreeItem" : "ApiRootTreeItem:System"
+      !resourceServer.is_system ? 'ApiRootTreeItem' : 'ApiRootTreeItem:System'
     );
   }
 }

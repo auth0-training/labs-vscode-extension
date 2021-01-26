@@ -1,22 +1,26 @@
-var axios = require("axios").default;
-var qs = require("qs");
-import * as vscode from "vscode";
-import { keytar } from "./secrets";
+import axios from 'axios';
+import * as qs from 'qs';
+import * as vscode from 'vscode';
+import { keytar } from './secrets';
 
-const SECRET_KEY_SERVICE_NAME = "auth0-vsc-access-token";
-const clientId = "2iZo3Uczt5LFHacKdM0zzgUO2eG2uDjT";
-const audience = "https://*.auth0.com/api/v2/";
-let deviceCode = "";
+const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-access-token';
+const clientId = '2iZo3Uczt5LFHacKdM0zzgUO2eG2uDjT';
+const audience = 'https://*.auth0.com/api/v2/';
+let deviceCode = '';
 let interval = 3000; // 3 seconds
 
-async function setIntervalAsync(cb: () => {}, interval: number) {
+async function setIntervalAsync(cb: () => unknown, interval: number) {
   return new Promise((resolve, reject) => {
     const i = setInterval(async () => {
-      const data = await cb();
+      try {
+        const data = await cb();
 
-      if (data) {
-        clearInterval(i);
-        resolve(data);
+        if (data) {
+          clearInterval(i);
+          resolve(data);
+        }
+      } catch (err) {
+        return reject(err);
       }
     }, interval);
   });
@@ -30,28 +34,28 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
   }
 
   const options = {
-    method: "POST",
-    url: "https://auth0.auth0.com/oauth/device/code",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
+    method: 'POST',
+    url: 'https://auth0.auth0.com/oauth/device/code',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: qs.stringify({
       client_id: clientId,
       scope:
-        "openid read:roles read:client_grants read:clients read:client_keys read:connections create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:device_credentials read:rules read:actions update:actions delete:actions create:actions read:logs read:grants update:tenant_settings update:resource_servers create:clients update:clients delete:clients",
+        'openid read:roles read:client_grants read:clients read:client_keys read:connections create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:device_credentials read:rules read:actions update:actions delete:actions create:actions read:logs read:grants update:tenant_settings update:resource_servers create:clients update:clients delete:clients',
       audience: audience,
     }),
   };
 
-  const response = await axios.request(options);
+  const response = await axios.request(options as any);
 
   if (!response) {
-    return "No data in the response";
+    return 'No data in the response';
   }
 
   deviceCode = response.data.device_code;
   interval = response.data.interval;
 
   vscode.commands.executeCommand(
-    "vscode.open",
+    'vscode.open',
     vscode.Uri.parse(response.data.verification_uri_complete)
   );
 
@@ -59,24 +63,20 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
   await setIntervalAsync(async () => {
     try {
       const response = await axios.request({
-        method: "POST",
-        url: "https://auth0.auth0.com/oauth/token",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
+        method: 'POST',
+        url: 'https://auth0.auth0.com/oauth/token',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
         data: qs.stringify({
           client_id: clientId,
           device_code: deviceCode,
-          grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+          grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
         }),
       });
 
-      await keytar.setPassword(
-        SECRET_KEY_SERVICE_NAME,
-        "access_token",
-        response.data.access_token
-      );
+      await keytar.setPassword(SECRET_KEY_SERVICE_NAME, 'access_token', response.data.access_token);
 
       vscode.window.showInformationMessage(`Successful log in.`);
-      context.globalState.update("extensionState", "authenticated");
+      context.globalState.update('extensionState', 'authenticated');
       return response.data;
     } catch {
       return null;
@@ -85,10 +85,10 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
 }
 
 export function parseAccessToken(accessToken: string) {
-  const tokenParts = accessToken.split(".");
+  const tokenParts = accessToken.split('.');
 
-  const buff = Buffer.from(tokenParts[1], "base64");
-  const text = buff.toString("ascii");
+  const buff = Buffer.from(tokenParts[1], 'base64');
+  const text = buff.toString('ascii');
   return JSON.parse(text);
 }
 
@@ -103,7 +103,7 @@ export function getDomainFromToken(accessToken: string) {
   let domain = null;
 
   for (const aud of data.aud) {
-    if (aud.endsWith("/api/v2/")) {
+    if (aud.endsWith('/api/v2/')) {
       const audUrl = vscode.Uri.parse(aud);
       domain = audUrl.authority;
       break;
@@ -111,14 +111,14 @@ export function getDomainFromToken(accessToken: string) {
   }
 
   if (!domain) {
-    throw new Error("Audience not found");
+    throw new Error('Audience not found');
   }
 
   return domain;
 }
 
 export async function getAccessToken() {
-  const accessToken = await keytar.getPassword(SECRET_KEY_SERVICE_NAME, "access_token");
+  const accessToken = await keytar.getPassword(SECRET_KEY_SERVICE_NAME, 'access_token');
 
   if (!accessToken) {
     return '';

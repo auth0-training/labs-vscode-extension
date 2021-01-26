@@ -3,17 +3,14 @@
 // Ignoring this import because this module is built in to VSCode, so we don't
 // need to install the package ourselves - but TS complains.
 // @ts-ignore
-import * as keytarType from "keytar";
-import { env } from "vscode";
+import * as keytarType from 'keytar';
+import { env } from 'vscode';
 
 declare const __webpack_require__: typeof require;
 declare const __non_webpack_require__: typeof require;
 
 export function getNodeModule<T>(moduleName: string): T {
-  const r =
-    typeof __webpack_require__ === "function"
-      ? __non_webpack_require__
-      : require;
+  const r = typeof __webpack_require__ === 'function' ? __non_webpack_require__ : require;
   try {
     return r(`${env.appRoot}/node_modules.asar/${moduleName}`);
   } catch (err) {
@@ -30,4 +27,4 @@ export function getNodeModule<T>(moduleName: string): T {
   }
 }
 
-export const keytar = getNodeModule<typeof keytarType>("keytar");
+export const keytar = getNodeModule<typeof keytarType>('keytar');

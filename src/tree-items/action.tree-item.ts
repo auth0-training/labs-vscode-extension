@@ -1,5 +1,5 @@
-import { Client } from "auth0";
-import * as vscode from "vscode";
+import { Client } from 'auth0';
+import * as vscode from 'vscode';
 
 export class ActionTreeItem extends vscode.TreeItem {
   constructor(
@@ -13,7 +13,7 @@ export class ActionTreeItem extends vscode.TreeItem {
     this.tooltip = `${this.label}`;
   }
 
-  contextValue = "ActionTreeItem";
+  contextValue = 'ActionTreeItem';
 }
 
 export class ActionRootTreeItem extends ActionTreeItem {
@@ -26,7 +26,7 @@ export class ActionRootTreeItem extends ActionTreeItem {
     super(label, actionId, collapsibleState);
   }
 
-  contextValue = "ActionRootTreeItem";
+  contextValue = 'ActionRootTreeItem';
 
   static fromAction(action: any) {
     return new ActionRootTreeItem(

@@ -1,5 +1,5 @@
-import { Client } from "auth0";
-import * as vscode from "vscode";
+import { Client } from 'auth0';
+import * as vscode from 'vscode';
 
 export class ApplicationTreeItem extends vscode.TreeItem {
   constructor(
@@ -8,7 +8,7 @@ export class ApplicationTreeItem extends vscode.TreeItem {
     public readonly clientId: string | undefined = '',
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly value?: string,
-    public readonly contextValue = "ApplicationTreeItem"
+    public readonly contextValue = 'ApplicationTreeItem'
   ) {
     super(label, collapsibleState);
 
@@ -27,20 +27,20 @@ export class ApplicationRootTreeItem extends ApplicationTreeItem {
     super(label, description, clientId, collapsibleState, value);
   }
 
-  contextValue = "ApplicationRootTreeItem";
+  contextValue = 'ApplicationRootTreeItem';
 
   static fromClient(client: Client) {
     const appTypes: { [key: string]: string } = {
-      'regular_web': 'Regular Web App',
-      'spa': 'Single Page App',
-      'non_interactive': 'Machine to Machine',
-      'native': 'Native'
+      regular_web: 'Regular Web App',
+      spa: 'Single Page App',
+      non_interactive: 'Machine to Machine',
+      native: 'Native',
     };
     return new ApplicationRootTreeItem(
-      client.name || "",
+      client.name || '',
       appTypes[client.app_type || ''],
       client.client_id || '',
-      vscode.TreeItemCollapsibleState.Collapsed,
+      vscode.TreeItemCollapsibleState.Collapsed
     );
   }
 }

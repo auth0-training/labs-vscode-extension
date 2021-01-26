@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
 export class ValueTreeItem extends vscode.TreeItem {
   constructor(
@@ -7,11 +7,10 @@ export class ValueTreeItem extends vscode.TreeItem {
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly value?: string
   ) {
-
     super(label, collapsibleState);
 
     this.tooltip = `${this.label}`;
   }
 
-  contextValue = "ValueTreeItem";
+  contextValue = 'ValueTreeItem';
 }

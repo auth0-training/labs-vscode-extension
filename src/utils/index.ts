@@ -1,4 +1,4 @@
-import { TextEncoder } from "util";
+import { TextEncoder } from 'util';
 
 export const stringToByteArray = (value: string) => {
   return new TextEncoder().encode(value);
