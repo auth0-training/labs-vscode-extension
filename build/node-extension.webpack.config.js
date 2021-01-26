@@ -40,7 +40,8 @@ const config = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({ "global.GENTLY": false })
+    new webpack.DefinePlugin({ "global.GENTLY": false }),
+    new webpack.IgnorePlugin(/edge/)
   ],
 };
 module.exports = config;
