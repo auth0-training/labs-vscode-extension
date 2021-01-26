@@ -9,6 +9,7 @@ const tools = require('auth0-source-control-extension-tools')
 const extTools = require('auth0-extension-tools');
 import {load} from 'js-yaml';
 import * as fs from 'fs';
+import * as path from 'path';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -362,18 +363,22 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
   vscode.commands.registerCommand("auth0.deploy", async (e) => {
-    const filePath = e.path;
-    vscode.window.showInformationMessage('deploying' + filePath);
-
-    // assets = parsed yaml
-    try {
-      // TODO: use safeLoad instead
-      const assets = load(fs.readFileSync(filePath, 'utf8'))
-      const config = extTools.config();
-      config.setProvider(() => null);
-      await tools.deploy(assets, managementClient, config);
-    } catch (err) {
-      console.log(err);
+    if (managementClient) {
+      try {
+        const filePath = e.path;
+        vscode.window.showInformationMessage('Deploying: ' + path.basename(filePath));
+        // TODO: use safeLoad instead
+        const assets = load(fs.readFileSync(filePath, 'utf8'))
+        const config = extTools.config();
+        config.setProvider(() => null);
+        await tools.deploy(assets, managementClient, config);
+        vscode.window.showInformationMessage("Successfully deployed  " + path.basename(filePath));
+      } catch (err) {
+        console.log(err);
+        vscode.window.showErrorMessage("Deploy failed. Error: " + err.message);
+      }
+    } else {
+      vscode.window.showWarningMessage("You must first authenticate with Auth0");
     }
   });
 
