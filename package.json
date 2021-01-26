@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:auth0.app-explorer"
+    "onView:auth0.app-explorer",
+    "onCommand:auth0.deploy"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -36,6 +37,10 @@
       {
         "command": "auth0.copyAsJson",
         "title": "Copy as JSON"
+      },
+      {
+        "command": "auth0.deploy",
+        "title": "Deploy to Auth0"
       }
     ],
     "viewsContainers": {
@@ -88,6 +93,13 @@
           "command": "auth0.copyAsJson",
           "group": "navigation"
         }
+      ],
+      "explorer/context": [
+        {
+          "when": "resourceFilename == auth0.yml",
+          "command": "auth0.deploy",
+          "group": "navigation"
+        }
       ]
     }
   },
@@ -105,6 +117,7 @@
   "devDependencies": {
     "@types/auth0": "^2.20.9",
     "@types/glob": "^7.1.3",
+    "@types/js-yaml": "^4.0.0",
     "@types/mocha": "^8.0.0",
     "@types/node": "^12.19.15",
     "@types/polka": "^0.5.2",
@@ -126,6 +139,9 @@
     "axios": "^0.21.1",
     "keytar": "^7.3.0",
     "polka": "^0.5.2",
-    "qs": "^6.9.6"
+    "qs": "^6.9.6",
+    "auth0-extension-tools": "^1.5.2",
+    "auth0-source-control-extension-tools": "^4.2.0",
+    "js-yaml": "^4.0.0"
   }
 }

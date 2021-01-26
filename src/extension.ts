@@ -4,12 +4,18 @@ import { ManagementClient } from "auth0";
 import * as vscode from "vscode";
 import { initializeAuth, getAccessToken, getDomainFromToken } from "./auth";
 import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
+const tools = require('auth0-source-control-extension-tools')
+const extTools = require('auth0-extension-tools');
+import {load} from 'js-yaml';
+import * as fs from 'fs';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
   // TODO: Check if already logged in, set correct state, view, etc
   let applicationsTreeDataProvider: { _clients: any[]; };
+
+  let client: any = null;
 
   let disposable = vscode.commands.registerCommand(
     "auth0.signIn",
@@ -24,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       const domain = getDomainFromToken(accessToken);
-      const client = new ManagementClient({
+      client = new ManagementClient({
         token: accessToken,
         domain: domain
       });
@@ -57,6 +63,22 @@ export async function activate(context: vscode.ExtensionContext) {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
     vscode.env.clipboard.writeText(JSON.stringify(client));
     vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
+  });
+
+  vscode.commands.registerCommand("auth0.deploy", async (e) => {
+    const filePath = e.path;
+    vscode.window.showInformationMessage('deploying' + filePath);
+
+    // assets = parsed yaml
+    try {
+      // TODO: use safeLoad instead
+      const assets = load(fs.readFileSync(filePath, 'utf8'))
+      const config = extTools.config();
+      config.setProvider(() => null);
+      await tools.deploy(assets, client, config);
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   context.subscriptions.push(disposable);

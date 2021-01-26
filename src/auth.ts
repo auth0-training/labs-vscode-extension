@@ -37,7 +37,7 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
     data: qs.stringify({
       client_id: clientId,
       scope:
-        "openid read:roles read:client_grants read:clients read:client_keys read:connections read:resource_servers read:device_credentials read:rules read:actions read:logs read:grants",
+        "openid read:roles read:client_grants read:clients read:client_keys read:connections create:resource_servers read:resource_servers read:device_credentials read:rules read:actions read:logs read:grants update:tenant_settings update:resource_servers create:clients",
       audience: audience,
     }),
   };
