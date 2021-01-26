@@ -36,6 +36,14 @@ export class ApplicationsTreeDataProvider
     });
   }
 
+  async refresh() {
+    const clients = await this._client.getClients();
+    this._clients = clients.sort(
+      sortAlphabetically<Client>((item) => item.name || '')
+    );
+    this._onDidChangeTreeData.fire();
+  }
+
   private async getClients() {
     if (!this._clients || !this._clients.length) {
       const clients = await this._client.getClients();

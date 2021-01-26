@@ -26,6 +26,41 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "auth0.addApp",
+        "title": "Add",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "auth0.removeApp",
+        "title": "Remove",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "auth0.addCallbackUrl",
+        "title": "Add Callback URL",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "auth0.removeCallbackUrl",
+        "title": "Remove Callback URL",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "auth0.editRotationType",
+        "title": "Edit Rotation Type",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "auth0.editTokenLifetime",
+        "title": "Edit Token Lifetime",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "auth0.editLeeway",
+        "title": "Edit Leeway",
+        "icon": "$(edit)"
+      },
+      {
         "command": "auth0.helloAuziros",
         "title": "HelloAuziros"
       },
@@ -71,6 +106,11 @@
     "menus": {
       "view/title": [
         {
+          "command": "auth0.addApp",
+          "when": "view == auth0.app-explorer",
+          "group": "navigation"
+        },
+        {
           "command": "auth0.refreshApps",
           "when": "view == auth0.app-explorer",
           "group": "navigation"
@@ -84,7 +124,7 @@
       ],
       "view/item/context": [
         {
-          "when": "view == auth0.app-explorer && viewItem == ValueTreeItem",
+          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem",
           "command": "auth0.copyValue",
           "group": "inline"
         },
@@ -92,6 +132,36 @@
           "when": "view == auth0.app-explorer && viewItem == ApplicationRootTreeItem",
           "command": "auth0.copyAsJson",
           "group": "navigation"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationRootTreeItem",
+          "command": "auth0.removeApp",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationTreeItem:CallbackUrls",
+          "command": "auth0.addCallbackUrl",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:CallbackUrl",
+          "command": "auth0.removeCallbackUrl",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:RotationType",
+          "command": "auth0.editRotationType",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:TokenLifetime",
+          "command": "auth0.editTokenLifetime",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:Leeway",
+          "command": "auth0.editLeeway",
+          "group": "inline"
         }
       ],
       "explorer/context": [

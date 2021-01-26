@@ -7,14 +7,13 @@ export class ApplicationTreeItem extends vscode.TreeItem {
     public readonly description: string | undefined = '',
     public readonly clientId: string | undefined = '',
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly value?: string
+    public readonly value?: string,
+    public readonly contextValue = "ApplicationTreeItem"
   ) {
     super(label, collapsibleState);
 
     this.tooltip = `${this.label}`;
   }
-
-  contextValue = "ApplicationTreeItem";
 }
 
 export class ApplicationRootTreeItem extends ApplicationTreeItem {
