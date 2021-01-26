@@ -27,7 +27,7 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
   const accessToken = await getAccessToken();
 
   if (accessToken && isTokenValid(accessToken)) {
-    //return;
+    return;
   }
 
   const options = {
