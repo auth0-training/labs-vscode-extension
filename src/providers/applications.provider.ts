@@ -38,7 +38,7 @@ export class ApplicationsTreeDataProvider
 
   async refresh() {
     const clients = await this._client.getClients();
-    this._clients = clients.sort(
+    this._clients = clients.filter((c:any) => !c.global).sort(
       sortAlphabetically<Client>((item) => item.name || '')
     );
     this._onDidChangeTreeData.fire();
@@ -47,7 +47,7 @@ export class ApplicationsTreeDataProvider
   private async getClients() {
     if (!this._clients || !this._clients.length) {
       const clients = await this._client.getClients();
-      this._clients = clients.sort(
+      this._clients = clients.filter((c:any) => !c.global).sort(
         sortAlphabetically<Client>((item) => item.name || '')
       );
     }
