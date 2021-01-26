@@ -2,53 +2,46 @@
 // Import the module and reference it with the alias vscode in your code below
 import { ManagementClient } from "auth0";
 import * as vscode from "vscode";
+import { initializeAuth, getAccessToken, getDomainFromToken } from "./auth";
 import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-  let domain: string | undefined;
-
-  const client = new ManagementClient({
-    clientId: '',
-    clientSecret: '',
-    domain: ''
-  });
-
-  const applicationsTreeDataProvider = new ApplicationsTreeDataProvider(
-    client
-  );
-
-  vscode.window.registerTreeDataProvider(
-    "auth0-app-explorer",
-    applicationsTreeDataProvider
-  );
+  // TODO: Check if already logged in, set correct state, view, etc
 
   let disposable = vscode.commands.registerCommand(
-    "auth0.authenticate",
+    "auth0.signIn",
     async () => {
-      // The code you place here will be executed every time your command is executed
-      if (!domain) {
-        domain = await vscode.window.showInputBox({
-          placeHolder: "your-domain.us.auth0.com",
-          prompt: "Enter your Auth0 domain",
-          value: domain,
-          validateInput: (text: string) =>
-            text !== null && text !== undefined && text !== ""
-              ? ""
-              : "Enter your Auth0 domain",
-        });
+      await initializeAuth(context);
+
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        // TODO correctly handle error
+        throw new Error('Missing access token');
       }
 
+      const domain = getDomainFromToken(accessToken);
+      const client = new ManagementClient({
+        token: accessToken,
+        domain: domain
+      });
 
+      const applicationsTreeDataProvider = new ApplicationsTreeDataProvider(
+        client
+      );
 
-      if (domain) {
-        // Store basic auth details in global state
-        context.globalState.update("extensionState", { domain });
-        console.log(domain);
-      }
+      vscode.window.registerTreeDataProvider(
+        "auth0.app-explorer",
+        applicationsTreeDataProvider
+      );
     }
   );
+
+  disposable = vscode.commands.registerCommand('auth0.helloAuth0', async () => {
+    vscode.window.showInformationMessage('Hello Auzirios');
+  });
 
   vscode.commands.registerCommand("auth0.refreshApps", () => {
     console.log('refresh apps');
@@ -59,11 +52,11 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`${e.label} copied to clipboard!`);
   });
 
-  vscode.commands.registerCommand("auth0.copyAsJson", (e) => {
-    const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
-    vscode.env.clipboard.writeText(JSON.stringify(client));
-    vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
-  });
+  // vscode.commands.registerCommand("auth0.copyAsJson", (e) => {
+  //   const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
+  //   vscode.env.clipboard.writeText(JSON.stringify(client));
+  //   vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
+  // });
 
   context.subscriptions.push(disposable);
 }

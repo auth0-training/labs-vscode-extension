@@ -7,7 +7,7 @@ import { buildCallbackUrlsChildren, buildRefreshTokenChildren, buildRootChildren
 const TREE_ITEM_LABELS = {
   refreshTokens: 'Refresh Tokens',
   callbackUrls: 'Callback URLs'
-}
+};
 
 export class ApplicationsTreeDataProvider
   implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -53,7 +53,7 @@ export class ApplicationsTreeDataProvider
       return this._clients.map((client) => ApplicationRootTreeItem.fromClient(client));
     }
 
-    const client: any = parent && this._clients.find(({ client_id }) => client_id === parent.clientId)
+    const client: any = parent && this._clients.find(({ client_id }) => client_id === parent.clientId);
 
     switch (parent.label) {
       case TREE_ITEM_LABELS.refreshTokens:

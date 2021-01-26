@@ -10,19 +10,23 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:auth0-app-explorer"
+    "onView:auth0.app-explorer"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "auth0.authenticate",
-        "title": "Authenticate"
+        "command": "auth0.signIn",
+        "title": "Sign In"
       },
       {
         "command": "auth0.refreshApps",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "auth0.helloAuth0",
+        "title": "HelloAuth0"
       },
       {
         "command": "auth0.copyValue",
@@ -46,7 +50,7 @@
     "views": {
       "auth0-explorer": [
         {
-          "id": "auth0-app-explorer",
+          "id": "auth0.app-explorer",
           "name": "Applications",
           "icon": "media/auth0.svg",
           "contextualTitle": "Auth0 Explorer"
@@ -55,26 +59,32 @@
     },
     "viewsWelcome": [
       {
-        "view": "auth0-app-explorer",
-        "contents": "Welcome to Auth0!\n[Authenticate](command:auth0.authenticate)"
+        "view": "auth0.app-explorer",
+        "contents": "Manage your Auth0 account by signing in into your Auth0 tenant.\n\n[Sign In](command:auth0.signIn)"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "auth0.refreshApps",
-          "when": "view == auth0-app-explorer",
+          "when": "view == auth0.app-explorer",
           "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "auth0.signIn",
+          "when": "auth0:state != SignedIn"
         }
       ],
       "view/item/context": [
         {
-          "when": "view == auth0-app-explorer && viewItem == ValueTreeItem",
+          "when": "view == auth0.app-explorer && viewItem == ValueTreeItem",
           "command": "auth0.copyValue",
           "group": "inline"
         },
         {
-          "when": "view == auth0-app-explorer && viewItem == ApplicationRootTreeItem",
+          "when": "view == auth0.app-explorer && viewItem == ApplicationRootTreeItem",
           "command": "auth0.copyAsJson",
           "group": "navigation"
         }
@@ -96,11 +106,13 @@
     "@types/auth0": "^2.20.9",
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.0",
-    "@types/node": "^12.11.7",
+    "@types/node": "^12.19.15",
+    "@types/polka": "^0.5.2",
     "@types/vscode": "^1.51.0",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "eslint": "^7.9.0",
+    "express": "^4.17.1",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
     "ts-loader": "^8.0.3",
@@ -110,6 +122,10 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "auth0": "^2.30.0"
+    "auth0": "^2.32.0",
+    "axios": "^0.21.1",
+    "keytar": "^7.3.0",
+    "polka": "^0.5.2",
+    "qs": "^6.9.6"
   }
 }
