@@ -62,7 +62,7 @@ export async function activate(context: vscode.ExtensionContext) {
     applicationsTreeDataProvider.refresh();
   });
 
-  vscode.commands.registerCommand("auth0.addApp", async () => {
+  vscode.commands.registerCommand("auth0.app.add", async () => {
     const appTypes: { [key: string]: string } = {
       'Regular Web App': 'regular_web',
       'Single Page App': 'spa',
@@ -92,7 +92,7 @@ export async function activate(context: vscode.ExtensionContext) {
     applicationsTreeDataProvider.refresh();
   });
 
-  vscode.commands.registerCommand("auth0.removeApp", async (e) => {
+  vscode.commands.registerCommand("auth0.app.remove", async (e) => {
     await managementClient.deleteClient({
       client_id: e.clientId
     });
@@ -101,7 +101,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Client removed");
   });
 
-  vscode.commands.registerCommand("auth0.addCallbackUrl", async (e) => {
+  vscode.commands.registerCommand("auth0.app.addCallbackUrl", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
     const url = await vscode.window.showInputBox({
       placeHolder: "http://localhost:3000",
@@ -124,7 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`${url} added as a callback URL`);
   });
 
-  vscode.commands.registerCommand("auth0.removeCallbackUrl", async (e) => {
+  vscode.commands.registerCommand("auth0.app.removeCallbackUrl", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
     const url = e.label;
     const callbacks = (client?.callbacks || []).filter(cb => cb !== url);
@@ -136,7 +136,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`${url} removed as a callback URL`);
   });
 
-  vscode.commands.registerCommand("auth0.editRotationType", async (e) => {
+  vscode.commands.registerCommand("auth0.app.editRotationType", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId) as  Client & { refresh_token: any };
     const rotationTypes: { [key: string]: string } = {
       "Rotating": "rotating",
@@ -164,7 +164,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`Rotation Type set to ${rotationType}`);
   });
 
-  vscode.commands.registerCommand("auth0.editTokenLifetime", async (e) => {
+  vscode.commands.registerCommand("auth0.app.editTokenLifetime", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId) as  Client & { refresh_token: any };
 
     const token_lifetime = await vscode.window.showInputBox({
@@ -190,7 +190,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`Token Lifetime set to ${token_lifetime}`);
   });
 
-  vscode.commands.registerCommand("auth0.editLeeway", async (e) => {
+  vscode.commands.registerCommand("auth0.app.editLeeway", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId) as  Client & { refresh_token: any };
 
     const leeway = await vscode.window.showInputBox({
