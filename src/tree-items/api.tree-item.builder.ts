@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 import { ResourceServer } from "auth0";
-import { ApiTreeItem } from './api.tree-item';
 import { ApiValueTreeItem } from './api-value.tree-item';
 
-export function buildRootChildren(resourceServer: ResourceServer) {
+export function buildRootChildren(resourceServer: ResourceServer & { is_system : boolean }) {
   return [
     new ApiValueTreeItem(
       'Identifier',
@@ -18,7 +17,7 @@ export function buildRootChildren(resourceServer: ResourceServer) {
       resourceServer.identifier,
       vscode.TreeItemCollapsibleState.None,
       `${resourceServer.allow_offline_access}`,
-      'ApiValueTreeItem:AllowOfflineAccess'
+      !resourceServer.is_system ? 'ApiValueTreeItem:AllowOfflineAccess' : 'ApiValueTreeItem:AllowOfflineAccess:System'
     ),
     new ApiValueTreeItem(
       'Token Lifetime',
@@ -26,7 +25,7 @@ export function buildRootChildren(resourceServer: ResourceServer) {
       resourceServer.identifier,
       vscode.TreeItemCollapsibleState.None,
       `${resourceServer.token_lifetime}`,
-      'ApiValueTreeItem:TokenLifetime'
+      !resourceServer.is_system ? 'ApiValueTreeItem:TokenLifetime' : 'ApiValueTreeItem:TokenLifetime:System'
     ),
     new ApiValueTreeItem(
       'Token Lifetime (web)',
@@ -34,7 +33,7 @@ export function buildRootChildren(resourceServer: ResourceServer) {
       resourceServer.identifier,
       vscode.TreeItemCollapsibleState.None,
       `${resourceServer.token_lifetime_for_web}`,
-      'ApiValueTreeItem:TokenLifetimeWeb'
+      !resourceServer.is_system ? 'ApiValueTreeItem:TokenLifetimeWeb' : 'ApiValueTreeItem:TokenLifetimeWeb:System'
     ),
   ];
 }

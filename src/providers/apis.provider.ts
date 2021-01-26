@@ -50,11 +50,11 @@ export class ApisTreeDataProvider
   private getTreeItems(parent?: ApiTreeItem): vscode.TreeItem[] {
     if (!parent) {
       return this._resourceServers.map((resourceServer) =>
-        ApiRootTreeItem.fromResourceServer(resourceServer)
+        ApiRootTreeItem.fromResourceServer(resourceServer as ResourceServer & { is_system: boolean })
       );
     }
 
-    const resourceServer = this._resourceServers.find(({ identifier }) => identifier === parent.identifier);
+    const resourceServer = this._resourceServers.find(({ identifier }) => identifier === parent.identifier) as ResourceServer & { is_system: boolean };
 
     if (!resourceServer) {
       return [];
