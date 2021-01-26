@@ -1,3 +1,9 @@
+import { TextEncoder } from "util";
+
+export const stringToByteArray = (value: string) => {
+  return new TextEncoder().encode(value);
+};
+
 export const sortAlphabetically = <TItem>(
   projection: (item: TItem) => string,
   mode: 'asc' | 'desc' = 'asc'

@@ -110,6 +110,16 @@
         "command": "auth0.api.editTokenLifetimeWeb",
         "title": "Edit Token Lifetime (web)",
         "icon": "$(edit)"
+      },
+      {
+        "command": "auth0.openAction",
+        "title": "Open Action",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "auth0.refreshActions",
+        "title": "Refresh Actions",
+        "icon": "$(refresh)"
       }
     ],
     "viewsContainers": {
@@ -132,6 +142,12 @@
         {
           "id": "auth0.api-explorer",
           "name": "APIs",
+          "contextualTitle": "Auth0 Explorer"
+        },
+        {
+          "id": "auth0.actions-explorer",
+          "name": "Actions",
+          "icon": "media/auth0.svg",
           "contextualTitle": "Auth0 Explorer"
         }
       ]
@@ -163,12 +179,41 @@
           "command": "auth0.api.add",
           "when": "view == auth0.api-explorer",
           "group": "navigation"
+        },
+        {
+          "command": "auth0.refreshActions",
+          "when": "view == auth0.actions-explorer",
+          "group": "navigation"
         }
       ],
       "commandPalette": [
         {
-          "command": "auth0.signIn",
-          "when": "auth0:state != SignedIn"
+          "command": "auth0.api.remove",
+          "when": "false"
+        },
+        {
+          "command": "auth0.copyValue",
+          "when": "false"
+        },
+        {
+          "command": "auth0.copyAsJson",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.copyAsJson",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.editAllowOfflineAccess",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.editTokenLifetime",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.editTokenLifetimeWeb",
+          "when": "false"
         }
       ],
       "view/item/context": [
@@ -241,6 +286,11 @@
           "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem:TokenLifetimeWeb",
           "command": "auth0.api.editTokenLifetimeWeb",
           "group": "inline"
+        },
+        {
+          "command": "auth0.openAction",
+          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
+          "group": "inline"
         }
       ],
       "explorer/context": [
@@ -248,36 +298,6 @@
           "when": "resourceFilename == auth0.yml",
           "command": "auth0.deploy",
           "group": "navigation"
-        }
-      ],
-      "commandPalette": [
-        {
-          "command": "auth0.api.remove",
-          "when": "false"
-        },
-        {
-          "command": "auth0.copyValue",
-          "when": "false"
-        },
-        {
-          "command": "auth0.copyAsJson",
-          "when": "false"
-        },
-        {
-          "command": "auth0.api.copyAsJson",
-          "when": "false"
-        },
-        {
-          "command": "auth0.api.editAllowOfflineAccess",
-          "when": "false"
-        },
-        {
-          "command": "auth0.api.editTokenLifetime",
-          "when": "false"
-        },
-        {
-          "command": "auth0.api.editTokenLifetimeWeb",
-          "when": "false"
         }
       ]
     }
@@ -307,6 +327,7 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
+    "prettier": "^2.2.1",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
     "vscode-test": "^1.4.0",
@@ -322,5 +343,17 @@
     "auth0-extension-tools": "^1.5.2",
     "auth0-source-control-extension-tools": "^4.2.0",
     "js-yaml": "^4.0.0"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "quoteProps": "consistent",
+    "semi": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
   }
 }

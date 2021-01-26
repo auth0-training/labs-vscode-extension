@@ -1,15 +1,19 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { Client, ManagementClient } from "auth0";
-import * as vscode from "vscode";
-import { initializeAuth, getAccessToken, getDomainFromToken } from "./auth";
-import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
-import { ApisTreeDataProvider } from "./providers/apis.provider";
-const tools = require('auth0-source-control-extension-tools')
-const extTools = require('auth0-extension-tools');
-import {load} from 'js-yaml';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Client, ManagementClient } from "auth0";
+import * as vscode from "vscode";
+import { initializeAuth, getAccessToken } from "./auth";
+import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
+import { ApisTreeDataProvider } from "./providers/apis.provider";
+import {load} from 'js-yaml';
+import { registerTreeDataProviders } from "./providers";
+import { registerCommands } from "./commands";
+import { registerFileSystemProvider } from "./filesystem";
+import { getClientWithToken } from "./store/api";
+const tools = require('auth0-source-control-extension-tools');
+const extTools = require('auth0-extension-tools');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -18,6 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
   let applicationsTreeDataProvider: ApplicationsTreeDataProvider;
   let apisTreeDataProvider: ApisTreeDataProvider;
   let managementClient: ManagementClient;
+
   let disposable = vscode.commands.registerCommand(
     "auth0.signIn",
     async () => {
@@ -30,11 +35,7 @@ export async function activate(context: vscode.ExtensionContext) {
         throw new Error('Missing access token');
       }
 
-      const domain = getDomainFromToken(accessToken);
-      managementClient = new ManagementClient({
-        token: accessToken,
-        domain: domain
-      });
+      managementClient = await getClientWithToken(accessToken);
 
       applicationsTreeDataProvider = new ApplicationsTreeDataProvider(
         managementClient
@@ -51,6 +52,10 @@ export async function activate(context: vscode.ExtensionContext) {
         "auth0.api-explorer",
         apisTreeDataProvider
       );
+
+      registerFileSystemProvider();
+      registerTreeDataProviders();
+      registerCommands(context);
     }
   );
 
