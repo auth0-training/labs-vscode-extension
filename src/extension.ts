@@ -4,6 +4,7 @@ import { Client, ManagementClient } from "auth0";
 import * as vscode from "vscode";
 import { initializeAuth, getAccessToken, getDomainFromToken } from "./auth";
 import { ApplicationsTreeDataProvider } from "./providers/applications.provider";
+import { ApisTreeDataProvider } from "./providers/apis.provider";
 const tools = require('auth0-source-control-extension-tools')
 const extTools = require('auth0-extension-tools');
 import {load} from 'js-yaml';
@@ -14,6 +15,7 @@ import * as fs from 'fs';
 export async function activate(context: vscode.ExtensionContext) {
   // TODO: Check if already logged in, set correct state, view, etc
   let applicationsTreeDataProvider: ApplicationsTreeDataProvider;
+  let apisTreeDataProvider: ApisTreeDataProvider;
   let managementClient: ManagementClient;
   let disposable = vscode.commands.registerCommand(
     "auth0.signIn",
@@ -36,10 +38,17 @@ export async function activate(context: vscode.ExtensionContext) {
       applicationsTreeDataProvider = new ApplicationsTreeDataProvider(
         managementClient
       );
+      apisTreeDataProvider = new ApisTreeDataProvider(managementClient);
+
 
       vscode.window.registerTreeDataProvider(
         "auth0.app-explorer",
         applicationsTreeDataProvider
+      );
+
+      vscode.window.registerTreeDataProvider(
+        "auth0.api-explorer",
+        apisTreeDataProvider
       );
     }
   );
@@ -78,7 +87,7 @@ export async function activate(context: vscode.ExtensionContext) {
       name,
       app_type: appTypes[appType]
     });
-    
+
     applicationsTreeDataProvider.refresh();
   });
 
@@ -86,7 +95,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await managementClient.deleteClient({
       client_id: e.clientId
     });
-    
+
     applicationsTreeDataProvider.refresh();
     vscode.window.showInformationMessage("Client removed");
   });
@@ -156,7 +165,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("auth0.editTokenLifetime", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId) as  Client & { refresh_token: any };
-    
+
     const token_lifetime = await vscode.window.showInputBox({
       placeHolder: "2600000",
       prompt: "Enter the token liftetime",
@@ -182,7 +191,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("auth0.editLeeway", async (e) => {
     const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId) as  Client & { refresh_token: any };
-    
+
     const leeway = await vscode.window.showInputBox({
       placeHolder: "0",
       prompt: "Enter the leeway",
@@ -212,10 +221,145 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("auth0.copyAsJson", (e) => {
-    const client = applicationsTreeDataProvider._clients.find(c => c.client_id === e.clientId);
+    const client = applicationsTreeDataProvider._clients.find(
+      (c) => c.client_id === e.clientId
+    );
     vscode.env.clipboard.writeText(JSON.stringify(client));
     vscode.window.showInformationMessage(`Copied Client as JSON to clipboard!`);
   });
+
+    vscode.commands.registerCommand("auth0.api.refresh", () => {
+      apisTreeDataProvider.refresh();
+    });
+
+    vscode.commands.registerCommand("auth0.api.add", async () => {
+      const name = await vscode.window.showInputBox({
+        placeHolder: "My Api",
+        prompt: "Enter an API name",
+        ignoreFocusOut: true,
+        validateInput: (text: string) =>
+            text !== null && text !== undefined && text !== ""
+                ? ""
+                : "Enter an API name",
+      });
+
+      const identifier =
+          (await vscode.window.showInputBox({
+            placeHolder: "http://my-api",
+            prompt: "Enter an API identifier",
+            ignoreFocusOut: true,
+            validateInput: (text: string) =>
+                text !== null && text !== undefined && text !== ""
+                    ? ""
+                    : "Enter an API identifier",
+          })) || "";
+
+      await managementClient.createResourceServer({
+        name,
+        identifier,
+      });
+
+      apisTreeDataProvider.refresh();
+    });
+
+    vscode.commands.registerCommand("auth0.api.remove", async (e) => {
+      const resourceServer = apisTreeDataProvider._resourceServers.find(
+          (c) => c.identifier === e.identifier
+      );
+
+      if (!resourceServer || !resourceServer.id) {
+        return;
+      }
+
+      await managementClient.deleteResourceServer({
+        id: resourceServer?.id,
+      });
+
+      apisTreeDataProvider.refresh();
+      vscode.window.showInformationMessage("Api removed");
+    });
+
+    vscode.commands.registerCommand("auth0.api.copyAsJson", (e) => {
+      const resourceServer = apisTreeDataProvider._resourceServers.find(
+          (r) => r.identifier === e.identifier
+      );
+      vscode.env.clipboard.writeText(JSON.stringify(resourceServer));
+      vscode.window.showInformationMessage(`Copied API as JSON to clipboard!`);
+    });
+
+    vscode.commands.registerCommand("auth0.api.editAllowOfflineAccess", async (e) => {
+      const resourceServer = apisTreeDataProvider._resourceServers.find(({identifier}) => identifier === e.identifier);
+      const allowOfflineAccess = await vscode.window.showQuickPick(['Yes', 'No'], {
+        ignoreFocusOut: true,
+      }) || "";
+
+      if(!resourceServer || !resourceServer.id) {
+        return;
+      }
+
+      await managementClient.updateResourceServer({
+        id: resourceServer.id
+      }, {
+        allow_offline_access: allowOfflineAccess === 'Yes' ? true : false
+      })
+
+      apisTreeDataProvider.refresh();
+      vscode.window.showInformationMessage(`Allow Offline Access set to ${allowOfflineAccess}`);
+    });
+
+    vscode.commands.registerCommand("auth0.api.editTokenLifetime", async (e) => {
+      const resourceServer = apisTreeDataProvider._resourceServers.find(({identifier}) => identifier === e.identifier);
+
+      if(!resourceServer || !resourceServer.id) {
+        return;
+      }
+
+      const tokenLifetime = await vscode.window.showInputBox({
+        placeHolder: `${resourceServer?.token_lifetime}`,
+        prompt: "Enter the token liftetime",
+        ignoreFocusOut: true,
+        validateInput: (text: string) =>
+            text !== null && text !== undefined && text !== "" && !isNaN(Number(text))
+                ? ""
+                : "Enter the token lifetime",
+      });
+
+      await managementClient.updateResourceServer({
+        id: resourceServer.id
+      }, {
+        token_lifetime: Number(tokenLifetime)
+      })
+
+      apisTreeDataProvider.refresh();
+      vscode.window.showInformationMessage(`Token Lifetime set to ${tokenLifetime}`);
+    });
+
+    vscode.commands.registerCommand("auth0.api.editTokenLifetimeWeb", async (e) => {
+      const resourceServer = apisTreeDataProvider._resourceServers.find(({identifier}) => identifier === e.identifier);
+
+      if(!resourceServer || !resourceServer.id) {
+        return;
+      }
+
+      const tokenLifetime = await vscode.window.showInputBox({
+        placeHolder: `${resourceServer?.token_lifetime_for_web}`,
+        prompt: "Enter the token liftetime",
+        ignoreFocusOut: true,
+        validateInput: (text: string) =>
+            text !== null && text !== undefined && text !== "" && !isNaN(Number(text))
+                ? ""
+                : "Enter the token lifetime",
+      });
+
+      await managementClient.updateResourceServer({
+        id: resourceServer.id
+      }, {
+        token_lifetime_for_web: Number(tokenLifetime)
+      })
+
+      apisTreeDataProvider.refresh();
+      vscode.window.showInformationMessage(`Token Lifetime (Web) set to ${tokenLifetime}`);
+    });
 
   vscode.commands.registerCommand("auth0.deploy", async (e) => {
     const filePath = e.path;

@@ -27,7 +27,7 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
   const accessToken = await getAccessToken();
 
   if (accessToken && isTokenValid(accessToken)) {
-    return;
+    //return;
   }
 
   const options = {
@@ -37,7 +37,7 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
     data: qs.stringify({
       client_id: clientId,
       scope:
-        "openid read:roles read:client_grants read:clients read:client_keys read:connections create:resource_servers read:resource_servers read:device_credentials read:rules read:actions read:logs read:grants update:tenant_settings update:resource_servers create:clients update:clients delete:clients",
+        "openid read:roles read:client_grants read:clients read:client_keys read:connections create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:device_credentials read:rules read:actions read:logs read:grants update:tenant_settings update:resource_servers create:clients update:clients delete:clients",
       audience: audience,
     }),
   };
