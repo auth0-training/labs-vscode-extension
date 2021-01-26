@@ -23,9 +23,7 @@ async function setIntervalAsync(cb: () => {}, interval: number) {
   });
 }
 
-export async function initializeAuth(
-  context: vscode.ExtensionContext
-) {
+export async function initializeAuth(context: vscode.ExtensionContext) {
   const accessToken = await getAccessToken();
 
   if (accessToken && isTokenValid(accessToken)) {
@@ -59,34 +57,39 @@ export async function initializeAuth(
   );
 
   //TODO: To avoid errors due to network latency, we should start counting each interval after receipt of the last polling request's response.
-  return setIntervalAsync(async () => {
-    const response = await axios.request({
-      method: "POST",
-      url: "https://auth0.auth0.com/oauth/token",
-      headers: { "content-type": "application/x-www-form-urlencoded" },
-      data: qs.stringify({
-        client_id: clientId,
-        device_code: deviceCode,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-      }),
-    });
+  await setIntervalAsync(async () => {
+    try {
+      const response = await axios.request({
+        method: "POST",
+        url: "https://auth0.auth0.com/oauth/token",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        data: qs.stringify({
+          client_id: clientId,
+          device_code: deviceCode,
+          grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+        }),
+      });
 
-    await keytar.setPassword(
-      SECRET_KEY_SERVICE_NAME,
-      "access_token",
-      response.data.access_token
-    );
+      await keytar.setPassword(
+        SECRET_KEY_SERVICE_NAME,
+        "access_token",
+        response.data.access_token
+      );
 
-    vscode.window.showInformationMessage(`Successful log in.`);
-    context.globalState.update("extensionState", "authenticated");
+      vscode.window.showInformationMessage(`Successful log in.`);
+      context.globalState.update("extensionState", "authenticated");
+      return response.data;
+    } catch {
+      return null;
+    }
   }, interval * 1000);
 }
 
 export function parseAccessToken(accessToken: string) {
-  const tokenParts = accessToken.split('.');
+  const tokenParts = accessToken.split(".");
 
-  const buff = Buffer.from(tokenParts[1], 'base64');
-  const text = buff.toString('ascii');
+  const buff = Buffer.from(tokenParts[1], "base64");
+  const text = buff.toString("ascii");
   return JSON.parse(text);
 }
 
@@ -101,7 +104,7 @@ export function getDomainFromToken(accessToken: string) {
   let domain = null;
 
   for (const aud of data.aud) {
-    if (aud.endsWith('/api/v2/')) {
+    if (aud.endsWith("/api/v2/")) {
       const audUrl = vscode.Uri.parse(aud);
       domain = audUrl.authority;
       break;
@@ -109,7 +112,7 @@ export function getDomainFromToken(accessToken: string) {
   }
 
   if (!domain) {
-    throw new Error('Audience not found');
+    throw new Error("Audience not found");
   }
 
   return domain;

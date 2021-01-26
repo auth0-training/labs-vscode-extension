@@ -25,8 +25,8 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "auth0.helloAuth0",
-        "title": "HelloAuth0"
+        "command": "auth0.helloAuziros",
+        "title": "HelloAuziros"
       },
       {
         "command": "auth0.copyValue",
