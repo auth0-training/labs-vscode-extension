@@ -3,8 +3,17 @@ import { stringToByteArray, sortAlphabetically } from './../utils';
 import { ActionRootTreeItem, ActionTreeItem } from '../tree-items/action.tree-item';
 import { getActions, getActionVersionsDraft, upsertActionVersionsDraft } from '../store/api';
 import { fileSystemProvider } from '../filesystem';
-import { buildRootChildren } from '../tree-items/action.tree-item.builder';
+import {
+  buildRootChildren,
+  buildDependenciesChildren,
+  buildSecretsChildren,
+} from '../tree-items/action.tree-item.builder';
 import { store } from '../store';
+
+const TREE_ITEM_LABELS = {
+  dependencies: 'Dependencies',
+  secrets: 'Secrets',
+};
 
 export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
@@ -86,6 +95,10 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
     const action: any = this._actions.find(({ id }) => id === parent.actionId);
 
     switch (parent.label) {
+      case TREE_ITEM_LABELS.dependencies:
+        return buildDependenciesChildren(action);
+      case TREE_ITEM_LABELS.secrets:
+        return buildSecretsChildren(action);
       case action.name:
         return buildRootChildren(action);
     }

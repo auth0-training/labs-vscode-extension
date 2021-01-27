@@ -130,6 +130,26 @@
         "command": "auth0.actions.remove",
         "title": "Remove",
         "icon": "$(trash)"
+      },
+      {
+        "command": "auth0.actions.addDependency",
+        "title": "Add Dependency",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "auth0.actions.removeDependency",
+        "title": "Remove Dependency",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "auth0.actions.addSecret",
+        "title": "Add Secret",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "auth0.actions.removeSecret",
+        "title": "Remove Secret",
+        "icon": "$(trash)"
       }
     ],
     "viewsContainers": {
@@ -311,6 +331,26 @@
           "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
           "command": "auth0.actions.remove",
           "group": "inline@3"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionTreeItem:Dependencies",
+          "command": "auth0.actions.addDependency",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionValueTreeItem:Dependency",
+          "command": "auth0.actions.removeDependency",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionTreeItem:Secrets",
+          "command": "auth0.actions.addSecret",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionValueTreeItem:Secret",
+          "command": "auth0.actions.removeSecret",
+          "group": "inline"
         }
       ],
       "explorer/context": [

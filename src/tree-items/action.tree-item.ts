@@ -6,14 +6,13 @@ export class ActionTreeItem extends vscode.TreeItem {
     public readonly label: string | undefined = '',
     public readonly actionId: string | undefined = '',
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly value?: any
+    public readonly value?: any,
+    public readonly contextValue = 'ActionTreeItem'
   ) {
     super(label, collapsibleState);
 
     this.tooltip = `${this.label}`;
   }
-
-  contextValue = 'ActionTreeItem';
 }
 
 export class ActionRootTreeItem extends ActionTreeItem {
