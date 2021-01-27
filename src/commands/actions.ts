@@ -1,6 +1,11 @@
 import * as vscode from 'vscode';
 import { actionsTreeDataProvider } from '../providers';
-import { removeAction, deployActionVersionsDraft, upsertActionVersionsDraft } from '../store/api';
+import {
+  removeAction,
+  deployActionVersionsDraft,
+  upsertActionVersionsDraft,
+  createAction,
+} from '../store/api';
 import { MultiStepInput } from '../utils/multi-step-pick';
 
 export async function registerActionCommands() {
@@ -137,7 +142,10 @@ export async function registerActionCommands() {
         validate: async (name: string) => {
           return name === '' ? 'Dependency name required' : undefined;
         },
-        shouldResume: () => Promise.resolve(true),
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
       });
       return (input: MultiStepInput) => inputDependencyVersion(input, state);
     }
@@ -152,7 +160,10 @@ export async function registerActionCommands() {
         validate: async (version: string) => {
           return version === '' ? 'Dependency version required' : undefined;
         },
-        shouldResume: () => Promise.resolve(true),
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
       });
     }
 
@@ -213,7 +224,10 @@ export async function registerActionCommands() {
         validate: async (name: string) => {
           return name === '' ? 'Secret key required' : undefined;
         },
-        shouldResume: () => Promise.resolve(true),
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
       });
       return (input: MultiStepInput) => inputSecretValue(input, state);
     }
@@ -228,7 +242,10 @@ export async function registerActionCommands() {
         validate: async (version: string) => {
           return version === '' ? 'Secret value required' : undefined;
         },
-        shouldResume: () => Promise.resolve(true),
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
       });
     }
 
@@ -248,6 +265,93 @@ export async function registerActionCommands() {
           runtime: e.value.draft.runtime,
           dependencies: e.value.draft.dependencies,
           secrets: (e.value.draft.secrets || []).concat([{ name: state.key, value: state.value }]),
+        });
+
+        progress.report({ increment: 50 });
+
+        await actionsTreeDataProvider.refresh();
+
+        progress.report({ increment: 100, message: `Done!` });
+      }
+    );
+  });
+
+  vscode.commands.registerCommand('auth0.actions.add', async () => {
+    const TRIGGER_LABEL_TYPES: any = {
+      'post-login': 'Login / Post Login',
+      'credentials-exchange': 'M2M / Client-Credentials',
+    };
+
+    const triggerTypes: vscode.QuickPickItem[] = [
+      'post-login',
+      'credentials-exchange',
+    ].map((id) => ({ id, label: TRIGGER_LABEL_TYPES[id] }));
+
+    interface State {
+      title: string;
+      step: number;
+      totalSteps: number;
+
+      name: string;
+      triggerType: vscode.QuickPickItem & { id?: string };
+    }
+
+    async function collectInputs() {
+      const state = {} as Partial<State>;
+      await MultiStepInput.run((input) => inputName(input, state));
+      return state as State;
+    }
+
+    const title = 'Create Action';
+
+    async function inputName(input: MultiStepInput, state: Partial<State>) {
+      state.name = await input.showInputBox({
+        title,
+        step: 1,
+        totalSteps: 2,
+        value: state.name || '',
+        prompt: 'Enter action name',
+        validate: async (name: string) => {
+          return name === '' ? 'Action name required' : undefined;
+        },
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
+      });
+      return (input: MultiStepInput) => pickTriggerType(input, state);
+    }
+
+    async function pickTriggerType(input: MultiStepInput, state: Partial<State>) {
+      state.triggerType = await input.showQuickPick({
+        title,
+        step: 1,
+        totalSteps: 2,
+        placeholder: 'Choose trigger type',
+        items: triggerTypes,
+        activeItem: typeof state.triggerType !== 'string' ? state.triggerType : undefined,
+        buttons: [],
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
+      });
+    }
+
+    const state = await collectInputs();
+
+    vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: `Creating action`,
+        cancellable: false,
+      },
+      async (progress) => {
+        progress.report({ increment: 0 });
+
+        await createAction({
+          name: state.name,
+          triggerType: state.triggerType.id as string,
         });
 
         progress.report({ increment: 50 });

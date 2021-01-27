@@ -112,6 +112,11 @@
         "icon": "$(edit)"
       },
       {
+        "command": "auth0.actions.add",
+        "title": "Add",
+        "icon": "$(plus)"
+      },
+      {
         "command": "auth0.actions.open",
         "title": "Open Action",
         "icon": "$(edit)"
@@ -208,6 +213,11 @@
         {
           "command": "auth0.api.add",
           "when": "view == auth0.api-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "auth0.actions.add",
+          "when": "view == auth0.actions-explorer",
           "group": "navigation"
         },
         {

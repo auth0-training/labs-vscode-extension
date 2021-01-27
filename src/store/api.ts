@@ -94,3 +94,64 @@ export async function deployActionVersionsDraft(actionId: string) {
 
   return response.data;
 }
+
+export async function createAction(data: any) {
+  const token = await getAccessToken();
+  const domain = getDomainFromToken(token);
+  const triggerDetails = getTriggerDetails(data.triggerType);
+  const createResponse = await axios.post(
+    `https://${domain}/api/v2/actions/actions`,
+    {
+      name: data.name,
+      supported_triggers: [
+        {
+          id: triggerDetails.id,
+          version: 'v1',
+        },
+      ],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  await upsertActionVersionsDraft(createResponse.data.id, {
+    code: triggerDetails.codeTemplate,
+    runtime: 'node12',
+    dependencies: [],
+    secrets: [],
+  });
+
+  return createResponse.data;
+}
+
+export function getTriggerDetails(triggerId: string): { id: string; codeTemplate: string } {
+  switch (triggerId) {
+    case 'credentials-exchange':
+      return {
+        codeTemplate:
+          `
+/** @type {CredentialsExchangeAction} */
+module.exports = async (event, context) => {
+  return {};
+};
+          `.trim() + '\n',
+        id: triggerId,
+      };
+    case 'post-login':
+      return {
+        codeTemplate:
+          `
+/** @type {PostLoginAction} */
+module.exports = async (event, context) => {
+  return {};
+};
+          `.trim() + '\n',
+        id: triggerId,
+      };
+    default:
+      throw new Error(`Not implemented for ${triggerId}`);
+  }
+}
