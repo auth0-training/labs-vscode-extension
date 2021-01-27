@@ -15,8 +15,6 @@ export async function registerActionCommands() {
   });
 
   vscode.commands.registerCommand('auth0.actions.remove', async (e) => {
-    console.log(e);
-
     await removeAction(e.value.id);
 
     actionsTreeDataProvider.refresh();
