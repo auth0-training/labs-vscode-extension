@@ -156,6 +156,30 @@
         "command": "auth0.actions.removeSecret",
         "title": "Remove Secret",
         "icon": "$(trash)"
+      },
+      {
+        "command": "auth0.links.openManage",
+        "title": "Open Manage dashboard"
+      },
+      {
+        "command": "auth0.links.openCommunity",
+        "title": "Open Community site"
+      },
+      {
+        "command": "auth0.links.openDocs",
+        "title": "Open Docs"
+      },
+      {
+        "command": "auth0.links.openQuickstarts",
+        "title": "Open Quickstarts"
+      },
+      {
+        "command": "auth0.links.openSupport",
+        "title": "Open Support Center"
+      },
+      {
+        "command": "auth0.links.openProServices",
+        "title": "Open Professional Services"
       }
     ],
     "viewsContainers": {
@@ -185,6 +209,10 @@
           "name": "Actions",
           "icon": "media/auth0.svg",
           "contextualTitle": "Auth0 Explorer"
+        },
+        {
+          "id": "auth0.help-view",
+          "name": "Help and Support"
         }
       ]
     },
@@ -284,7 +312,6 @@
           "command": "auth0.api.editTokenLifetimeWeb",
           "when": "false"
         },
-
         {
           "command": "auth0.app.addCallbackUrl",
           "when": "false"

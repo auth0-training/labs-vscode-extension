@@ -4,6 +4,7 @@ import { registerActionCommands } from './actions';
 import { registerApiCommands } from './apis';
 import { registerApplicationCommands } from './applications';
 import { registerDeployCommands } from './deploy';
+import { registerLinkCommands } from './links';
 
 export function registerCommands(): vscode.Disposable[] {
   return [
@@ -11,5 +12,6 @@ export function registerCommands(): vscode.Disposable[] {
     ...registerApiCommands(),
     ...registerApplicationCommands(),
     ...registerDeployCommands(),
+    ...registerLinkCommands(),
   ];
 }
