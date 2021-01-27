@@ -401,6 +401,8 @@ export async function activate(context: vscode.ExtensionContext) {
         config.setProvider(() => null);
         await tools.deploy(assets, managementClient, config);
         vscode.window.showInformationMessage('Successfully deployed  ' + path.basename(filePath));
+
+        await Promise.all([apisTreeDataProvider.refresh(), applicationsTreeDataProvider.refresh()]);
       } catch (err) {
         console.log(err);
         vscode.window.showErrorMessage('Deploy failed. Error: ' + err.message);
