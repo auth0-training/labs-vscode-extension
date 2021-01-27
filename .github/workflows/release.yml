@@ -1,6 +1,9 @@
 name: VSCode Extension Release
 
-on: push
+on: 
+  push:
+    tags:
+      - 'v*' # Push events matching v*, i.e. v1.0, v20.15.10    
 
 jobs:
   build:
@@ -41,5 +44,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./auth0-vsce-0.0.1.vsix
-          asset_name: auth0-vsce-0.0.1.vsix
+          asset_path: ./auth0-vsce.vsix
+          asset_name: auth0-vsce.vsix
