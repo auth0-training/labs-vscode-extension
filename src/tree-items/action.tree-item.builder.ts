@@ -1,33 +1,24 @@
 import * as vscode from 'vscode';
-import { Client } from 'auth0';
-import { ValueTreeItem } from './value.tree-item';
+import { ActionValueTreeItem } from './action-value.tree-item';
 
 export function buildRootChildren(action: any) {
   const children = [
-    new ValueTreeItem(
+    new ActionValueTreeItem(
       'Supported Trigger',
       action.supported_triggers[0].id,
       vscode.TreeItemCollapsibleState.None
     ),
+    new ActionValueTreeItem(
+      'Node Version',
+      action.current_version?.runtime || 'Unknown',
+      vscode.TreeItemCollapsibleState.None
+    ),
+    new ActionValueTreeItem(
+      'Status',
+      action.current_version?.status || 'Unknown',
+      vscode.TreeItemCollapsibleState.None
+    ),
   ];
-
-  if (action.current_version) {
-    children.push(
-      new ValueTreeItem(
-        'Node Version',
-        action.current_version.runtime,
-        vscode.TreeItemCollapsibleState.None
-      )
-    );
-
-    children.push(
-      new ValueTreeItem(
-        'Status',
-        action.current_version.status,
-        vscode.TreeItemCollapsibleState.None
-      )
-    );
-  }
 
   return children;
 }

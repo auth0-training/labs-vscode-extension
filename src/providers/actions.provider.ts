@@ -18,7 +18,7 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   constructor() {
     fileSystemProvider.onDidChangeFile(async (events) => {
       for (const event of events) {
-        const action = store.actions.find((a: any) => {
+        const action = this._actions.find((a: any) => {
           return a.uri.toString() === event.uri.toString();
         });
         const eventFile = await vscode.workspace.fs.readFile(event.uri);
@@ -75,7 +75,6 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
       }
     }
 
-    store.actions = this._actions;
     return this._actions;
   }
 

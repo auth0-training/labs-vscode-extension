@@ -117,6 +117,11 @@
         "icon": "$(edit)"
       },
       {
+        "command": "auth0.actions.deploy",
+        "title": "Deploy Action",
+        "icon": "$(rocket)"
+      },
+      {
         "command": "auth0.actions.refresh",
         "title": "Refresh Actions",
         "icon": "$(refresh)"
@@ -295,12 +300,17 @@
         {
           "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
           "command": "auth0.actions.open",
-          "group": "inline"
+          "group": "inline@1"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
+          "command": "auth0.actions.deploy",
+          "group": "inline@2"
         },
         {
           "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
           "command": "auth0.actions.remove",
-          "group": "inline"
+          "group": "inline@3"
         }
       ],
       "explorer/context": [

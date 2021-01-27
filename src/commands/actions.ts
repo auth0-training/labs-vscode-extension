@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { actionsTreeDataProvider } from '../providers';
-import { removeAction } from '../store/api';
+import { removeAction, deployActionVersionsDraft } from '../store/api';
 
 export async function registerActionCommands() {
   vscode.commands.registerCommand('auth0.actions.open', async (e) => {
@@ -18,6 +18,13 @@ export async function registerActionCommands() {
     await removeAction(e.value.id);
 
     actionsTreeDataProvider.refresh();
-    vscode.window.showInformationMessage('Actions removed');
+    vscode.window.showInformationMessage('Action removed');
+  });
+
+  vscode.commands.registerCommand('auth0.actions.deploy', async (e) => {
+    await deployActionVersionsDraft(e.value.id);
+
+    actionsTreeDataProvider.refresh();
+    vscode.window.showInformationMessage('Action deployed');
   });
 }

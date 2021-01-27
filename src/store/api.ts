@@ -78,3 +78,19 @@ export async function removeAction(actionId: string) {
     },
   });
 }
+
+export async function deployActionVersionsDraft(actionId: string) {
+  const token = await getAccessToken();
+  const domain = getDomainFromToken(token);
+  const response = await axios.post(
+    `https://${domain}/api/v2/actions/actions/${actionId}/versions/draft/deploy`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+}
