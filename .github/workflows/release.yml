@@ -45,4 +45,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./auth0-vsce.vsix
-          asset_name: auth0-vsce.vsix
+          asset_name: auth0-vsce
+          asset_content_type: application/zip
