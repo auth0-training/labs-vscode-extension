@@ -98,14 +98,13 @@ export async function deployActionVersionsDraft(actionId: string) {
 export async function createAction(data: any) {
   const token = await getAccessToken();
   const domain = getDomainFromToken(token);
-  const triggerDetails = getTriggerDetails(data.triggerType);
   const createResponse = await axios.post(
     `https://${domain}/api/v2/actions/actions`,
     {
       name: data.name,
       supported_triggers: [
         {
-          id: triggerDetails.id,
+          id: data.triggerType,
           version: 'v1',
         },
       ],
@@ -118,7 +117,7 @@ export async function createAction(data: any) {
   );
 
   await upsertActionVersionsDraft(createResponse.data.id, {
-    code: triggerDetails.codeTemplate,
+    code: getCodeTemplate(data.codeTemplate),
     runtime: 'node12',
     dependencies: [],
     secrets: [],
@@ -127,31 +126,28 @@ export async function createAction(data: any) {
   return createResponse.data;
 }
 
-export function getTriggerDetails(triggerId: string): { id: string; codeTemplate: string } {
-  switch (triggerId) {
-    case 'credentials-exchange':
-      return {
-        codeTemplate:
-          `
+export function getCodeTemplate(templateId: string) {
+  switch (templateId) {
+    case 'credentials-exchange-template-1':
+      return (
+        `
 /** @type {CredentialsExchangeAction} */
 module.exports = async (event, context) => {
   return {};
 };
-          `.trim() + '\n',
-        id: triggerId,
-      };
-    case 'post-login':
-      return {
-        codeTemplate:
-          `
+          `.trim() + '\n'
+      );
+    case 'post-login-template-1':
+      return (
+        `
 /** @type {PostLoginAction} */
 module.exports = async (event, context) => {
   return {};
 };
-          `.trim() + '\n',
-        id: triggerId,
-      };
+            `.trim() + '\n'
+      );
+
     default:
-      throw new Error(`Not implemented for ${triggerId}`);
+      throw new Error(`Not implemented for ${templateId}`);
   }
 }

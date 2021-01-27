@@ -287,6 +287,23 @@ export async function registerActionCommands() {
       'credentials-exchange',
     ].map((id) => ({ id, label: TRIGGER_LABEL_TYPES[id] }));
 
+    const POST_LOGIN_TEMPLATE_TYPES: any = {
+      'post-login-template-1': 'Basic',
+    };
+
+    const postLoginTemplates: vscode.QuickPickItem[] = ['post-login-template-1'].map((id) => ({
+      id,
+      label: POST_LOGIN_TEMPLATE_TYPES[id],
+    }));
+
+    const CREDENTIALS_EXCHANGE_TEMPLATE_TYPES: any = {
+      'credentials-exchange-template-1': 'Basic',
+    };
+
+    const credentialsExchangeTemplates: vscode.QuickPickItem[] = [
+      'credentials-exchange-template-1',
+    ].map((id) => ({ id, label: CREDENTIALS_EXCHANGE_TEMPLATE_TYPES[id] }));
+
     interface State {
       title: string;
       step: number;
@@ -294,6 +311,7 @@ export async function registerActionCommands() {
 
       name: string;
       triggerType: vscode.QuickPickItem & { id?: string };
+      codeTemplate: vscode.QuickPickItem & { id?: string };
     }
 
     async function collectInputs() {
@@ -308,7 +326,7 @@ export async function registerActionCommands() {
       state.name = await input.showInputBox({
         title,
         step: 1,
-        totalSteps: 2,
+        totalSteps: 3,
         value: state.name || '',
         prompt: 'Enter action name',
         validate: async (name: string) => {
@@ -326,10 +344,30 @@ export async function registerActionCommands() {
       state.triggerType = await input.showQuickPick({
         title,
         step: 1,
-        totalSteps: 2,
+        totalSteps: 3,
         placeholder: 'Choose trigger type',
         items: triggerTypes,
         activeItem: typeof state.triggerType !== 'string' ? state.triggerType : undefined,
+        buttons: [],
+        shouldResume: () =>
+          new Promise<boolean>((resolve, reject) => {
+            // noop
+          }),
+      });
+      return (input: MultiStepInput) => pickTemplate(input, state);
+    }
+
+    async function pickTemplate(input: MultiStepInput, state: Partial<State>) {
+      state.codeTemplate = await input.showQuickPick({
+        title,
+        step: 1,
+        totalSteps: 3,
+        placeholder: 'Choose template',
+        items:
+          state.triggerType?.id === 'post-login'
+            ? postLoginTemplates
+            : credentialsExchangeTemplates,
+        activeItem: typeof state.codeTemplate !== 'string' ? state.codeTemplate : undefined,
         buttons: [],
         shouldResume: () =>
           new Promise<boolean>((resolve, reject) => {
@@ -349,9 +387,10 @@ export async function registerActionCommands() {
       async (progress) => {
         progress.report({ increment: 0 });
 
-        await createAction({
+        const action = await createAction({
           name: state.name,
           triggerType: state.triggerType.id as string,
+          codeTemplate: state.codeTemplate.id as string,
         });
 
         progress.report({ increment: 50 });
@@ -359,6 +398,15 @@ export async function registerActionCommands() {
         await actionsTreeDataProvider.refresh();
 
         progress.report({ increment: 100, message: `Done!` });
+
+        const actionUri = vscode.Uri.parse(
+          `auth0-actions://${action.id}/${encodeURIComponent(action.name)}.js`
+        );
+
+        vscode.commands.executeCommand('vscode.open', actionUri, {
+          preview: true,
+          viewColumn: vscode.ViewColumn.Active,
+        });
       }
     );
   });

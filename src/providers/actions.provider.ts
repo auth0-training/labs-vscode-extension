@@ -30,13 +30,28 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
         const action = this._actions.find((a: any) => {
           return a.uri.toString() === event.uri.toString();
         });
-        const eventFile = await vscode.workspace.fs.readFile(event.uri);
-        await upsertActionVersionsDraft(action.id, {
-          code: eventFile.toString(),
-          runtime: action.draft.runtime,
-          dependencies: action.draft.dependencies,
-          secrets: [],
-        });
+
+        vscode.window.withProgress(
+          {
+            location: vscode.ProgressLocation.Notification,
+            title: `Saving changes`,
+            cancellable: false,
+          },
+          async (progress) => {
+            progress.report({ increment: 0 });
+
+            const eventFile = await vscode.workspace.fs.readFile(event.uri);
+
+            await upsertActionVersionsDraft(action.id, {
+              code: eventFile.toString(),
+              runtime: action.draft.runtime,
+              dependencies: action.draft.dependencies,
+              secrets: [],
+            });
+
+            progress.report({ increment: 100, message: `Done!` });
+          }
+        );
       }
     });
   }
