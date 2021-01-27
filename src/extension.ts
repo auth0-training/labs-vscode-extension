@@ -44,7 +44,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerFileSystemProvider();
     registerTreeDataProviders();
-    registerCommands(context);
+    registerCommands();
   });
 
   vscode.commands.registerCommand('auth0.helloAuziros', async () => {

@@ -68,3 +68,13 @@ export async function upsertActionVersionsDraft(
 
   return response.data;
 }
+
+export async function removeAction(actionId: string) {
+  const token = await getAccessToken();
+  const domain = getDomainFromToken(token);
+  return await axios.delete(`https://${domain}/api/v2/actions/actions/${actionId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

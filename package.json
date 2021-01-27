@@ -112,14 +112,19 @@
         "icon": "$(edit)"
       },
       {
-        "command": "auth0.openAction",
+        "command": "auth0.actions.open",
         "title": "Open Action",
         "icon": "$(edit)"
       },
       {
-        "command": "auth0.refreshActions",
+        "command": "auth0.actions.refresh",
         "title": "Refresh Actions",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "auth0.actions.remove",
+        "title": "Remove",
+        "icon": "$(trash)"
       }
     ],
     "viewsContainers": {
@@ -181,7 +186,7 @@
           "group": "navigation"
         },
         {
-          "command": "auth0.refreshActions",
+          "command": "auth0.actions.refresh",
           "when": "view == auth0.actions-explorer",
           "group": "navigation"
         }
@@ -288,8 +293,13 @@
           "group": "inline"
         },
         {
-          "command": "auth0.openAction",
           "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
+          "command": "auth0.actions.open",
+          "group": "inline"
+        },
+        {
+          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
+          "command": "auth0.actions.remove",
           "group": "inline"
         }
       ],
