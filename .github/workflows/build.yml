@@ -19,3 +19,6 @@ jobs:
 
       - name: Build
         run: npm run compile
+      
+      - name: Package
+        run: npm run vscode:package

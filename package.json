@@ -1,8 +1,10 @@
 {
-  "name": "auth0-vsc",
+  "name": "auth0-vsce",
   "displayName": "Auth0",
   "description": "Visualize Auth0 tenant information inside Visual Studio Code",
   "version": "0.0.1",
+  "publisher": "Auth0",
+  "repository": "https://github.com/auth0/vscode-extension",
   "engines": {
     "vscode": "^1.51.0"
   },
@@ -374,6 +376,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
+    "vscode:package": "vsce package",
     "compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
     "watch": "webpack --watch --devtool nosources-source-map --info-verbosity verbose --config ./build/node-extension.webpack.config.js",
     "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
@@ -402,19 +405,20 @@
     "prettier": "^2.2.1",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
+    "vsce": "^1.84.0",
     "vscode-test": "^1.4.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "auth0": "^2.32.0",
-    "axios": "^0.21.1",
-    "keytar": "^7.3.0",
-    "polka": "^0.5.2",
-    "qs": "^6.9.6",
     "auth0-extension-tools": "^1.5.2",
     "auth0-source-control-extension-tools": "^4.2.0",
-    "js-yaml": "^4.0.0"
+    "axios": "^0.21.1",
+    "js-yaml": "^4.0.0",
+    "keytar": "^7.3.0",
+    "polka": "^0.5.2",
+    "qs": "^6.9.6"
   },
   "prettier": {
     "printWidth": 100,

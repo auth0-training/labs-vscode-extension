@@ -1,20 +1,37 @@
-# auth0 README
+# Auth0 Visual Studio Code Extension README
 
-This is the README for your extension "auth0". After writing up a brief description, we recommend including the following sections.
+testing
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Authenticationg to a tenant 
+* CRUD opersations for applications, apis, and actions
+* Deploy CLI integration
+* Editing Actions inline
 
-For example if there is an image subfolder under your extension project workspace:
+Screenshots
+animations 
 
 \!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+
 
 ## Requirements
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+
+## Instalation
+
+This Visual Studio Code extension is not yet published to the Extensions Marketplace. In order to install this extension, you must run `code --install-extension auth0-vsce-0.0.1.vsix` and close/open Visual Studio Code.
+
+Complete commands:
+```
+git clone https://github.com/auth0/vscode-extension.git
+cd vscode-extension
+code --install-extension auth0-vsce-0.0.1.vsix
+```
+
+To remove the extension, run `code --uninstall-extension auth0-vsce-0.0.1.vsix`
 
 ## Extension Settings
 
