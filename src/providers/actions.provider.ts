@@ -8,14 +8,16 @@ import {
   buildDependenciesChildren,
   buildSecretsChildren,
 } from '../tree-items/action.tree-item.builder';
-import { store } from '../store';
 
 const TREE_ITEM_LABELS = {
   dependencies: 'Dependencies',
   secrets: 'Secrets',
 };
 
-export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class ActionsTreeDataProvider
+  implements vscode.TreeDataProvider<vscode.TreeItem>, vscode.Disposable {
+  private _disposables: vscode.Disposable[] = [];
+
   private _onDidChangeTreeData: vscode.EventEmitter<
     ActionTreeItem | undefined | void
   > = new vscode.EventEmitter<ActionTreeItem | undefined | void>();
@@ -25,40 +27,43 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   public _actions: any[] | null = null;
 
   constructor() {
-    fileSystemProvider.onDidChangeFile(async (events) => {
-      for (const event of events) {
-        const action = this._actions?.find((a: any) => {
-          return a.uri.toString() === event.uri.toString();
-        });
+    this._disposables.push(
+      fileSystemProvider.onDidChangeFile(async (events) => {
+        for (const event of events) {
+          const action = this._actions?.find((a: any) => {
+            return a.uri.toString() === event.uri.toString();
+          });
 
-        vscode.window.withProgress(
-          {
-            location: vscode.ProgressLocation.Notification,
-            title: `Saving changes`,
-            cancellable: false,
-          },
-          async (progress) => {
-            progress.report({ increment: 0 });
+          vscode.window.withProgress(
+            {
+              location: vscode.ProgressLocation.Notification,
+              title: `Saving changes`,
+              cancellable: false,
+            },
+            async (progress) => {
+              progress.report({ increment: 0 });
 
-            const eventFile = await vscode.workspace.fs.readFile(event.uri);
+              const eventFile = await vscode.workspace.fs.readFile(event.uri);
 
-            await upsertActionVersionsDraft(action.id, {
-              code: eventFile.toString(),
-              runtime: action.draft.runtime,
-              dependencies: action.draft.dependencies,
-              secrets: [],
-            });
+              await upsertActionVersionsDraft(action.id, {
+                code: eventFile.toString(),
+                runtime: action.draft.runtime,
+                dependencies: action.draft.dependencies,
+                secrets: [],
+              });
 
-            progress.report({ increment: 100, message: `Done!` });
-          }
-        );
-      }
-    });
+              progress.report({ increment: 100, message: `Done!` });
+            }
+          );
+        }
+      })
+    );
   }
 
   async clear() {
     this._actions = [];
     this._onDidChangeTreeData.fire();
+    this.dispose();
   }
 
   async refresh() {
@@ -128,5 +133,9 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
     }
 
     return [];
+  }
+
+  dispose() {
+    this._disposables.forEach((disposable) => disposable.dispose());
   }
 }
