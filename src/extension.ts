@@ -41,6 +41,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     statusBarItem.text = '';
     statusBarItem.dispose();
+
+    vscode.commands.executeCommand('setContext', 'auth0:isAuthenticated', false);
   }
 
   async function logIn() {
@@ -52,6 +54,8 @@ export async function activate(context: vscode.ExtensionContext) {
       // TODO correctly handle error
       throw new Error('Missing access token');
     }
+
+    vscode.commands.executeCommand('setContext', 'auth0:isAuthenticated', true);
 
     await createClientWithToken(accessToken);
 

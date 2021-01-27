@@ -89,8 +89,6 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
             response.data.access_token
           );
 
-          context.globalState.update('extensionState', 'authenticated');
-
           return response.data;
         } catch (err) {
           return null;

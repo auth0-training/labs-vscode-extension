@@ -12,8 +12,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:auth0.app-explorer",
-    "onCommand:auth0.deploy"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -23,7 +22,7 @@
         "title": "Sign In"
       },
       {
-        "command": "auth0.refreshApps",
+        "command": "auth0.app.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
       },
@@ -199,36 +198,64 @@
       "view/title": [
         {
           "command": "auth0.app.add",
-          "when": "view == auth0.app-explorer",
+          "when": "auth0:isAuthenticated == true && view == auth0.app-explorer",
           "group": "navigation"
         },
         {
-          "command": "auth0.refreshApps",
-          "when": "view == auth0.app-explorer",
+          "command": "auth0.app.refresh",
+          "when": "auth0:isAuthenticated == true && view == auth0.app-explorer",
           "group": "navigation"
         },
         {
           "command": "auth0.api.refresh",
-          "when": "view == auth0.api-explorer",
+          "when": "auth0:isAuthenticated == true && view == auth0.api-explorer",
           "group": "navigation"
         },
         {
           "command": "auth0.api.add",
-          "when": "view == auth0.api-explorer",
+          "when": "auth0:isAuthenticated == true && view == auth0.api-explorer",
           "group": "navigation"
         },
         {
           "command": "auth0.actions.add",
-          "when": "view == auth0.actions-explorer",
+          "when": "auth0:isAuthenticated == true && view == auth0.actions-explorer",
           "group": "navigation"
         },
         {
           "command": "auth0.actions.refresh",
-          "when": "view == auth0.actions-explorer",
+          "when": "auth0:isAuthenticated == true && view == auth0.actions-explorer",
           "group": "navigation"
         }
       ],
       "commandPalette": [
+        {
+          "command": "auth0.api.add",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.api.refresh",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.app.add",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.app.refresh",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.actions.refresh",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.actions.add",
+          "when": "auth0:isAuthenticated == true"
+        },
+        {
+          "command": "auth0.deploy",
+          "when": "auth0:isAuthenticated == true"
+        },
         {
           "command": "auth0.api.remove",
           "when": "false"
@@ -255,6 +282,51 @@
         },
         {
           "command": "auth0.api.editTokenLifetimeWeb",
+          "when": "false"
+        },
+
+        {
+          "command": "auth0.app.addCallbackUrl",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.removeCallbackUrl",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editRotationType",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editTokenLifetime",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editLeeway",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.remove",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.addDependency",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.removeDependency",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.addSecret",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.removeSecret",
+          "when": "false"
+        },
+        {
+          "command": "auth0.actions.deploy",
           "when": "false"
         }
       ],
@@ -367,7 +439,7 @@
       ],
       "explorer/context": [
         {
-          "when": "resourceFilename == auth0.yml",
+          "when": "auth0:isAuthenticated == true && resourceFilename == auth0.yml",
           "command": "auth0.deploy",
           "group": "navigation"
         }

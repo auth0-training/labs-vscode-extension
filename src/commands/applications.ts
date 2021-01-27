@@ -230,7 +230,7 @@ export function registerApplicationCommands(): vscode.Disposable[] {
       vscode.window.showInformationMessage(`Leeway set to ${leeway}`);
     }),
 
-    vscode.commands.registerCommand('auth0.refreshApps', () => {
+    vscode.commands.registerCommand('auth0.app.refresh', () => {
       const { applicationsTreeDataProvider } = getTreeDataProviders();
       applicationsTreeDataProvider.refresh();
     }),
