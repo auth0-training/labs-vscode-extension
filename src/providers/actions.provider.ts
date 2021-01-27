@@ -22,12 +22,12 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   readonly onDidChangeTreeData: vscode.Event<ActionTreeItem | undefined | void> = this
     ._onDidChangeTreeData.event;
 
-  public _actions: any[] = [];
+  public _actions: any[] | null = null;
 
   constructor() {
     fileSystemProvider.onDidChangeFile(async (events) => {
       for (const event of events) {
-        const action = this._actions.find((a: any) => {
+        const action = this._actions?.find((a: any) => {
           return a.uri.toString() === event.uri.toString();
         });
 
@@ -56,6 +56,11 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
     });
   }
 
+  async clear() {
+    this._actions = [];
+    this._onDidChangeTreeData.fire();
+  }
+
   async refresh() {
     await this.getActions(true);
     this._onDidChangeTreeData.fire();
@@ -66,7 +71,7 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   }
 
   getChildren(element?: ActionTreeItem): Thenable<vscode.TreeItem[]> {
-    return this.getActions(true).then(() => {
+    return this.getActions(false).then(() => {
       if (element) {
         return this.getTreeItems(element);
       } else {
@@ -76,7 +81,7 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   }
 
   private async getActions(forceReload: boolean) {
-    if (forceReload || !this._actions || !this._actions.length) {
+    if (forceReload || !this._actions) {
       const { actions } = await getActions();
       const actionsWithDraft = await Promise.all(
         actions.map(async (action: any) => {
@@ -103,6 +108,10 @@ export class ActionsTreeDataProvider implements vscode.TreeDataProvider<vscode.T
   }
 
   private getTreeItems(parent?: ActionTreeItem): vscode.TreeItem[] {
+    if (!this._actions) {
+      return [];
+    }
+
     if (!parent) {
       return this._actions.map((action) => ActionRootTreeItem.fromAction(action));
     }

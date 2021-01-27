@@ -12,7 +12,7 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
   readonly onDidChangeTreeData: vscode.Event<ApplicationTreeItem | undefined | void> = this
     ._onDidChangeTreeData.event;
 
-  public _resourceServers: ResourceServer[] = [];
+  public _resourceServers: ResourceServer[] | null = null;
 
   constructor(private _client: ManagementClient) {
     // noop
@@ -26,6 +26,11 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
     return this.getResourceServers().then(() => this.getTreeItems(element));
   }
 
+  async clear() {
+    this._resourceServers = [];
+    this._onDidChangeTreeData.fire();
+  }
+
   async refresh() {
     const resourceServers = await this._client.getResourceServers();
     this._resourceServers = resourceServers.sort(
@@ -35,7 +40,7 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
   }
 
   private async getResourceServers() {
-    if (!this._resourceServers || !this._resourceServers.length) {
+    if (!this._resourceServers) {
       const resourceServers = await this._client.getResourceServers();
       this._resourceServers = resourceServers.sort(
         sortAlphabetically<Client>((item) => item.name || '')
@@ -46,6 +51,10 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
   }
 
   private getTreeItems(parent?: ApiTreeItem): vscode.TreeItem[] {
+    if (!this._resourceServers) {
+      return [];
+    }
+
     if (!parent) {
       return this._resourceServers.map((resourceServer) =>
         ApiRootTreeItem.fromResourceServer(

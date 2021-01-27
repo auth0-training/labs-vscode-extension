@@ -20,7 +20,7 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
   readonly onDidChangeTreeData: vscode.Event<ApplicationTreeItem | undefined | void> = this
     ._onDidChangeTreeData.event;
 
-  public _clients: Client[] = [];
+  public _clients: Client[] | null = null;
 
   constructor(private _client: ManagementClient) {}
 
@@ -46,8 +46,13 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
     this._onDidChangeTreeData.fire();
   }
 
+  async clear() {
+    this._clients = [];
+    this._onDidChangeTreeData.fire();
+  }
+
   private async getClients() {
-    if (!this._clients || !this._clients.length) {
+    if (!this._clients) {
       const clients = await this._client.getClients();
       this._clients = clients
         .filter((c: any) => !c.global)
@@ -58,6 +63,10 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
   }
 
   private getTreeItems(parent?: ApplicationTreeItem): vscode.TreeItem[] {
+    if (!this._clients) {
+      return [];
+    }
+
     if (!parent) {
       return this._clients.map((client) => ApplicationRootTreeItem.fromClient(client));
     }

@@ -126,3 +126,7 @@ export async function getAccessToken() {
 
   return accessToken;
 }
+
+export function clearAccessToken() {
+  return keytar.deletePassword(SECRET_KEY_SERVICE_NAME, 'access_token');
+}

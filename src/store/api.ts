@@ -2,8 +2,13 @@ import axios from 'axios';
 import { ManagementClient } from 'auth0';
 import { getAccessToken, getDomainFromToken } from '../auth';
 
-export async function getClientWithToken(accessToken: string) {
-  return new ManagementClient({
+let managementClient: ManagementClient;
+export function getClientWithToken() {
+  return managementClient;
+}
+
+export async function createClientWithToken(accessToken: string) {
+  managementClient = new ManagementClient({
     token: accessToken,
     domain: getDomainFromToken(accessToken),
   });
