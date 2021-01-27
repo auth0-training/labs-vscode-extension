@@ -3,7 +3,13 @@
 
 import { ManagementClient } from 'auth0';
 import * as vscode from 'vscode';
-import { initializeAuth, getAccessToken, getDomainFromToken, clearAccessToken } from './auth';
+import {
+  initializeAuth,
+  getAccessToken,
+  getDomainFromToken,
+  clearAccessToken,
+  isTokenValid,
+} from './auth';
 
 import { getTreeDataProviders, registerTreeDataProviders } from './providers';
 import { registerCommands } from './commands';
@@ -88,6 +94,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(...registerCommands());
   context.subscriptions.push(disposable);
+
+  const accessToken = await getAccessToken();
+
+  if (accessToken && isTokenValid(accessToken)) {
+    await logIn();
+  }
 }
 
 // this method is called when your extension is deactivated
