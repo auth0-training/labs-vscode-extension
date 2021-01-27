@@ -54,34 +54,50 @@ export async function initializeAuth(context: vscode.ExtensionContext) {
   deviceCode = response.data.device_code;
   interval = response.data.interval;
 
-  vscode.commands.executeCommand(
-    'vscode.open',
-    vscode.Uri.parse(response.data.verification_uri_complete)
-  );
+  console.log(response.data);
 
-  //TODO: To avoid errors due to network latency, we should start counting each interval after receipt of the last polling request's response.
-  await setIntervalAsync(async () => {
-    try {
-      const response = await axios.request({
-        method: 'POST',
-        url: 'https://auth0.auth0.com/oauth/token',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify({
-          client_id: clientId,
-          device_code: deviceCode,
-          grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
-        }),
-      });
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: `Sign in: Your pairing code is ${response.data.user_code}`,
+      cancellable: false,
+    },
+    async () => {
+      vscode.commands.executeCommand(
+        'vscode.open',
+        vscode.Uri.parse(response.data.verification_uri_complete)
+      );
 
-      await keytar.setPassword(SECRET_KEY_SERVICE_NAME, 'access_token', response.data.access_token);
+      //TODO: To avoid errors due to network latency, we should start counting each interval after receipt of the last polling request's response.
+      await setIntervalAsync(async () => {
+        try {
+          const response = await axios.request({
+            method: 'POST',
+            url: 'https://auth0.auth0.com/oauth/token',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify({
+              client_id: clientId,
+              device_code: deviceCode,
+              grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
+            }),
+          });
+          console.log(response.data);
 
-      vscode.window.showInformationMessage(`Successful log in.`);
-      context.globalState.update('extensionState', 'authenticated');
-      return response.data;
-    } catch {
-      return null;
+          await keytar.setPassword(
+            SECRET_KEY_SERVICE_NAME,
+            'access_token',
+            response.data.access_token
+          );
+
+          context.globalState.update('extensionState', 'authenticated');
+
+          return response.data;
+        } catch (err) {
+          return null;
+        }
+      }, interval * 1000);
     }
-  }, interval * 1000);
+  );
 }
 
 export function parseAccessToken(accessToken: string) {
