@@ -15,8 +15,8 @@ export function buildRootChildren(client: Client & { refresh_token: any }) {
     ),
     new ApplicationValueTreeItem(
       'Client Secret',
-      client.client_id,
       obfuscate(client.client_secret),
+      client.client_id,
       vscode.TreeItemCollapsibleState.None,
       client.client_secret
     ),
