@@ -17,7 +17,7 @@ export function registerDeployCommands(): vscode.Disposable[] {
           const filePath = e.path;
           vscode.window.showInformationMessage('Deploying: ' + path.basename(filePath));
           // TODO: use safeLoad instead
-          const assets = load(fs.readFileSync(filePath, 'utf8'));
+          const assets = load(tools.keywordReplace(fs.readFileSync(filePath, 'utf8'), process.env));
           const config = extTools.config();
           config.setProvider(() => null);
           await tools.deploy(assets, managementClient, config);
