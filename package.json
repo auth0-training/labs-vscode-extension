@@ -4,6 +4,7 @@
   "description": "Visualize Auth0 tenant information inside Visual Studio Code",
   "version": "0.0.1",
   "publisher": "Auth0",
+  "preview": true,
   "repository": "https://github.com/auth0/vscode-extension",
   "engines": {
     "vscode": "^1.51.0"
