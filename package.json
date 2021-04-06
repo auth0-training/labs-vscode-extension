@@ -6,15 +6,6 @@
   "publisher": "Auth0",
   "preview": true,
   "repository": "https://github.com/auth0/vscode-extension",
-  "engines": {
-    "vscode": "^1.51.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -67,13 +58,22 @@
     "singleQuote": true,
     "arrowParens": "always",
     "bracketSpacing": true,
-    "endOfLine": "lf",
+    "endOfLine": "auto",
     "quoteProps": "consistent",
     "semi": true,
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": false
   },
+  "engines": {
+    "vscode": "^1.51.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "commands": [
       {
