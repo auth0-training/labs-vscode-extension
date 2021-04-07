@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import axios from 'axios';
 import * as qs from 'qs';
 import * as vscode from 'vscode';
@@ -26,7 +27,7 @@ async function setIntervalAsync(cb: () => unknown, interval: number) {
   });
 }
 
-export async function initializeAuth(context: vscode.ExtensionContext) {
+export async function initializeAuth(context: vscode.ExtensionContext): Promise<void> {
   const accessToken = await getAccessToken();
 
   if (accessToken && isTokenValid(accessToken)) {
@@ -106,13 +107,13 @@ export function parseAccessToken(accessToken: string) {
   return JSON.parse(text);
 }
 
-export function isTokenValid(accessToken: string) {
+export function isTokenValid(accessToken: string): boolean {
   // TODO add any other validation necessary
   const data = parseAccessToken(accessToken);
   return data.exp > Math.floor(Date.now() / 1000);
 }
 
-export function getDomainFromToken(accessToken: string) {
+export function getDomainFromToken(accessToken: string): string {
   const data = parseAccessToken(accessToken);
   let domain = null;
 
@@ -131,7 +132,7 @@ export function getDomainFromToken(accessToken: string) {
   return domain;
 }
 
-export async function getAccessToken() {
+export async function getAccessToken(): Promise<string> {
   const accessToken = await keytar.getPassword(SECRET_KEY_SERVICE_NAME, 'access_token');
 
   if (!accessToken) {
@@ -141,6 +142,6 @@ export async function getAccessToken() {
   return accessToken;
 }
 
-export function clearAccessToken() {
+export async function clearAccessToken(): Promise<boolean> {
   return keytar.deletePassword(SECRET_KEY_SERVICE_NAME, 'access_token');
 }
