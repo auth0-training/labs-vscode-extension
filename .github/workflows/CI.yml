@@ -27,3 +27,8 @@ jobs:
       run: npm run compile
     - name: Package VSIX
       run: npm run package
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: auth0-vscode
+        path: release.vsix
