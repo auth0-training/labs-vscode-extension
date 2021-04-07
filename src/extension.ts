@@ -24,16 +24,10 @@ export async function activate(context: vscode.ExtensionContext) {
   async function logOut() {
     await clearAccessToken();
 
-    const {
-      apisTreeDataProvider,
-      applicationsTreeDataProvider,
-      actionsTreeDataProvider,
-    } = getTreeDataProviders();
+    const { apisTreeDataProvider, applicationsTreeDataProvider } = getTreeDataProviders();
 
     apisTreeDataProvider.clear();
     applicationsTreeDataProvider.clear();
-    // TODO: We should still clear actions when switching
-    actionsTreeDataProvider.clear();
 
     statusBarItem.text = '';
     statusBarItem.dispose();
@@ -66,10 +60,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const disposable = vscode.commands.registerCommand('auth0.signIn', async () => {
     await logIn();
-  });
-
-  vscode.commands.registerCommand('auth0.helloAuziros', async () => {
-    vscode.window.showInformationMessage('🚀 🚀 🚀 🚀');
   });
 
   vscode.commands.registerCommand('auth0.switchTenant', async () => {

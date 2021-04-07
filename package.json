@@ -2,7 +2,7 @@
   "name": "vscode",
   "displayName": "Auth0",
   "description": "Visualize Auth0 tenant information inside Visual Studio Code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "auth0",
   "preview": true,
   "repository": "https://github.com/auth0/vscode-extension",
@@ -122,10 +122,6 @@
         "icon": "$(edit)"
       },
       {
-        "command": "auth0.helloAuziros",
-        "title": "HelloAuziros"
-      },
-      {
         "command": "auth0.copyValue",
         "title": "Copy Value",
         "icon": "$(files)"
@@ -171,51 +167,6 @@
         "command": "auth0.api.editTokenLifetimeWeb",
         "title": "Edit Token Lifetime (web)",
         "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.actions.add",
-        "title": "Add",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.actions.open",
-        "title": "Open Action",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.actions.deploy",
-        "title": "Deploy Action",
-        "icon": "$(rocket)"
-      },
-      {
-        "command": "auth0.actions.refresh",
-        "title": "Refresh Actions",
-        "icon": "$(refresh)"
-      },
-      {
-        "command": "auth0.actions.remove",
-        "title": "Remove",
-        "icon": "$(trash)"
-      },
-      {
-        "command": "auth0.actions.addDependency",
-        "title": "Add Dependency",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.actions.removeDependency",
-        "title": "Remove Dependency",
-        "icon": "$(trash)"
-      },
-      {
-        "command": "auth0.actions.addSecret",
-        "title": "Add Secret",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.actions.removeSecret",
-        "title": "Remove Secret",
-        "icon": "$(trash)"
       },
       {
         "command": "auth0.links.openManage",
@@ -265,12 +216,6 @@
           "contextualTitle": "Auth0 Explorer"
         },
         {
-          "id": "auth0.actions-explorer",
-          "name": "Actions",
-          "icon": "media/auth0.svg",
-          "contextualTitle": "Auth0 Explorer"
-        },
-        {
           "id": "auth0.help-view",
           "name": "Help and Support"
         }
@@ -303,16 +248,6 @@
           "command": "auth0.api.add",
           "when": "auth0:isAuthenticated == true && view == auth0.api-explorer",
           "group": "navigation"
-        },
-        {
-          "command": "auth0.actions.add",
-          "when": "auth0:isAuthenticated == true && view == auth0.actions-explorer",
-          "group": "navigation"
-        },
-        {
-          "command": "auth0.actions.refresh",
-          "when": "auth0:isAuthenticated == true && view == auth0.actions-explorer",
-          "group": "navigation"
         }
       ],
       "commandPalette": [
@@ -330,14 +265,6 @@
         },
         {
           "command": "auth0.app.refresh",
-          "when": "auth0:isAuthenticated == true"
-        },
-        {
-          "command": "auth0.actions.refresh",
-          "when": "auth0:isAuthenticated == true"
-        },
-        {
-          "command": "auth0.actions.add",
           "when": "auth0:isAuthenticated == true"
         },
         {
@@ -390,30 +317,6 @@
         },
         {
           "command": "auth0.app.editLeeway",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.remove",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.addDependency",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.removeDependency",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.addSecret",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.removeSecret",
-          "when": "false"
-        },
-        {
-          "command": "auth0.actions.deploy",
           "when": "false"
         }
       ],
@@ -486,41 +389,6 @@
         {
           "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem:TokenLifetimeWeb",
           "command": "auth0.api.editTokenLifetimeWeb",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
-          "command": "auth0.actions.open",
-          "group": "inline@1"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
-          "command": "auth0.actions.deploy",
-          "group": "inline@2"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionRootTreeItem",
-          "command": "auth0.actions.remove",
-          "group": "inline@3"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionTreeItem:Dependencies",
-          "command": "auth0.actions.addDependency",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionValueTreeItem:Dependency",
-          "command": "auth0.actions.removeDependency",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionTreeItem:Secrets",
-          "command": "auth0.actions.addSecret",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.actions-explorer && viewItem == ActionValueTreeItem:Secret",
-          "command": "auth0.actions.removeSecret",
           "group": "inline"
         }
       ],
