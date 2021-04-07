@@ -27,7 +27,7 @@ async function setIntervalAsync(cb: () => unknown, interval: number) {
   });
 }
 
-export async function initializeAuth(context: vscode.ExtensionContext): Promise<void> {
+export async function initializeAuth(context: vscode.ExtensionContext) {
   const accessToken = await getAccessToken();
 
   if (accessToken && isTokenValid(accessToken)) {
