@@ -15,7 +15,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install Node.js
-      uses: actions/setup-node@v2-beta
+      uses: actions/setup-node@v1
       with:
         node-version: 10.x
     - name: Install Dependencies
