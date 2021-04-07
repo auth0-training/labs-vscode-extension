@@ -23,8 +23,8 @@ jobs:
       run: npm install
     - name: Run Lint
       run: npm run lint
-    - name: Run Test
-      run: npm run compile
+    - name: Run Tests
+      run: npm run test
     - name: Package VSIX
       run: npm run package
     - name: Upload Artifact
