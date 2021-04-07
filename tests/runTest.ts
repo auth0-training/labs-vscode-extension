@@ -10,23 +10,15 @@ async function main() {
     // The path to the extension test workspace
     const testWorkspace = path.resolve(__dirname, extensionDevelopmentPath + '/tests/workspace/');
 
-    const launchArgs = [
-      testWorkspace,
-      // This disables all extensions except the one being testing
-      '--disable-extensions',
-    ];
-
-    const extensionTestsEnv = {
-      EXTENSION_MODE: 'development',
-    };
+    const launchArgs = [testWorkspace, '--disable-extensions'];
 
     await runTests({
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs,
-      //	extensionTestsEnv,
     });
   } catch (err) {
+    console.error(err);
     console.error('Failed to run tests');
     process.exit(1);
   }
