@@ -47,7 +47,6 @@ const config = {
     new webpack.DefinePlugin({ 'global.GENTLY': false }),
     new webpack.IgnorePlugin({ resourceRegExp: /edge/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /pug/ }),
-    new webpack.IgnorePlugin({ resourceRegExp: /colors/ }),
   ],
   node: {
     __dirname: false,
