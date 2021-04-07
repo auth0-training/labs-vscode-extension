@@ -7,7 +7,6 @@
     },
     "extends": [
         "plugin:@typescript-eslint/recommended",
-        "prettier/@typescript-eslint",
         "plugin:prettier/recommended"
     ],
     "rules": {
@@ -19,5 +18,8 @@
         "eqeqeq": "warn",
         "no-throw-literal": "warn",
         "semi": "off"
-    }
+    },
+    "ignorePatterns": [
+        "**/*.d.ts"
+    ]
 }

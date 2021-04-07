@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, release ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, release ]
+    branches: [ main ]
 jobs:
   build:
     if: github.event.head_commit.committer.name != 'Versioning Action'
@@ -23,7 +23,7 @@ jobs:
       run: npm install
     - name: Run Lint
       run: npm run lint
-    - name: build
+    - name: Run Test
       run: npm run compile
     - name: Package VSIX
-      run: npm run vscode:package
+      run: npm run package
