@@ -31,6 +31,7 @@ jobs:
     - name: Package VSIX
       run: npm run package
     - name: Upload Artifact
+      if: runner.os == 'macOS'
       uses: actions/upload-artifact@v2
       with:
         name: auth0-vscode
