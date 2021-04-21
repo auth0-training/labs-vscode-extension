@@ -1,61 +1,94 @@
 {
   "name": "vscode",
-  "displayName": "Auth0",
-  "description": "Visualize Auth0 tenant information inside Visual Studio Code",
-  "version": "0.0.2",
-  "publisher": "auth0",
   "preview": true,
-  "repository": "https://github.com/auth0/vscode-extension",
+  "displayName": "Auth0",
+  "version": "0.0.3",
+  "description": "Visualize Auth0 tenant information inside Visual Studio Code",
   "main": "./dist/extension.js",
-  "scripts": {
-    "package": "npx vsce package -o release.vsix",
-    "vscode:prepublish": "webpack --mode production",
-    "compile": "tsc -p ./ && webpack",
-    "lint": "eslint --ext .ts .",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile",
-    "webpack": "webpack --mode production",
-    "test": "node ./out/tests/runTest.js"
+  "publisher": "auth0",
+  "icon": "resources/auth0.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auth0/vscode-extension"
   },
+  "keywords": [
+    "auth0"
+  ],
+  "author": {
+    "name": "Auth0",
+    "url": "https://auth0.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/auth0/vscode-extension/issues"
+  },
+  "engines": {
+    "vscode": "^1.55.0"
+  },
+  "galleryBanner": {
+    "color": "#373436",
+    "theme": "dark"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "scripts": {
+    "clean": "rm -rf out && rm -rf dist && rm -rf .vscode-test && rm ./release.vsix",
+    "build": "webpack --config ./webpack.config.js",
+    "watch": "webpack --watch --config ./webpack.config.js",
+    "build:production": "NODE_ENV=production webpack --config ./webpack.config.js",
+    "format": "prettier --check '{.vscode,src}/**/*.{json,ts}' '*.{json,md}'",
+    "format:fix": "npm run format -- --write",
+    "lint": "eslint src --ext ts --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "pretest": "tsc -p ./ && npm run build",
+    "test": "node ./out/tests/runTest.js",
+    "package": "npx vsce package -o release.vsix"
+  },
+  "homepage": "https://auth0.com",
+  "categories": [
+    "Other"
+  ],
   "devDependencies": {
     "@types/auth0": "^2.33.3",
     "@types/chai": "^4.2.16",
     "@types/glob": "^7.1.3",
     "@types/js-yaml": "^4.0.0",
     "@types/mocha": "^8.2.2",
-    "@types/node": "^14.14.37",
-    "@types/sinon": "^9.0.11",
+    "@types/node": "^14.14.41",
+    "@types/sinon": "^10.0.0",
     "@types/vscode": "^1.55.0",
-    "@typescript-eslint/eslint-plugin": "^4.21.0",
-    "@typescript-eslint/parser": "^4.21.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "chai": "^4.3.4",
     "copy-webpack-plugin": "^8.1.1",
-    "eslint": "^7.23.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "mocha": "^8.3.2",
     "prettier": "^2.2.1",
     "sinon": "^10.0.0",
-    "ts-loader": "^8.1.0",
-    "typescript": "^4.2.3",
+    "ts-loader": "^9.0.0",
+    "typescript": "^4.2.4",
     "vsce": "^1.87.1",
     "vscode-test": "^1.5.2",
-    "webpack": "^5.30.0",
+    "webpack": "^5.33.2",
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
-    "auth0": "^2.34.1",
+    "auth0": "^2.34.2",
     "auth0-extension-tools": "^1.5.2",
     "auth0-source-control-extension-tools": "^5.4.0",
     "axios": "^0.21.1",
-    "js-yaml": "^4.0.0",
+    "js-yaml": "^4.1.0",
     "keytar": "^7.6.0",
+    "openid-client": "^4.6.0",
     "qs": "^6.10.1"
   },
   "prettier": {
-    "printWidth": 100,
+    "printWidth": 80,
     "singleQuote": true,
     "arrowParens": "always",
     "bracketSpacing": true,
@@ -66,225 +99,288 @@
     "trailingComma": "es5",
     "useTabs": false
   },
-  "engines": {
-    "vscode": "^1.55.0"
-  },
-  "categories": [
-    "Other"
-  ],
   "activationEvents": [
     "onStartupFinished"
   ],
   "contributes": {
-    "commands": [
-      {
-        "command": "auth0.signIn",
-        "title": "Sign In"
-      },
-      {
-        "command": "auth0.app.refresh",
-        "title": "Refresh",
-        "icon": "$(refresh)"
-      },
-      {
-        "command": "auth0.app.add",
-        "title": "Add",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.app.remove",
-        "title": "Remove",
-        "icon": "$(trash)"
-      },
-      {
-        "command": "auth0.app.addCallbackUrl",
-        "title": "Add Callback URL",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.app.removeCallbackUrl",
-        "title": "Remove Callback URL",
-        "icon": "$(trash)"
-      },
-      {
-        "command": "auth0.app.editRotationType",
-        "title": "Edit Rotation Type",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.app.editTokenLifetime",
-        "title": "Edit Token Lifetime",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.app.editLeeway",
-        "title": "Edit Leeway",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.copyValue",
-        "title": "Copy Value",
-        "icon": "$(files)"
-      },
-      {
-        "command": "auth0.copyAsJson",
-        "title": "Copy as JSON"
-      },
-      {
-        "command": "auth0.deploy",
-        "title": "Deploy to Auth0"
-      },
-      {
-        "command": "auth0.api.add",
-        "title": "Add an API",
-        "icon": "$(plus)"
-      },
-      {
-        "command": "auth0.api.remove",
-        "title": "Remove",
-        "icon": "$(trash)"
-      },
-      {
-        "command": "auth0.api.refresh",
-        "title": "Refresh",
-        "icon": "$(refresh)"
-      },
-      {
-        "command": "auth0.api.copyAsJson",
-        "title": "Copy as JSON"
-      },
-      {
-        "command": "auth0.api.editAllowOfflineAccess",
-        "title": "Edit Allow Offline Access",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.api.editTokenLifetime",
-        "title": "Edit Token Lifetime",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.api.editTokenLifetimeWeb",
-        "title": "Edit Token Lifetime (web)",
-        "icon": "$(edit)"
-      },
-      {
-        "command": "auth0.links.openManage",
-        "title": "Open Manage dashboard"
-      },
-      {
-        "command": "auth0.links.openCommunity",
-        "title": "Open Community site"
-      },
-      {
-        "command": "auth0.links.openDocs",
-        "title": "Open Docs"
-      },
-      {
-        "command": "auth0.links.openQuickstarts",
-        "title": "Open Quickstarts"
-      },
-      {
-        "command": "auth0.links.openSupport",
-        "title": "Open Support Center"
-      },
-      {
-        "command": "auth0.links.openProServices",
-        "title": "Open Professional Services"
-      }
-    ],
     "viewsContainers": {
       "activitybar": [
         {
           "id": "auth0-explorer",
           "title": "Auth0 Explorer",
-          "icon": "media/auth0.svg"
-        }
-      ]
-    },
-    "views": {
-      "auth0-explorer": [
-        {
-          "id": "auth0.app-explorer",
-          "name": "Applications",
-          "icon": "media/auth0.svg",
-          "contextualTitle": "Auth0 Explorer"
-        },
-        {
-          "id": "auth0.api-explorer",
-          "name": "APIs",
-          "contextualTitle": "Auth0 Explorer"
-        },
-        {
-          "id": "auth0.help-view",
-          "name": "Help and Support"
+          "icon": "./resources/auth0.png"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "auth0.app-explorer",
-        "contents": "Manage your Auth0 account by signing in into your Auth0 tenant.\n\n[Sign In](command:auth0.signIn)"
+        "view": "authenticateView",
+        "contents": "Manage your Auth0 account by signing in into your Auth0 tenant.\n\n[Sign In](command:auth0.auth.signIn)",
+        "when": "!auth0:authenticated"
+      }
+    ],
+    "views": {
+      "auth0-explorer": [
+        {
+          "id": "authenticateView",
+          "name": "Authenticate",
+          "contextualTitle": "Auth0 Explorer",
+          "icon": "./resources/auth0.png",
+          "when": "!auth0:authenticated"
+        },
+        {
+          "id": "appsView",
+          "name": "Applications",
+          "icon": "./resources/auth0.png",
+          "when": "auth0:authenticated"
+        },
+        {
+          "id": "apisView",
+          "name": "APIs",
+          "icon": "./resources/auth0.png",
+          "when": "auth0:authenticated"
+        },
+        {
+          "id": "linksView",
+          "name": "Help and Support",
+          "icon": "./resources/auth0.png",
+          "when": "auth0:authenticated"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "category": "Auth0",
+        "command": "auth0.auth.signIn",
+        "title": "Sign In",
+        "icon":"$(sign-in)",
+        "enablement": "auth0:authenticated == false"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.auth.signOut",
+        "title": "Sign Out",
+        "icon":"$(sign-out)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.auth.switchTenant",
+        "title": "Switch Tenant",
+        "icon":"$(sign-in)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.lab.notification",
+        "title": "Discover Auth0 Lab?",
+        "icon":"$(beaker)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.lab.configure",
+        "title": "Configure Lab",
+        "icon":"$(beaker)",
+        "enablement": "auth0:authenticated && auth0:isLabWorkspace"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.refresh",
+        "title": "Refresh Applications",
+        "icon": "$(refresh)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.add",
+        "title": "Add Application",
+        "icon": "$(plus)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.remove",
+        "title": "Remove Application",
+        "icon": "$(trash)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.copyAsJson",
+        "title": "Copy as JSON",
+        "icon": "$(copy)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.copyValue",
+        "title": "Copy Value",
+        "icon": "$(files)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.addCallbackUrl",
+        "title": "Add Callback URL",
+        "icon": "$(plus)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.removeCallbackUrl",
+        "title": "Remove Callback URL",
+        "icon": "$(trash)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.editRotationType",
+        "title": "Edit Rotation Type",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.editTokenLifetime",
+        "title": "Edit Token Lifetime",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.app.editLeeway",
+        "title": "Edit Leeway",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },{
+        "category": "Auth0",
+        "command": "auth0.api.refresh",
+        "title": "Refresh APIs",
+        "icon": "$(refresh)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.add",
+        "title": "Add API",
+        "icon": "$(plus)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.remove",
+        "title": "Remove API",
+        "icon": "$(trash)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.copyAsJson",
+        "title": "Copy as JSON",
+        "icon": "$(copy)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.copyValue",
+        "title": "Copy Value",
+        "icon": "$(files)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.editAllowOfflineAccess",
+        "title": "Edit Allow Offline Access",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.editTokenLifetime",
+        "title": "Edit Token Lifetime",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.api.editTokenLifetimeWeb",
+        "title": "Edit Token Lifetime (web)",
+        "icon": "$(edit)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.deploy",
+        "title": "Deploy to Auth0",
+        "icon": "$(rocket)",
+        "enablement": "auth0:authenticated"
       }
     ],
     "menus": {
-      "view/title": [
-        {
-          "command": "auth0.app.add",
-          "when": "auth0:isAuthenticated == true && view == auth0.app-explorer",
-          "group": "navigation"
-        },
-        {
-          "command": "auth0.app.refresh",
-          "when": "auth0:isAuthenticated == true && view == auth0.app-explorer",
-          "group": "navigation"
-        },
-        {
-          "command": "auth0.api.refresh",
-          "when": "auth0:isAuthenticated == true && view == auth0.api-explorer",
-          "group": "navigation"
-        },
-        {
-          "command": "auth0.api.add",
-          "when": "auth0:isAuthenticated == true && view == auth0.api-explorer",
-          "group": "navigation"
-        }
-      ],
       "commandPalette": [
         {
-          "command": "auth0.api.add",
-          "when": "auth0:isAuthenticated == true"
-        },
-        {
-          "command": "auth0.api.refresh",
-          "when": "auth0:isAuthenticated == true"
+          "command": "auth0.lab.configure",
+          "when": "auth0:authenticated && auth0:isLabWorkspace"
         },
         {
           "command": "auth0.app.add",
-          "when": "auth0:isAuthenticated == true"
+          "when": "auth0:authenticated"
+        },
+        {
+          "command": "auth0.app.remove",
+          "when": "false"
         },
         {
           "command": "auth0.app.refresh",
-          "when": "auth0:isAuthenticated == true"
+          "when": "false"
         },
         {
-          "command": "auth0.deploy",
-          "when": "auth0:isAuthenticated == true"
+          "command": "auth0.app.copyAsJson",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.copyValue",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.addCallbackUrl",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.removeCallbackUrl",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editRotationType",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editTokenLifetime",
+          "when": "false"
+        },
+        {
+          "command": "auth0.app.editLeeway",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.add",
+          "when": "auth0:authenticated"
         },
         {
           "command": "auth0.api.remove",
           "when": "false"
         },
         {
-          "command": "auth0.copyValue",
-          "when": "false"
-        },
-        {
-          "command": "auth0.copyAsJson",
+          "command": "auth0.api.refresh",
           "when": "false"
         },
         {
           "command": "auth0.api.copyAsJson",
+          "when": "false"
+        },
+        {
+          "command": "auth0.api.copyValue",
           "when": "false"
         },
         {
@@ -300,101 +396,107 @@
           "when": "false"
         },
         {
-          "command": "auth0.app.addCallbackUrl",
+          "command": "auth0.deploy",
           "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "auth0.app.refresh",
+          "when": "auth0:authenticated && view == appsView",
+          "group": "navigation"
         },
         {
-          "command": "auth0.app.removeCallbackUrl",
-          "when": "false"
+          "command": "auth0.app.add",
+          "when": "auth0:authenticated && view == appsView",
+          "group": "navigation"
         },
         {
-          "command": "auth0.app.editRotationType",
-          "when": "false"
+          "command": "auth0.api.refresh",
+          "when": "auth0:authenticated && view == apisView",
+          "group": "navigation"
         },
         {
-          "command": "auth0.app.editTokenLifetime",
-          "when": "false"
-        },
-        {
-          "command": "auth0.app.editLeeway",
-          "when": "false"
+          "command": "auth0.api.add",
+          "when": "auth0:authenticated && view == apisView",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem",
-          "command": "auth0.copyValue",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationRootTreeItem",
-          "command": "auth0.copyAsJson",
-          "group": "navigation"
-        },
-        {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationRootTreeItem",
+          "when": "view == appsView && viewItem == ApplicationRootTreeItem",
           "command": "auth0.app.remove",
           "group": "inline"
         },
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationTreeItem:CallbackUrls",
+          "when": "view == appsView && viewItem == ApplicationRootTreeItem",
+          "command": "auth0.app.copyAsJson",
+          "group": "navigation"
+        },
+        {
+          "when": "view == appsView && viewItem == ApplicationValueTreeItem",
+          "command": "auth0.app.copyValue",
+          "group": "inline"
+        },
+        {
+          "when": "view == appsView && viewItem == ApplicationTreeItem:CallbackUrls",
           "command": "auth0.app.addCallbackUrl",
           "group": "inline"
         },
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:CallbackUrl",
+          "when": "view == appsView && viewItem == ApplicationValueTreeItem:CallbackUrl",
           "command": "auth0.app.removeCallbackUrl",
           "group": "inline"
         },
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:RotationType",
+          "when": "view == appsView && viewItem == ApplicationValueTreeItem:RotationType",
           "command": "auth0.app.editRotationType",
           "group": "inline"
         },
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:TokenLifetime",
+          "when": "view == appsView && viewItem == ApplicationValueTreeItem:TokenLifetime",
           "command": "auth0.app.editTokenLifetime",
           "group": "inline"
         },
         {
-          "when": "view == auth0.app-explorer && viewItem == ApplicationValueTreeItem:Leeway",
+          "when": "view == appsView && viewItem == ApplicationValueTreeItem:Leeway",
           "command": "auth0.app.editLeeway",
           "group": "inline"
         },
         {
-          "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem",
-          "command": "auth0.copyValue",
-          "group": "inline"
-        },
-        {
-          "when": "view == auth0.api-explorer && viewItem == ApiRootTreeItem",
-          "command": "auth0.api.copyAsJson",
-          "group": "navigation"
-        },
-        {
-          "when": "view == auth0.api-explorer && viewItem == ApiRootTreeItem",
+          "when": "view == apisView && viewItem == ApiRootTreeItem",
           "command": "auth0.api.remove",
           "group": "inline"
         },
         {
-          "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem:AllowOfflineAccess",
+          "when": "view == apisView && viewItem == ApiRootTreeItem",
+          "command": "auth0.api.copyAsJson",
+          "group": "navigation"
+        },
+        {
+          "when": "view == apisView && viewItem == ApiValueTreeItem",
+          "command": "auth0.api.copyValue",
+          "group": "inline"
+        },
+        {
+          "when": "view == apisView && viewItem == ApiValueTreeItem:AllowOfflineAccess",
           "command": "auth0.api.editAllowOfflineAccess",
           "group": "inline"
         },
         {
-          "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem:TokenLifetime",
+          "when": "view == apisView && viewItem == ApiValueTreeItem:TokenLifetime",
           "command": "auth0.api.editTokenLifetime",
           "group": "inline"
         },
         {
-          "when": "view == auth0.api-explorer && viewItem == ApiValueTreeItem:TokenLifetimeWeb",
+          "when": "view == apisView && viewItem == ApiValueTreeItem:TokenLifetimeWeb",
           "command": "auth0.api.editTokenLifetimeWeb",
           "group": "inline"
         }
       ],
       "explorer/context": [
         {
-          "when": "auth0:isAuthenticated == true && resourceFilename == auth0.yml",
+          "when": "auth0:authenticated && resourceFilename == auth0.yml",
           "command": "auth0.deploy",
           "group": "navigation"
         }

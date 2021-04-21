@@ -31,8 +31,10 @@ export class ApplicationRootTreeItem extends ApplicationTreeItem {
 
   static fromClient(client: Client) {
     const appTypes: { [key: string]: string } = {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       regular_web: 'Regular Web App',
       spa: 'Single Page App',
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       non_interactive: 'Machine to Machine',
       native: 'Native',
     };

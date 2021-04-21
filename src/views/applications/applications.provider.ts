@@ -1,28 +1,34 @@
 import * as vscode from 'vscode';
-import { obfuscate, sortAlphabetically } from './../utils';
-import { ApplicationRootTreeItem, ApplicationTreeItem } from '../tree-items/application.tree-item';
 import { Client, ManagementClient } from 'auth0';
+import { getClient } from '../../client';
+import { sortAlphabetically } from '../../utils';
+import {
+  ApplicationRootTreeItem,
+  ApplicationTreeItem,
+} from './application.tree-item';
+
 import {
   buildCallbackUrlsChildren,
   buildRefreshTokenChildren,
   buildRootChildren,
-} from '../tree-items/application.tree-item.builder';
+} from './application.tree-item.builder';
 
 const TREE_ITEM_LABELS = {
   refreshTokens: 'Refresh Tokens',
   callbackUrls: 'Callback URLs',
 };
 
-export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class ApplicationsViewDataProvider
+  implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
     ApplicationTreeItem | undefined | void
   > = new vscode.EventEmitter<ApplicationTreeItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<ApplicationTreeItem | undefined | void> = this
-    ._onDidChangeTreeData.event;
+
+  readonly onDidChangeTreeData: vscode.Event<
+    ApplicationTreeItem | undefined | void
+  > = this._onDidChangeTreeData.event;
 
   public _clients: Client[] | null = null;
-
-  constructor(private _client: ManagementClient) {}
 
   getTreeItem(element: ApplicationTreeItem): vscode.TreeItem {
     return element;
@@ -39,7 +45,8 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
   }
 
   async refresh() {
-    const clients = await this._client.getClients();
+    const client = await getClient();
+    const clients = await client.getClients();
     this._clients = clients
       .filter((c: any) => !c.global)
       .sort(sortAlphabetically<Client>((item) => item.name || ''));
@@ -53,7 +60,8 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
 
   private async getClients() {
     if (!this._clients) {
-      const clients = await this._client.getClients();
+      const client = await getClient();
+      const clients = await client.getClients();
       this._clients = clients
         .filter((c: any) => !c.global)
         .sort(sortAlphabetically<Client>((item) => item.name || ''));
@@ -68,11 +76,15 @@ export class ApplicationsTreeDataProvider implements vscode.TreeDataProvider<vsc
     }
 
     if (!parent) {
-      return this._clients.map((client) => ApplicationRootTreeItem.fromClient(client));
+      return this._clients.map((client) =>
+        ApplicationRootTreeItem.fromClient(client)
+      );
     }
 
     const client: any =
-      parent && this._clients.find(({ client_id }) => client_id === parent.clientId);
+      parent &&
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      this._clients.find(({ client_id }) => client_id === parent.clientId);
 
     switch (parent.label) {
       case TREE_ITEM_LABELS.refreshTokens:

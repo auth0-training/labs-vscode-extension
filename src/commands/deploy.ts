@@ -1,39 +1,40 @@
 import * as vscode from 'vscode';
-import * as tools from 'auth0-source-control-extension-tools';
-import * as extTools from 'auth0-extension-tools';
 import * as path from 'path';
 import * as fs from 'fs';
 import { load } from 'js-yaml';
-import { getTreeDataProviders } from '../providers';
-import { getClientWithToken } from '../store/api';
+import * as tools from 'auth0-source-control-extension-tools';
+import * as extTools from 'auth0-extension-tools';
+import { getClient } from '../client';
 
-export function registerDeployCommands(): vscode.Disposable[] {
-  return [
-    vscode.commands.registerCommand('auth0.deploy', async (e) => {
-      const managementClient = getClientWithToken();
-      const { applicationsTreeDataProvider, apisTreeDataProvider } = getTreeDataProviders();
-      if (managementClient) {
-        try {
-          const filePath = e.path;
-          vscode.window.showInformationMessage('Deploying: ' + path.basename(filePath));
-          // TODO: use safeLoad instead
-          const assets = load(tools.keywordReplace(fs.readFileSync(filePath, 'utf8'), process.env));
-          const config = extTools.config();
-          config.setProvider(() => null);
-          await tools.deploy(assets, managementClient, config);
-          vscode.window.showInformationMessage('Successfully deployed  ' + path.basename(filePath));
+const registerCommand = vscode.commands.registerCommand;
 
-          await Promise.all([
-            apisTreeDataProvider.refresh(),
-            applicationsTreeDataProvider.refresh(),
-          ]);
-        } catch (err) {
-          console.log(err);
-          vscode.window.showErrorMessage('Deploy failed. Error: ' + err.message);
-        }
-      } else {
-        vscode.window.showWarningMessage('You must first authenticate with Auth0');
-      }
-    }),
-  ];
+export class DeployCommands {
+  constructor(private subscriptions: { dispose(): any }[]) {
+    subscriptions.push(...[registerCommand('auth0.deploy', this.deploy)]);
+  }
+
+  deploy = async (e: vscode.Uri) => {
+    console.log('auth0:deploy');
+    const filePath = e.path;
+    if (!filePath) {
+      return;
+    }
+    const client = await getClient();
+    vscode.window.showInformationMessage(
+      'Deploying: ' + path.basename(filePath)
+    );
+
+    const assets = load(
+      tools.keywordReplace(fs.readFileSync(filePath, 'utf8'), process.env)
+    );
+    const config = extTools.config();
+    config.setProvider(() => null);
+    await tools.deploy(assets, client, config);
+    vscode.window.showInformationMessage(
+      'Successfully deployed  ' + path.basename(filePath)
+    );
+
+    await vscode.commands.executeCommand('auth0.app.refresh');
+    await vscode.commands.executeCommand('auth0.api.refresh');
+  };
 }

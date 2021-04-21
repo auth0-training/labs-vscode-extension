@@ -1,11 +1,12 @@
-import path from 'path';
-import Mocha from 'mocha';
-import glob from 'glob';
+import * as path from 'path';
+import Mocha = require('mocha');
+import { glob } from 'glob';
 
 export function run(): Promise<void> {
   // Create the mocha test
   const mocha = new Mocha({
     ui: 'tdd',
+    color: true,
   });
 
   const testsRoot = path.resolve(__dirname, '..');
@@ -21,7 +22,7 @@ export function run(): Promise<void> {
 
       try {
         // Run the mocha test
-        mocha.run((failures: number) => {
+        mocha.run((failures) => {
           if (failures > 0) {
             e(new Error(`${failures} tests failed.`));
           } else {
@@ -29,6 +30,7 @@ export function run(): Promise<void> {
           }
         });
       } catch (err) {
+        console.error(err);
         e(err);
       }
     });

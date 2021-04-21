@@ -28,7 +28,10 @@ export class ApiRootTreeItem extends ApiTreeItem {
     super(label, description, identifier, collapsibleState, '');
   }
 
-  static fromResourceServer(resourceServer: ResourceServer & { is_system: boolean }) {
+  static fromResourceServer(
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    resourceServer: ResourceServer & { is_system: boolean }
+  ) {
     return new ApiRootTreeItem(
       resourceServer.name || '',
       '',

@@ -1,22 +1,20 @@
 import * as vscode from 'vscode';
-import { sortAlphabetically } from './../utils';
-import { ApplicationTreeItem } from '../tree-items/application.tree-item';
-import { Client, ManagementClient, ResourceServer } from 'auth0';
-import { ApiRootTreeItem, ApiTreeItem } from '../tree-items/api.tree-item';
-import { buildRootChildren } from '../tree-items/api.tree-item.builder';
+import { ResourceServer } from 'auth0';
+import { sortAlphabetically } from '../../utils';
+import { getClient } from '../../client';
+import { ApiRootTreeItem, ApiTreeItem } from './api.tree-item';
+import { buildRootChildren } from './api.tree-item.builder';
 
-export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class ApisViewDataProvider
+  implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
-    ApplicationTreeItem | undefined | void
-  > = new vscode.EventEmitter<ApplicationTreeItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<ApplicationTreeItem | undefined | void> = this
-    ._onDidChangeTreeData.event;
+    ApiTreeItem | undefined | void
+  > = new vscode.EventEmitter<ApiTreeItem | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<
+    ApiTreeItem | undefined | void
+  > = this._onDidChangeTreeData.event;
 
   public _resourceServers: ResourceServer[] | null = null;
-
-  constructor(private _client: ManagementClient) {
-    // noop
-  }
 
   getTreeItem(element: ApiTreeItem): vscode.TreeItem {
     return element;
@@ -32,18 +30,20 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
   }
 
   async refresh() {
-    const resourceServers = await this._client.getResourceServers();
+    const client = await getClient();
+    const resourceServers = await client.getResourceServers();
     this._resourceServers = resourceServers.sort(
-      sortAlphabetically<Client>((item) => item.name || '')
+      sortAlphabetically<ResourceServer>((item) => item.name || '')
     );
     this._onDidChangeTreeData.fire();
   }
 
   private async getResourceServers() {
     if (!this._resourceServers) {
-      const resourceServers = await this._client.getResourceServers();
+      const client = await getClient();
+      const resourceServers = await client.getResourceServers();
       this._resourceServers = resourceServers.sort(
-        sortAlphabetically<Client>((item) => item.name || '')
+        sortAlphabetically<ResourceServer>((item) => item.name || '')
       );
     }
 
@@ -58,6 +58,7 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
     if (!parent) {
       return this._resourceServers.map((resourceServer) =>
         ApiRootTreeItem.fromResourceServer(
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           resourceServer as ResourceServer & { is_system: boolean }
         )
       );
@@ -65,6 +66,7 @@ export class ApisTreeDataProvider implements vscode.TreeDataProvider<vscode.Tree
 
     const resourceServer = this._resourceServers.find(
       ({ identifier }) => identifier === parent.identifier
+      // eslint-disable-next-line @typescript-eslint/naming-convention
     ) as ResourceServer & { is_system: boolean };
 
     if (!resourceServer) {

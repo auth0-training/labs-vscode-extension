@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
@@ -26,13 +26,17 @@ jobs:
       run: npm run test
       if: runner.os != 'Linux'
     - name: Run Tests (Linux)
-      run: xvfb-run -a npm test
+      run: xvfb-run -a npm run test
+      if: runner.os == 'Linux'
+    - name: Build Production
+      run: npm run build:production
       if: runner.os == 'Linux'
     - name: Package VSIX
       run: npm run package
+      if: runner.os == 'Linux'
     - name: Upload Artifact
-      if: runner.os == 'macOS'
+      if: runner.os == 'Linux'
       uses: actions/upload-artifact@v2
       with:
-        name: auth0-vscode
+        name: test-vscode
         path: release.vsix

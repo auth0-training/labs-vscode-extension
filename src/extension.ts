@@ -1,101 +1,116 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-
 import * as vscode from 'vscode';
+import { Auth } from './auth';
+import { TokenSet } from 'openid-client';
 import {
-  initializeAuth,
-  getAccessToken,
-  getDomainFromToken,
-  clearAccessToken,
-  isTokenValid,
-} from './auth';
+  ApplicationsViewDataProvider,
+  ApisViewDataProvider,
+  LinksViewDataProvider,
+} from './views';
+import {
+  AuthCommands,
+  LabCommands,
+  ApplicationCommands,
+  ApiCommands,
+  LinkCommands,
+  DeployCommands,
+} from './commands';
 
-import { LinksTreeDataProvider } from './providers/links.provider';
-import { getTreeDataProviders, registerTreeDataProviders } from './providers';
-import { registerCommands } from './commands';
-import { registerFileSystemProvider } from './filesystem';
-import { createClientWithToken } from './store/api';
+let activeExtension: Extension;
+let _context: vscode.ExtensionContext;
+export class Extension {
+  activate = async () => {
+    /**
+     * Register commands & views
+     */
+    const appViewDataProvider = new ApplicationsViewDataProvider();
+    const apiViewDataProvider = new ApisViewDataProvider();
+    const linkViewDataProvider = new LinksViewDataProvider();
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export async function activate(context: vscode.ExtensionContext) {
-  let statusBarItem: vscode.StatusBarItem;
+    const subscriptions = _context.subscriptions;
+    const authCommands = new AuthCommands(subscriptions);
+    const labCommands = new LabCommands(subscriptions);
+    const deployCommands = new DeployCommands(subscriptions);
+    const appCommands = new ApplicationCommands(
+      subscriptions,
+      appViewDataProvider
+    );
+    const apiCommands = new ApiCommands(subscriptions, apiViewDataProvider);
+    const linkCommands = new LinkCommands(subscriptions, linkViewDataProvider);
 
-  async function logOut() {
-    await clearAccessToken();
+    /**
+     * Register tree views within activity bar
+     */
+    vscode.window.createTreeView('appsView', {
+      treeDataProvider: appViewDataProvider,
+      showCollapseAll: false,
+    });
 
-    const { apisTreeDataProvider, applicationsTreeDataProvider } = getTreeDataProviders();
+    vscode.window.createTreeView('apisView', {
+      treeDataProvider: apiViewDataProvider,
+      showCollapseAll: false,
+    });
 
-    apisTreeDataProvider.clear();
-    applicationsTreeDataProvider.clear();
+    vscode.window.createTreeView('linksView', {
+      treeDataProvider: linkViewDataProvider,
+      showCollapseAll: false,
+    });
 
-    statusBarItem.text = '';
-    statusBarItem.dispose();
+    /**
+     * Register changes in authentication to update views
+     */
+    const updateViews = async (tokenSet: TokenSet | undefined) => {
+      /**
+       * Set a global context item `auth0:authenticated`. This
+       * setting is used to determine what commands/views/etc are
+       * available to the user. The access token is also used
+       * when making requests from the Management API.
+       */
+      const authenticated = tokenSet && !tokenSet.expired();
+      await vscode.commands.executeCommand(
+        'setContext',
+        'auth0:authenticated',
+        authenticated
+      );
+      authCommands.updateStatus(tokenSet);
+      await appCommands.refresh();
+      if (authenticated) {
+        await vscode.commands.executeCommand('auth0.lab.notification');
+      }
+    };
+    Auth.onAuthStatusChanged(updateViews);
 
-    vscode.commands.executeCommand('setContext', 'auth0:isAuthenticated', false);
-  }
+    await vscode.commands.executeCommand('auth0.auth.silentSignIn');
+  };
 
-  async function logIn() {
-    await initializeAuth(context);
-
-    const accessToken = await getAccessToken();
-
-    if (!accessToken) {
-      // TODO correctly handle error
-      throw new Error('Missing access token');
-    }
-
-    vscode.commands.executeCommand('setContext', 'auth0:isAuthenticated', true);
-
-    await createClientWithToken(accessToken);
-
-    context.subscriptions.push(...registerTreeDataProviders());
-
-    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-    statusBarItem.command = 'auth0.switchTenant';
-    context.subscriptions.push(statusBarItem);
-    statusBarItem.text = 'Auth0: ' + getDomainFromToken(accessToken);
-    statusBarItem.show();
-  }
-
-  const disposable = vscode.commands.registerCommand('auth0.signIn', async () => {
-    await logIn();
-  });
-
-  vscode.commands.registerCommand('auth0.switchTenant', async () => {
-    const action =
-      (await vscode.window.showQuickPick(['Logout', 'Switch Tenant'], {
-        ignoreFocusOut: true,
-      })) || '';
-
-    await logOut();
-
-    if (action === 'Switch Tenant') {
-      vscode.commands.executeCommand('auth0.signIn');
-    }
-  });
-
-  vscode.commands.registerCommand('auth0.copyValue', (e) => {
-    vscode.env.clipboard.writeText(e.value);
-    vscode.window.showInformationMessage(`${e.label} copied to clipboard!`);
-  });
-
-  context.subscriptions.push(...registerFileSystemProvider());
-
-  context.subscriptions.push(...registerCommands());
-
-  vscode.window.registerTreeDataProvider('auth0.help-view', new LinksTreeDataProvider());
-
-  context.subscriptions.push(disposable);
-
-  const accessToken = await getAccessToken();
-
-  if (accessToken && isTokenValid(accessToken)) {
-    await logIn();
-  }
+  /**
+   * Deactivate the extension. Due to uninstalling the
+   * extension.
+   */
+  deactivate = async () => {
+    /**
+     * Sign out and dispose of all credentials
+     */
+    Auth.signOut();
+    Auth.dispose();
+  };
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {
-  // noop
+/**
+ * Activates the extension in VS Code and registers commands available
+ * in the command palette
+ * @param context - Context the extension is being run in
+ */
+export async function activate(this: any, context: vscode.ExtensionContext) {
+  _context = context;
+  activeExtension = new Extension();
+  activeExtension.activate();
+}
+
+/**
+ * Deactivates the extension in VS Code
+ */
+export async function deactivate() {
+  if (activeExtension) {
+    await activeExtension.deactivate();
+  }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 // https://code.visualstudio.com/api/advanced-topics/remote-extensions#persisting-secrets
 
 // Ignoring this import because this module is built in to VSCode, so we don't

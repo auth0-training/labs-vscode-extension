@@ -2,7 +2,10 @@ import * as vscode from 'vscode';
 import { ResourceServer } from 'auth0';
 import { ApiValueTreeItem } from './api-value.tree-item';
 
-export function buildRootChildren(resourceServer: ResourceServer & { is_system: boolean }) {
+export function buildRootChildren(
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  resourceServer: ResourceServer & { is_system: boolean }
+) {
   return [
     new ApiValueTreeItem(
       'Identifier',

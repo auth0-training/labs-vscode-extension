@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-var-requires */
 //@ts-check
+
 'use strict';
 
 const path = require('path');
@@ -9,6 +8,7 @@ const webpack = require('webpack');
 /**@type {import('webpack').Configuration}*/
 const config = {
   target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
+  mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 
   entry: './src/extension.ts', // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: {
@@ -16,9 +16,8 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
-    devtoolModuleFilenameTemplate: '../[resource-path]',
   },
-  devtool: 'source-map',
+  devtool: 'nosources-source-map',
   externals: {
     vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },
@@ -37,19 +36,11 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({ 'global.GENTLY': false }),
     new webpack.IgnorePlugin({ resourceRegExp: /edge/ }),
     new webpack.IgnorePlugin({ resourceRegExp: /pug/ }),
   ],
-  node: {
-    __dirname: false,
-  },
 };
 module.exports = config;

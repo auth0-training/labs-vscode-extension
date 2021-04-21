@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import { Client } from 'auth0';
 import { ApplicationTreeItem } from './application.tree-item';
 import { ApplicationValueTreeItem } from './application-value.tree-item';
-import { obfuscate } from '../utils';
+import { obfuscate } from '../../utils';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function buildRootChildren(client: Client & { refresh_token: any }) {
   const children = [
     new ApplicationValueTreeItem(
@@ -63,7 +64,11 @@ export function buildCallbackUrlsChildren(client: Client | undefined) {
   );
 }
 
-export function buildRefreshTokenChildren(client: Client & { refresh_token: any }) {
+export function buildRefreshTokenChildren(
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  client: Client & { refresh_token: any }
+) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { rotation_type, token_lifetime, leeway } = client.refresh_token;
   const children = [];
   if (rotation_type !== undefined) {

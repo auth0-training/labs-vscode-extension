@@ -1,14 +1,6 @@
-import * as vscode from 'vscode';
-import { registerApiCommands } from './apis';
-import { registerApplicationCommands } from './applications';
-import { registerDeployCommands } from './deploy';
-import { registerLinkCommands } from './links';
-
-export function registerCommands(): vscode.Disposable[] {
-  return [
-    ...registerApiCommands(),
-    ...registerApplicationCommands(),
-    ...registerDeployCommands(),
-    ...registerLinkCommands(),
-  ];
-}
+export { AuthCommands } from './auth';
+export { LabCommands } from './lab';
+export { ApplicationCommands } from './application';
+export { ApiCommands } from './api';
+export { LinkCommands } from './link';
+export { DeployCommands } from './deploy';
