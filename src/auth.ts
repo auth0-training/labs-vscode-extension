@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { keytar } from './secrets';
 import { OIDC_CONFIG } from './auth.config';
 import { Client, Issuer, TokenSet } from 'openid-client';
+import { AbortController } from 'abort-controller';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
 
@@ -80,15 +81,24 @@ export class Auth {
       {
         location: vscode.ProgressLocation.Notification,
         title: `Sign in: Your pairing code is ${handle.user_code}`,
-        cancellable: false,
+        cancellable: true,
       },
-      async () => {
+      async (progress, token) => {
         vscode.commands.executeCommand(
           'vscode.open',
           vscode.Uri.parse(handle.verification_uri_complete)
         );
 
-        const tokenSet = await handle.poll();
+        const abort = new AbortController();
+        token.onCancellationRequested(() => {
+          abort.abort();
+        });
+
+        const tokenSet = await handle.poll(abort);
+
+        if (!tokenSet) {
+          return;
+        }
 
         await keytar.setPassword(
           SECRET_KEY_SERVICE_NAME,
