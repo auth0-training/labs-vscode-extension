@@ -2,7 +2,7 @@
 
 # Auth0 VSCode Extension
 
-A Visial Studio Code extension that provides a rich IDE experience for setting up your Auth0 integration, and deploying changes to your Auth0 account.
+A Visual Studio Code extension that provides a rich IDE experience for setting up your Auth0 integration, and deploying changes to your Auth0 account.
 
 ## Requirements
 
