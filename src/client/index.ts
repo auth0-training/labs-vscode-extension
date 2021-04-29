@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ManagementClient } from 'auth0';
 import { getDomainFromToken } from '../utils';
-import { TokenSet } from 'openid-client';
+import type { TokenSet } from 'openid-client';
 import { Auth } from '../auth';
 
 let managementClient: ManagementClient;

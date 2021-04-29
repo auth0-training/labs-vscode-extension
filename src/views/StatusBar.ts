@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TokenSet } from 'openid-client';
+import type { TokenSet } from 'openid-client';
 import { getDomainFromToken } from '../utils';
 
 class StatusBarImpl implements vscode.Disposable {

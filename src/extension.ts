@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Auth } from './auth';
-import { TokenSet } from 'openid-client';
+import type { TokenSet } from 'openid-client';
 import {
   ApplicationsViewDataProvider,
   ApisViewDataProvider,

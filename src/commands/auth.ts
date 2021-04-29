@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TokenSet } from 'openid-client';
+import type { TokenSet } from 'openid-client';
 import { Auth } from '../auth';
 import { StatusBar } from '../views/StatusBar';
 
@@ -26,7 +26,11 @@ export class AuthCommands {
 
   signIn = async (): Promise<void> => {
     console.log('auth0:authCommands:signIn');
-    await Auth.signIn();
+    try {
+      await Auth.signIn();
+    } catch (e) {
+      vscode.window.showErrorMessage(e.message);
+    }
   };
 
   switchTenant = async (): Promise<void> => {
