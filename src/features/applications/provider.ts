@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import { Client, ManagementClient } from 'auth0';
+import type { Client } from 'auth0';
 import { getClient } from '../../client';
 import { sortAlphabetically } from '../../utils';
 import {
   ApplicationRootTreeItem,
   ApplicationTreeItem,
-} from './application.tree-item';
+} from './views/application.tree-item';
 
 import {
   buildCallbackUrlsChildren,
   buildRefreshTokenChildren,
   buildRootChildren,
-} from './application.tree-item.builder';
+} from './views/application.tree-item.builder';
 
 const TREE_ITEM_LABELS = {
   refreshTokens: 'Refresh Tokens',
@@ -58,7 +58,7 @@ export class ApplicationsViewDataProvider
     this._onDidChangeTreeData.fire();
   }
 
-  private async getClients() {
+  async getClients() {
     if (!this._clients) {
       const client = await getClient();
       const clients = await client.getClients();

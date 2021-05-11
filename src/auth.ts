@@ -2,8 +2,9 @@
 import * as vscode from 'vscode';
 import { keytar } from './secrets';
 import { OIDC_CONFIG } from './auth.config';
-import { Client, DeviceFlowHandle, Issuer, TokenSet } from 'openid-client';
+import { Client, Issuer, TokenSet } from 'openid-client';
 import { AbortController } from 'abort-controller';
+import { getDomainFromToken } from './utils';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
 
@@ -128,5 +129,12 @@ export class Auth {
 
   public static dispose(): void {
     authStatusEventEmitter.dispose();
+  }
+}
+
+export async function getTenantDomain() {
+  const tokenSet = await Auth.getTokenSet();
+  if (tokenSet && tokenSet.access_token) {
+    return getDomainFromToken(tokenSet.access_token);
   }
 }

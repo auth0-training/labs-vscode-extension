@@ -1,116 +1,108 @@
 import * as vscode from 'vscode';
-import { Auth } from './auth';
 import type { TokenSet } from 'openid-client';
+import { Auth } from './auth';
+
+/**
+ * Import Features
+ */
 import {
-  ApplicationsViewDataProvider,
-  ApisViewDataProvider,
-  LinksViewDataProvider,
-} from './views';
-import {
-  AuthCommands,
-  LabCommands,
   ApplicationCommands,
-  ApiCommands,
-  LinkCommands,
-  DeployCommands,
-} from './commands';
+  ApplicationsViewDataProvider,
+} from './features/applications';
+import { ApiCommands, ApisViewDataProvider } from './features/apis';
+import { LinkCommands, LinksViewDataProvider } from './features/links';
+import { AuthCommands } from './features/auth';
+import { DeployCommands } from './features/deploy';
+import {
+  LabCommands,
+  LocalEndpointsViewDataProvider,
+  LabResourceResolverBuilder,
+} from './features/labs';
 
-let activeExtension: Extension;
-let _context: vscode.ExtensionContext;
-export class Extension {
-  activate = async () => {
-    /**
-     * Register commands & views
-     */
-    const appViewDataProvider = new ApplicationsViewDataProvider();
-    const apiViewDataProvider = new ApisViewDataProvider();
-    const linkViewDataProvider = new LinksViewDataProvider();
+export async function activate(this: any, context: vscode.ExtensionContext) {
+  /**
+   * Register commands & views
+   */
+  const appViewDataProvider = new ApplicationsViewDataProvider();
+  const apiViewDataProvider = new ApisViewDataProvider();
+  const linkViewDataProvider = new LinksViewDataProvider();
+  const localEndpointsViewDataProvider = new LocalEndpointsViewDataProvider();
 
-    const subscriptions = _context.subscriptions;
-    const authCommands = new AuthCommands(subscriptions);
-    const labCommands = new LabCommands(subscriptions);
-    const deployCommands = new DeployCommands(subscriptions);
-    const appCommands = new ApplicationCommands(
-      subscriptions,
-      appViewDataProvider
-    );
-    const apiCommands = new ApiCommands(subscriptions, apiViewDataProvider);
-    const linkCommands = new LinkCommands(subscriptions, linkViewDataProvider);
-
-    /**
-     * Register tree views within activity bar
-     */
-    vscode.window.createTreeView('appsView', {
-      treeDataProvider: appViewDataProvider,
-      showCollapseAll: false,
-    });
-
-    vscode.window.createTreeView('apisView', {
-      treeDataProvider: apiViewDataProvider,
-      showCollapseAll: false,
-    });
-
-    vscode.window.createTreeView('linksView', {
-      treeDataProvider: linkViewDataProvider,
-      showCollapseAll: false,
-    });
-
-    /**
-     * Register changes in authentication to update views
-     */
-    const updateViews = async (tokenSet: TokenSet | undefined) => {
-      /**
-       * Set a global context item `auth0:authenticated`. This
-       * setting is used to determine what commands/views/etc are
-       * available to the user. The access token is also used
-       * when making requests from the Management API.
-       */
-      const authenticated = tokenSet && !tokenSet.expired();
-      await vscode.commands.executeCommand(
-        'setContext',
-        'auth0:authenticated',
-        authenticated
-      );
-      authCommands.updateStatus(tokenSet);
-      await appCommands.refresh();
-      if (authenticated) {
-        await vscode.commands.executeCommand('auth0.lab.notification');
-      }
-    };
-    Auth.onAuthStatusChanged(updateViews);
-
-    await vscode.commands.executeCommand('auth0.auth.silentSignIn');
-  };
+  const subscriptions = context.subscriptions;
+  const authCommands = new AuthCommands(subscriptions);
+  const labCommands = new LabCommands(
+    subscriptions,
+    new LabResourceResolverBuilder(
+      appViewDataProvider.getClients,
+      apiViewDataProvider.getResourceServers
+    )
+  );
+  const deployCommands = new DeployCommands(subscriptions);
+  const appCommands = new ApplicationCommands(
+    subscriptions,
+    appViewDataProvider
+  );
+  const apiCommands = new ApiCommands(subscriptions, apiViewDataProvider);
+  const linkCommands = new LinkCommands(subscriptions, linkViewDataProvider);
 
   /**
-   * Deactivate the extension. Due to uninstalling the
-   * extension.
+   * Register tree views within activity bar
    */
-  deactivate = async () => {
+  vscode.window.createTreeView('appsView', {
+    treeDataProvider: appViewDataProvider,
+    showCollapseAll: false,
+  });
+
+  vscode.window.createTreeView('apisView', {
+    treeDataProvider: apiViewDataProvider,
+    showCollapseAll: false,
+  });
+
+  vscode.window.createTreeView('linksView', {
+    treeDataProvider: linkViewDataProvider,
+    showCollapseAll: false,
+  });
+
+  vscode.window.createTreeView('localEndpointsView', {
+    treeDataProvider: localEndpointsViewDataProvider,
+    showCollapseAll: false,
+  });
+
+  /**
+   * Register changes in authentication to update views
+   */
+  const updateViews = async (tokenSet: TokenSet | undefined) => {
     /**
-     * Sign out and dispose of all credentials
+     * Set a global context item `auth0:authenticated`. This
+     * setting is used to determine what commands/views/etc are
+     * available to the user. The access token is also used
+     * when making requests from the Management API.
      */
-    Auth.signOut();
-    Auth.dispose();
+    const authenticated = tokenSet && !tokenSet.expired();
+    await vscode.commands.executeCommand(
+      'setContext',
+      'auth0:authenticated',
+      authenticated
+    );
+    await appCommands.refresh();
+    await apiCommands.refresh();
+    if (authenticated) {
+      await vscode.commands.executeCommand('auth0.lab.notification');
+    }
   };
+  Auth.onAuthStatusChanged(updateViews);
+
+  await vscode.commands.executeCommand('auth0.auth.silentSignIn');
 }
 
 /**
- * Activates the extension in VS Code and registers commands available
- * in the command palette
- * @param context - Context the extension is being run in
- */
-export async function activate(this: any, context: vscode.ExtensionContext) {
-  _context = context;
-  activeExtension = new Extension();
-  activeExtension.activate();
-}
-
-/**
- * Deactivates the extension in VS Code
+ * Deactivate the extension. Due to uninstalling the
+ * extension.
  */
 export async function deactivate() {
-  if (activeExtension) {
-    await activeExtension.deactivate();
-  }
+  /**
+   * Sign out and dispose of all tokensets
+   */
+  Auth.signOut();
+  Auth.dispose();
 }

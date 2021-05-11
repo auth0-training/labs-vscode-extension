@@ -1,10 +1,8 @@
 import * as vscode from 'vscode';
-import type { TokenSet } from 'openid-client';
-import { Auth } from '../auth';
-import { StatusBar } from '../views/StatusBar';
+import { Auth } from '../../auth';
+import { StatusBar } from './views/StatusBar';
 
 const registerCommand = vscode.commands.registerCommand;
-
 export class AuthCommands {
   constructor(private subscriptions: { dispose(): any }[]) {
     subscriptions.push(
@@ -13,7 +11,6 @@ export class AuthCommands {
         registerCommand('auth0.auth.signIn', this.signIn),
         registerCommand('auth0.auth.switchTenant', this.switchTenant),
         registerCommand('auth0.auth.signOut', this.signOut),
-        registerCommand('auth0.auth.updateStatus', this.updateStatus),
         StatusBar,
       ]
     );
@@ -21,7 +18,11 @@ export class AuthCommands {
 
   silentSignIn = async (): Promise<void> => {
     console.log('auth0:authCommands:silentSignIn');
-    await Auth.silentSignIn();
+    try {
+      await Auth.silentSignIn();
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   signIn = async (): Promise<void> => {
@@ -50,10 +51,5 @@ export class AuthCommands {
   signOut = async (): Promise<void> => {
     console.log('auth0:authCommands:signOut');
     await Auth.signOut();
-  };
-
-  updateStatus = (tokenSet: TokenSet | undefined): void => {
-    console.log('auth0:authCommands:updateStatus');
-    StatusBar.setTextFromTokenSet(tokenSet);
   };
 }

@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import { ResourceServer } from 'auth0';
 import { sortAlphabetically } from '../../utils';
 import { getClient } from '../../client';
-import { ApiRootTreeItem, ApiTreeItem } from './api.tree-item';
-import { buildRootChildren } from './api.tree-item.builder';
+import { ApiRootTreeItem, ApiTreeItem } from './views/api.tree-item';
+import { buildRootChildren } from './views/api.tree-item.builder';
 
 export class ApisViewDataProvider
   implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -38,7 +38,7 @@ export class ApisViewDataProvider
     this._onDidChangeTreeData.fire();
   }
 
-  private async getResourceServers() {
+  async getResourceServers() {
     if (!this._resourceServers) {
       const client = await getClient();
       const resourceServers = await client.getResourceServers();

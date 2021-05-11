@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { LinkTreeItem } from './link.tree-item';
+import { LinkTreeItem } from './views/link.tree-item';
 
 export class LinksViewDataProvider
   implements vscode.TreeDataProvider<vscode.TreeItem> {

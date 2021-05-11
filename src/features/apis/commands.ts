@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
-import { getClient } from '../client';
-import {
-  ApisViewDataProvider,
-  ApiRootTreeItem,
-  ApiValueTreeItem,
-} from '../views';
+import { getClient } from '../../client';
+import { ApisViewDataProvider } from './provider';
+import { ApiRootTreeItem } from './views/api.tree-item';
+import { ApiValueTreeItem } from './views/api-value.tree-item';
 
 const registerCommand = vscode.commands.registerCommand;
 

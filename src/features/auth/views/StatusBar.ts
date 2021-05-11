@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
+import { Auth } from '../../../auth';
 import type { TokenSet } from 'openid-client';
-import { getDomainFromToken } from '../utils';
+import { getDomainFromToken } from '../../../utils';
 
+const defaultStatus = 'Auth0: None';
 class StatusBarImpl implements vscode.Disposable {
   private readonly statusBarItem: vscode.StatusBarItem;
 
@@ -12,20 +14,22 @@ class StatusBarImpl implements vscode.Disposable {
     );
     this.statusBarItem.command = 'auth0.auth.switchTenant';
     this.statusBarItem.show();
+
+    Auth.onAuthStatusChanged(this.update, this);
   }
 
-  dispose() {
-    this.statusBarItem.dispose();
-  }
-
-  setTextFromTokenSet(tokenSet: TokenSet | undefined) {
-    if (tokenSet && !tokenSet.expired() && tokenSet.access_token) {
+  update(tokenSet: TokenSet | undefined) {
+    if (tokenSet && tokenSet.access_token) {
       this.statusBarItem.text = `Auth0: ${getDomainFromToken(
         tokenSet.access_token
       )}`;
     } else {
-      this.statusBarItem.text = 'Auth0: None';
+      this.statusBarItem.text = defaultStatus;
     }
+  }
+
+  dispose() {
+    this.statusBarItem.dispose();
   }
 }
 

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { Client } from 'auth0';
 import { ApplicationTreeItem } from './application.tree-item';
 import { ApplicationValueTreeItem } from './application-value.tree-item';
-import { obfuscate } from '../../utils';
+import { obfuscate } from '../../../utils';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function buildRootChildren(client: Client & { refresh_token: any }) {

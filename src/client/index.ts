@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ManagementClient } from 'auth0';
 import { getDomainFromToken } from '../utils';
 import type { TokenSet } from 'openid-client';
@@ -11,6 +10,7 @@ export async function getClient(): Promise<ManagementClient> {
   if (!tokenSet || tokenSet?.expired()) {
     const newTokenSet = await Auth.getTokenSet();
     if (newTokenSet && newTokenSet.access_token) {
+      tokenSet = newTokenSet;
       managementClient = new ManagementClient({
         token: newTokenSet.access_token,
         domain: getDomainFromToken(newTokenSet.access_token),

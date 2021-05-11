@@ -2,7 +2,7 @@
   "name": "vscode",
   "preview": true,
   "displayName": "Auth0",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Visualize Auth0 tenant information inside Visual Studio Code",
   "main": "./dist/extension.js",
   "publisher": "auth0",
@@ -86,7 +86,8 @@
     "js-yaml": "^4.1.0",
     "keytar": "^7.6.0",
     "openid-client": "^4.7.1",
-    "qs": "^6.10.1"
+    "qs": "^6.10.1",
+    "ts-is-present": "^1.2.1"
   },
   "prettier": {
     "printWidth": 80,
@@ -101,7 +102,8 @@
     "useTabs": false
   },
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "workspaceContains:**/.auth0/lab"
   ],
   "contributes": {
     "viewsContainers": {
@@ -147,6 +149,16 @@
           "icon": "./resources/auth0.png",
           "when": "auth0:authenticated"
         }
+      ],
+      "debug": [
+        {
+          "id": "localEndpointsView",
+          "name": "Lab Endpoints",
+          "contextualTitle": "Lab Endpoints",
+          "icon": "./resources/auth0.png",
+          "visibility": "visible",
+          "when": "auth0:authenticated  && auth0:isLabWorkspace"
+        }
       ]
     },
     "commands": [
@@ -184,6 +196,13 @@
         "title": "Configure Lab",
         "icon": "$(beaker)",
         "enablement": "auth0:authenticated && auth0:isLabWorkspace"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.lab.openLocalEndpoint",
+        "title": "Open Url",
+        "icon": "$(beaker)",
+        "enablement": "auth0:authenticated && auth0:isLabWorkspace && inDebugMode"
       },
       {
         "category": "Auth0",
@@ -317,10 +336,21 @@
         "title": "Deploy to Auth0",
         "icon": "$(rocket)",
         "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.silentDeploy",
+        "title": "Deploy to Auth0",
+        "icon": "$(rocket)",
+        "enablement": "auth0:authenticated"
       }
     ],
     "menus": {
       "commandPalette": [
+        {
+          "command": "auth0.lab.notification",
+          "when": "false"
+        },
         {
           "command": "auth0.lab.configure",
           "when": "auth0:authenticated && auth0:isLabWorkspace"
@@ -331,6 +361,10 @@
         },
         {
           "command": "auth0.app.remove",
+          "when": "false"
+        },
+        {
+          "command": "auth0.lab.openLocalEndpoint",
           "when": "false"
         },
         {
@@ -399,6 +433,10 @@
         },
         {
           "command": "auth0.deploy",
+          "when": "false"
+        },
+        {
+          "command": "auth0.silentDeploy",
           "when": "false"
         }
       ],

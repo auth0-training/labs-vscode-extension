@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Client } from 'auth0';
 import * as vscode from 'vscode';
-import { getClient } from '../client';
+import { getClient } from '../../client';
+import { ApplicationsViewDataProvider } from './provider';
 import {
-  ApplicationsViewDataProvider,
   ApplicationRootTreeItem,
   ApplicationTreeItem,
-  ApplicationValueTreeItem,
-} from '../views';
+} from './views/application.tree-item';
+import { ApplicationValueTreeItem } from './views/application-value.tree-item';
 
 const registerCommand = vscode.commands.registerCommand;
 
@@ -50,7 +50,7 @@ export class ApplicationCommands {
   };
 
   add = async (): Promise<void> => {
-    console.log('auth0:apps.add');
+    console.log('auth0:apps:add');
     const name = await promptForName();
     if (!name) {
       return;
