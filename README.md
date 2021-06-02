@@ -4,13 +4,13 @@
 
 A Visual Studio Code extension that provides a rich IDE experience for setting up your Auth0 integration, and deploying changes to your Auth0 account.
 
-> Note: This extension is currently in an experimental state and is not supported by Auth0. It has not had a complete security review, and we do not recommend using it to interact with production tenants.
+> Note: This extension is an experimental release, and is built on a best-efforts basis by some Auth0 developers in their available innovation time. It is open-source licensed and free to use, and is not covered by any Auth0 Terms of Service or Agreements. If you have issues with this extension you can engage with the project's developer community through the repository GitHub Issues list, or contribute fixes and enhancements of your own via a Pull Request.
 
 ## Requirements
 
-You'll need an Auth0 account. If you do not already have one, you can create a free one [here](https://auth0.com/signup)
+You'll need an Auth0 account. If you do not already have one, you can create a free one [here](https://auth0.com/signup).
 
-## Instalation
+## Installation
 
 This Visual Studio Code extension is not yet published to the Extensions Marketplace. In order to install this extension, you must run `code --install-extension release.vsix` and close/open Visual Studio Code.
 
@@ -37,7 +37,7 @@ npm install
 ```
 
 Under the Debug Tab in Visual Studio Code, select `Run Extension`.
-![Debug Run Extension](media/debug-run-extension.png)
+![Debug Run Extension](resources/debug-run-extension.png)
 
 
 ## Quick Start
