@@ -28,6 +28,10 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        use: [{ loader: 'shebang-loader' }],
+      },
+      {
         test: /\.ts$/,
         exclude: /node_modules/,
         use: [
