@@ -29,6 +29,8 @@ const config = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
+        include: /node_modules\/auth0-deploy-cli/,
         use: [{ loader: 'shebang-loader' }],
       },
       {
