@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
-import { keytar } from './secrets';
 import { OIDC_CONFIG } from './auth.config';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import { AbortController } from 'abort-controller';
 import { getDomainFromToken } from './utils';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
-
 const authStatusEventEmitter = new vscode.EventEmitter<TokenSet | undefined>();
 
 export class Auth {
@@ -15,6 +13,11 @@ export class Auth {
 
   private static issuer: Issuer<Client>;
   private static client: Client;
+  private static storage: vscode.SecretStorage;
+
+  public static useStorage(storage: vscode.SecretStorage): void {
+    this.storage = storage;
+  }
 
   private static async getClient(): Promise<Client> {
     console.log('auth0:auth:getClient');
@@ -33,10 +36,7 @@ export class Auth {
 
   public static async getTokenSet(): Promise<TokenSet | undefined> {
     console.log('auth0:auth:getTokenSet');
-    const secret = await keytar.getPassword(
-      SECRET_KEY_SERVICE_NAME,
-      'token_set'
-    );
+    const secret = await this.storage.get(SECRET_KEY_SERVICE_NAME);
 
     if (secret) {
       const tokenSet = new TokenSet(JSON.parse(secret));
@@ -52,9 +52,8 @@ export class Auth {
     console.log('auth0:auth:refreshTokenSet');
     const client = await this.getClient();
     const newTokenSet = await client.refresh(current);
-    await keytar.setPassword(
+    await this.storage.store(
       SECRET_KEY_SERVICE_NAME,
-      'token_set',
       JSON.stringify(newTokenSet)
     );
 
@@ -101,9 +100,8 @@ export class Auth {
           return;
         }
 
-        await keytar.setPassword(
+        await this.storage.store(
           SECRET_KEY_SERVICE_NAME,
-          'token_set',
           JSON.stringify(tokenSet)
         );
 
@@ -114,7 +112,8 @@ export class Auth {
 
   public static async signOut(): Promise<void> {
     console.log('auth0:auth:signOut');
-    await keytar.deletePassword(SECRET_KEY_SERVICE_NAME, 'token_set');
+    await this.storage.delete(SECRET_KEY_SERVICE_NAME);
+
     authStatusEventEmitter.fire(undefined);
   }
 

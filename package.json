@@ -86,7 +86,6 @@
     "auth0-deploy-cli": "^7.1.1",
     "axios": "^0.21.1",
     "js-yaml": "^4.1.0",
-    "keytar": "^7.7.0",
     "openid-client": "^4.7.4",
     "qs": "^6.10.1",
     "ts-is-present": "^1.2.1"

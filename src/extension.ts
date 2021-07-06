@@ -90,6 +90,7 @@ export async function activate(this: any, context: vscode.ExtensionContext) {
       await vscode.commands.executeCommand('auth0.lab.notification');
     }
   };
+  Auth.useStorage(context.secrets);
   Auth.onAuthStatusChanged(updateViews);
 
   await vscode.commands.executeCommand('auth0.auth.silentSignIn');
