@@ -86,6 +86,15 @@ export class ApplicationCommands {
 
   remove = async (e: ApplicationRootTreeItem): Promise<void> => {
     console.log('auth0:apps:remove');
+
+    const confirm = await vscode.window.showWarningMessage(
+      `Do you want to permanently delete ${e.label}?`,
+      ...['Yes', 'No']
+    );
+    if (confirm === 'No') {
+      return;
+    }
+
     vscode.window.withProgress(
       {
         location: vscode.ProgressLocation.Notification,
