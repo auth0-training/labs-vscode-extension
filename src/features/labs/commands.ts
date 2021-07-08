@@ -4,7 +4,7 @@ import { getLabEnvironment, getLabWorkspace } from './workspace';
 import { LabResourceResolverBuilder } from './resolver';
 import { LabEnvWriter } from './writer';
 import { LocalEnvironment } from './models';
-import { getFileUri } from '../../utils';
+import { getFileUri, startTour } from '../../utils';
 
 const registerCommand = commands.registerCommand;
 const executeCommand = commands.executeCommand;
@@ -99,12 +99,18 @@ export class LabCommands {
           }
 
           //issue post command to kick off next process
-          if (labEnv.postConfigureCommand && !token.isCancellationRequested) {
+          if (labEnv.postConfigureTour && !token.isCancellationRequested) {
             progress.report({
-              message: 'starting lab',
+              message: 'Starting Lab',
               increment: 4,
             });
-            executeCommand(labEnv.postConfigureCommand);
+
+            const uri = getFileUri(
+              `${labEnv.postConfigureTour}`,
+              workspace.uri
+            );
+
+            await startTour(uri);
           }
 
           progress.report({

@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 suite('Extension', () => {
   vscode.window.showInformationMessage('Start all tests.');
 
-  test('should start extension auth0.vscode', async () => {
+  test('should start extension auth0.vscode-labs', async () => {
     const started = vscode.extensions.getExtension('auth0.vscode-labs');
     assert.notStrictEqual(started, undefined);
     if (started) {

@@ -16,9 +16,8 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = path.resolve(__dirname, './suite/index');
     const vscodeExecutablePath = await downloadAndUnzipVSCode('1.55.2');
-    const cliPath = resolveCliPathFromVSCodeExecutablePath(
-      vscodeExecutablePath
-    );
+    const cliPath =
+      resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
     // Use cp.spawn / cp.exec for custom setup
     cp.spawnSync(cliPath, ['--install-extension', 'vsls-contrib.codetour'], {
@@ -26,11 +25,17 @@ async function main() {
       stdio: 'inherit',
     });
 
+    // Use cp.spawn / cp.exec for custom setup
+    cp.spawnSync(cliPath, ['--install-extension', 'humao.rest-client'], {
+      encoding: 'utf-8',
+      stdio: 'inherit',
+    });
+
     // Download VS Code, unzip it and run the integration test
     await runTests({
+      vscodeExecutablePath,
       extensionDevelopmentPath,
       extensionTestsPath,
-      launchArgs: ['--disable-extensions'],
     });
   } catch (err) {
     console.error('Failed to run tests');

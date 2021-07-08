@@ -2,7 +2,7 @@ export interface LocalEnvironment {
   name: string;
   version: string;
   resources: string | null;
-  postConfigureCommand: string | null;
+  postConfigureTour: string | null;
   clients: Array<Resource>;
   resourceServers: Array<Resource>;
 }
