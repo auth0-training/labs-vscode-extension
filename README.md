@@ -1,4 +1,4 @@
-![Auth0 Training](/resources/auth0-training.png?raw=true "Auth0 Training")
+![Auth0 Training](https://user-images.githubusercontent.com/73120/124974583-d50d8200-dfe1-11eb-8f0c-d6b81eb02af2.png "Auth0 Training")
 
 
 ## Auth0 Labs VSCode Extension (Experimental)
