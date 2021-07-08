@@ -1,37 +1,44 @@
-![Auth0 Open Source Software](https://cdn.auth0.com/resources/oss-source-large-2x.png)
+![Auth0 Training](/resources/auth0-training.png?raw=true "Auth0 Training")
 
-# Auth0 VSCode Extension (Experimental)
 
-A Visual Studio Code extension that provides a rich IDE experience for setting up your Auth0 integration, and deploying changes to your Auth0 account.
+## Auth0 Labs VSCode Extension (Experimental)
+[![Marketplace](https://vsmarketplacebadge.apphb.com/version/auth0.vscode-labs.svg?color=blue?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/auth0.vscode-labs?color=%23ff00ff&logo=Auth0)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=%2300ffff)](https://opensource.org/licenses/MIT)
+
+
+A Visual Studio Code extension that provides a rich IDE experience for Auth0 Training Labs.
 
 > Note: This extension is an experimental release, and is built on a best-efforts basis by some Auth0 developers in their available innovation time. It is open-source licensed and free to use, and is not covered by any Auth0 Terms of Service or Agreements. If you have issues with this extension you can engage with the project's developer community through the repository GitHub Issues list, or contribute fixes and enhancements of your own via a Pull Request.
 
-## Requirements
+### Requirements
 
 You'll need an Auth0 account. If you do not already have one, you can create a free one [here](https://auth0.com/signup).
 
-## Installation
+### Installation for VS Code
 
-This Visual Studio Code extension is not yet published to the Extensions Marketplace. In order to install this extension, you must run `code --install-extension release.vsix` and close/open Visual Studio Code.
+You can find the Auth0 Labs Visual Studio Code extension in the Visual Studio Marketplace. Click install to add the extension to your editor.
+
+### Installation from source
+
+In order to install this extension from source, you must run `code --install-extension release.vsix` and close/open Visual Studio Code.
 
 Complete commands:
 
 ```
-git clone https://github.com/auth0/vscode-extension.git
-cd vscode-extension
+git clone https://github.com/auth0-training/labs-vscode-extension.git
+cd labs-vscode-extension
 npm install
 vsce package
 code --install-extension release.vsix
 ```
 
-## Uninstall
+### Uninstall
 To remove the extension, run `code --uninstall-extension release.vsix`
 
-## Contributing
-To start contributing new features to the Auth0 VS Code extension, you can develop and debug the application locally. 
+### Contributing
+To start contributing new features to the Auth0 Labs VSCode extension, you can develop and debug the application locally. 
 
 ```
-git clone https://github.com/auth0/vscode-extension.git
+git clone https://github.com/auth0-training/labs-vscode-extension.git
 cd vscode-extension
 npm install
 ```
@@ -39,8 +46,18 @@ npm install
 Under the Debug Tab in Visual Studio Code, select `Run Extension`.
 ![Debug Run Extension](resources/debug-run-extension.png)
 
+## Features
+---
 
-## Quick Start
+### Contributed Commands
+In addition to the visual features listed below, the Labs extension also contributes the following commands to the command palette:
+
+- **Auth0: Sign In** - Starts the authentication process.
+- **Auth0: Sign Out** - Clears all authentication tokens.
+- **Auth0: Switch Tenant** - Clears all authentication tokens and starts the authentication process allowing the selection of a new tenant.
+- **Auth0: Add Application** - Starts a wizard to create a new client registration in the current Auth0 tenant.
+- **Auth0: Add API** - Starts a wizard to create a new resource server registration in the current Auth0 tenant.
+- **Auth0: Configure Lab** - Configures tenant and local environment for the current lab materials. Only available when lab materials are present in workspace.
 
 ### Authenticating
 
@@ -106,11 +123,13 @@ You can also take advantage of our `yaml` configuration integration to make more
   </a>
 </div>
 
-## Contributing
+### Contributing
+---
 
 Please check the [contributing guidelines](CONTRIBUTING.md).
 
-## What is Auth0?
+### What is Auth0?
+---
 
 Auth0 helps you to:
 
@@ -121,14 +140,16 @@ Auth0 helps you to:
 * Analytics of how, when, and where users are logging in.
 * Pull data from other sources and add it to the user profile, through [JavaScript rules](https://auth0.com/docs/rules/current).
 
-## Issue Reporting
-
+### Issue Reporting
+---
 If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
 
-## Author
+### Author
+---
 
 [Auth0](https://auth0.com)
 
-## License
+### License
+---
 
 This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.

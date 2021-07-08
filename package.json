@@ -1,18 +1,19 @@
 {
-  "name": "vscode",
+  "name": "vscode-labs",
   "preview": true,
   "displayName": "Auth0",
-  "version": "0.1.0",
-  "description": "Visualize Auth0 tenant information inside Visual Studio Code",
+  "version": "1.0.0",
+  "description": "A Visual Studio Code extension for training lab automation and quick access to tenant information.",
   "main": "./dist/extension.js",
   "publisher": "auth0",
   "icon": "resources/auth0.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/auth0/vscode-extension"
+    "url": "https://github.com/auth0-training/labs-vscode-extension"
   },
   "keywords": [
-    "auth0"
+    "auth0",
+    "training"
   ],
   "author": {
     "name": "Auth0",
@@ -20,7 +21,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/auth0/vscode-extension/issues"
+    "url": "https://github.com/auth0-training/labs-vscode-extension/issues"
   },
   "engines": {
     "vscode": "^1.57.0"
@@ -43,11 +44,17 @@
     "lint:fix": "npm run lint -- --fix",
     "pretest": "tsc -p ./ && npm run build",
     "test": "node ./out/tests/runTest.js",
-    "package": "npx vsce package -o release.vsix"
+    "package": "npx vsce package -o release.vsix",
+    "deploy": "npx vsce publish --packagePath release.vsix"
   },
   "homepage": "https://auth0.com",
   "categories": [
+    "Education",
     "Other"
+  ],
+  "extensionDependencies": [
+    "vsls-contrib.codetour",
+    "humao.rest-client"
   ],
   "devDependencies": {
     "@types/auth0": "^2.33.3",
