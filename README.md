@@ -1,9 +1,10 @@
-![Auth0 Training](https://user-images.githubusercontent.com/73120/124974583-d50d8200-dfe1-11eb-8f0c-d6b81eb02af2.png "Auth0 Training")
+[![Auth0 Training](https://user-images.githubusercontent.com/73120/125103885-a2bb5d80-e091-11eb-8084-383003f1e484.png "Auth0 Training")](https://training.auth0.com)
 
+---
 
-## Auth0 Labs VSCode Extension (Experimental)
 [![Marketplace](https://vsmarketplacebadge.apphb.com/version/auth0.vscode-labs.svg?color=blue?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/auth0.vscode-labs?color=%23ff00ff&logo=Auth0)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=%2300ffff)](https://opensource.org/licenses/MIT)
 
+## Auth0 Labs VSCode Extension (Experimental)
 
 A Visual Studio Code extension that provides a rich IDE experience for Auth0 Training Labs.
 
