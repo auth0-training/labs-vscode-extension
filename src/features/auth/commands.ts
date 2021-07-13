@@ -36,14 +36,17 @@ export class AuthCommands {
 
   switchTenant = async (): Promise<void> => {
     console.log('auth0:authCommands:switchTenant');
+    const actions = (await Auth.isAuthenticated())
+      ? ['Sign Out', 'Switch Tenant']
+      : ['Sign In'];
     const action =
-      (await vscode.window.showQuickPick(['Sign Out', 'Switch Tenant'], {
+      (await vscode.window.showQuickPick(actions, {
         ignoreFocusOut: true,
       })) || '';
 
     await Auth.signOut();
 
-    if (action === 'Switch Tenant') {
+    if (action === 'Switch Tenant' || action === 'Sign In') {
       vscode.commands.executeCommand('auth0.auth.signIn');
     }
   };
