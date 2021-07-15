@@ -24,7 +24,7 @@
     "url": "https://github.com/auth0-training/labs-vscode-extension/issues"
   },
   "engines": {
-    "vscode": "^1.57.0"
+    "vscode": "^1.56.1"
   },
   "galleryBanner": {
     "color": "#373436",
@@ -64,7 +64,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.12.4",
     "@types/sinon": "^10.0.2",
-    "@types/vscode": "^1.57.0",
+    "@types/vscode": "^1.56.1",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "chai": "^4.3.4",
