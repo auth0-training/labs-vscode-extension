@@ -24,7 +24,7 @@ export class LabCommands {
   }
 
   openLocalEndpoint = async (e: Uri): Promise<boolean> => {
-    console.log('auth0:labs:silentDeploy');
+    console.log('auth0:labs:openLocalEndpoint');
     if (e) {
       return env.openExternal(e);
     }

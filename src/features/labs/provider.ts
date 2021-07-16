@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
 import { LocalEnvironment, Resource } from './models';
 import { getLabEnvironment } from './workspace';
+import { getUrlForPort } from '../../utils';
 import { LocalEndpointTreeItem } from './views/localEndpoint.tree-item';
 
 export class LocalEndpointsViewDataProvider
-  implements vscode.TreeDataProvider<vscode.TreeItem> {
+  implements vscode.TreeDataProvider<vscode.TreeItem>
+{
   private _onDidChangeTreeData: vscode.EventEmitter<
     LocalEndpointTreeItem | undefined | void
   > = new vscode.EventEmitter<LocalEndpointTreeItem | undefined | void>();
@@ -23,7 +25,7 @@ export class LocalEndpointsViewDataProvider
   }
 
   buildTreeItem(resource: Resource) {
-    const uri = vscode.Uri.parse(`http://localhost:${resource.env['PORT']}`);
+    const uri = vscode.Uri.parse(getUrlForPort(resource.env['PORT'] as number));
     return new LocalEndpointTreeItem(resource.name, {
       command: 'auth0.lab.openLocalEndpoint',
       title: '',
