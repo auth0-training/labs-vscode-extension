@@ -18,7 +18,7 @@ export async function startTour(uri: vscode.Uri) {
   const api = ext.exports;
   try {
     api.startTourByUri(uri);
-  } catch (e) {
+  } catch (e: any) {
     const confirm = await vscode.window.showErrorMessage(
       `Unable to start lab due to error: ${e.message}`
     );
