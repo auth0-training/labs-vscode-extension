@@ -225,7 +225,7 @@
       {
         "category": "Auth0",
         "command": "auth0.lab.openEndpointByName",
-        "title": "Open Url",
+        "title": "Open Endpoint Url",
         "icon": "$(beaker)",
         "enablement": "auth0:authenticated && auth0:isLabWorkspace && inDebugMode"
       },
