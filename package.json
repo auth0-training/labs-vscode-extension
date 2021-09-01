@@ -203,6 +203,20 @@
       },
       {
         "category": "Auth0",
+        "command": "auth0.lab.localConfigure",
+        "title": "Configure Local Environment",
+        "icon": "$(beaker)",
+        "enablement": "auth0:authenticated && auth0:isLabWorkspace"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.lab.tenantConfigure",
+        "title": "Configure Tenant Resources",
+        "icon": "$(beaker)",
+        "enablement": "auth0:authenticated && auth0:isLabWorkspace"
+      },
+      {
+        "category": "Auth0",
         "command": "auth0.lab.openLocalEndpoint",
         "title": "Open Url",
         "icon": "$(beaker)",
