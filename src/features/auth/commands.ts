@@ -20,7 +20,7 @@ export class AuthCommands {
     console.log('auth0:authCommands:silentSignIn');
     try {
       await Auth.silentSignIn();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.message);
     }
   };
@@ -29,7 +29,7 @@ export class AuthCommands {
     console.log('auth0:authCommands:signIn');
     try {
       await Auth.signIn();
-    } catch (e) {
+    } catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
   };

@@ -4,7 +4,7 @@ import { getLabEnvironment, getLabWorkspace } from './workspace';
 import { LabResourceResolverBuilder } from './resolver';
 import { LabEnvWriter } from './writer';
 import { LocalEnvironment } from './models';
-import { getFileUri, startTour } from '../../utils';
+import { getUrlForPort, getFileUri, startTour } from '../../utils';
 
 const registerCommand = commands.registerCommand;
 const executeCommand = commands.executeCommand;
@@ -18,10 +18,38 @@ export class LabCommands {
         registerCommand('auth0.lab.notification', this.checkLab),
         registerCommand('auth0.lab.configure', this.configureLab),
         registerCommand('auth0.lab.localConfigure', this.localConfigure),
+        registerCommand('auth0.lab.tenantConfigure', this.tenantConfigure),
         registerCommand('auth0.lab.openLocalEndpoint', this.openLocalEndpoint),
+        registerCommand(
+          'auth0.lab.openEndpointByName',
+          this.openEndpointByName
+        ),
       ]
     );
   }
+
+  openEndpointByName = async (endpointNames: string): Promise<boolean> => {
+    console.log('auth0:labs:openEndpointByName');
+    const lab = await getLabEnvironment();
+    const results = endpointNames.split(',').map(async (endpointName) => {
+      const port =
+        lab?.clients.find((c) => c.name === endpointName.trim())?.env['PORT'] ||
+        lab?.resourceServers.find((c) => c.name === endpointName.trim())?.env[
+          'PORT'
+        ];
+      if (port) {
+        const url = Uri.parse(getUrlForPort(port as number));
+        if (url) {
+          return await env.openExternal(url);
+        }
+      }
+      return false;
+    });
+
+    return Promise.all(results).then((results) => {
+      return results.every((result) => result === true);
+    });
+  };
 
   openLocalEndpoint = async (e: Uri): Promise<boolean> => {
     console.log('auth0:labs:openLocalEndpoint');
@@ -95,7 +123,7 @@ export class LabCommands {
               message: 'writing local environment files',
               increment: 60,
             });
-            await executeCommand('auth0.lab.localConfigure', labEnv);
+            await executeCommand('auth0.lab.localConfigure');
           }
 
           //issue post command to kick off next process
@@ -122,11 +150,25 @@ export class LabCommands {
     );
   };
 
-  localConfigure = async (labEnv: LocalEnvironment): Promise<void> => {
+  tenantConfigure = async (): Promise<void> => {
+    console.log('auth0:labs:tenantConfigure');
+    const workspace = getLabWorkspace();
+    const labEnv = await getLabEnvironment();
+
+    if (workspace && labEnv && labEnv.resources) {
+      const uri = getFileUri(`/.auth0/lab/${labEnv.resources}`, workspace.uri);
+
+      await executeCommand('auth0.deploy', uri);
+    }
+  };
+
+  localConfigure = async (): Promise<void> => {
     console.log('auth0:labs:localConfigure');
     const workspace = getLabWorkspace();
-    const resolvers = await this.labDataResolver.build(labEnv);
-    if (workspace) {
+    const labEnv = await getLabEnvironment();
+
+    if (workspace && labEnv) {
+      const resolvers = await this.labDataResolver.build(labEnv);
       new LabEnvWriter(workspace.uri).writeAll(resolvers);
     }
   };
