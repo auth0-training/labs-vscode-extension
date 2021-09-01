@@ -52,10 +52,6 @@
     "Education",
     "Other"
   ],
-  "extensionDependencies": [
-    "vsls-contrib.codetour",
-    "humao.rest-client"
-  ],
   "devDependencies": {
     "@types/auth0": "^2.33.4",
     "@types/chai": "^4.2.21",
