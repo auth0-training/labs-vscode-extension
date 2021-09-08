@@ -19,3 +19,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Removed
 - - Removed direct dependency on CodeTour and RestClient
   - These dependecies should now be defined in the devcontainer.json file
+
+## [1.1.1] - 2021-09-08
+### Added
+- Implemented `auth0.exportTenant` command
+
+
+### Changed
+- Updated dependencies

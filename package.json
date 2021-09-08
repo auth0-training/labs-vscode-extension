@@ -2,7 +2,7 @@
   "name": "vscode-labs",
   "preview": true,
   "displayName": "Auth0 Labs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A Visual Studio Code extension for training lab automation and quick access to tenant information.",
   "main": "./dist/extension.js",
   "publisher": "auth0",
@@ -53,21 +53,21 @@
     "Other"
   ],
   "devDependencies": {
-    "@types/auth0": "^2.33.4",
+    "@types/auth0": "^2.33.5",
     "@types/chai": "^4.2.21",
     "@types/glob": "^7.1.4",
     "@types/js-yaml": "^4.0.3",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.7.9",
+    "@types/node": "^16.7.13",
     "@types/sinon": "^10.0.2",
     "@types/vscode": "^1.56.1",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "chai": "^4.3.4",
     "copy-webpack-plugin": "^9.0.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "express": "^4.17.1",
     "glob": "^7.1.7",
     "mocha": "^9.1.1",
@@ -78,16 +78,16 @@
     "supports-color": "^9.0.2",
     "ts-loader": "^9.2.5",
     "typescript": "^4.4.2",
-    "vsce": "^1.96.2",
+    "vsce": "^1.97.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.51.1",
+    "webpack": "^5.52.0",
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
     "auth0": "^2.36.1",
     "auth0-deploy-cli": "^7.2.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "js-yaml": "^4.1.0",
     "openid-client": "^4.7.5",
     "qs": "^6.10.1",
@@ -357,6 +357,13 @@
       },
       {
         "category": "Auth0",
+        "command": "auth0.exportTenant",
+        "title": "Export Tenant",
+        "icon": "$(rocket)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
         "command": "auth0.deploy",
         "title": "Deploy to Auth0",
         "icon": "$(rocket)",
@@ -455,6 +462,10 @@
         {
           "command": "auth0.api.editTokenLifetimeWeb",
           "when": "false"
+        },
+        {
+          "command": "auth0.exportTenant",
+          "when": "auth0:authenticated"
         },
         {
           "command": "auth0.deploy",
@@ -560,6 +571,11 @@
         }
       ],
       "explorer/context": [
+        {
+          "when": "auth0:authenticated && explorerResourceIsFolder && resourcePath =~ /lab/",
+          "command": "auth0.exportTenant",
+          "group": "navigation"
+        },
         {
           "when": "auth0:authenticated && resourceFilename == auth0.yml",
           "command": "auth0.deploy",

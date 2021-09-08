@@ -61,6 +61,7 @@ In addition to the visual features listed below, the Labs extension also contrib
 - **Auth0: Configure Lab** - `auth0.lab.configure` Configures tenant and local environment for the current lab materials. Only available when lab materials are present in workspace.
 - **Auth0: Configure Local Environment** - `auth0.lab.localConfigure` Configures local environment for the current lab materials. Only available when lab materials are present in workspace.
 - **Auth0: Configure Tenant Resources** - `auth0.lab.tenantConfigure` Configures tenant for the current lab materials. Only available when lab materials are present in workspace.
+- **Auth0: Export Tenant** - `auth0.exportTenant` Exports tenant configuration yml to the root directory. This exports everything and needs to be edited down for a lab. 
 - **Auth0: Open Endpoint Url** - `auth0.lab.openEndpointByName?["Endpoint 1, Endpoint 2"]` Opens the URL associated with a specific named endpoint in the default browser. Multiple endpoints can be opened by supplying a comma seperated list. Only available when lab materials are present in workspace.
 
 ### Authenticating
