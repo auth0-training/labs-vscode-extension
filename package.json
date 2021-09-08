@@ -357,6 +357,13 @@
       },
       {
         "category": "Auth0",
+        "command": "auth0.exportTenant",
+        "title": "Export Tenant",
+        "icon": "$(rocket)",
+        "enablement": "auth0:authenticated"
+      },
+      {
+        "category": "Auth0",
         "command": "auth0.deploy",
         "title": "Deploy to Auth0",
         "icon": "$(rocket)",
@@ -455,6 +462,10 @@
         {
           "command": "auth0.api.editTokenLifetimeWeb",
           "when": "false"
+        },
+        {
+          "command": "auth0.exportTenant",
+          "when": "auth0:authenticated"
         },
         {
           "command": "auth0.deploy",
@@ -560,6 +571,11 @@
         }
       ],
       "explorer/context": [
+        {
+          "when": "auth0:authenticated && explorerResourceIsFolder && resourcePath =~ /lab/",
+          "command": "auth0.exportTenant",
+          "group": "navigation"
+        },
         {
           "when": "auth0:authenticated && resourceFilename == auth0.yml",
           "command": "auth0.deploy",
