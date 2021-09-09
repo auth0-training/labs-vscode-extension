@@ -2,7 +2,7 @@
   "name": "vscode-labs",
   "preview": true,
   "displayName": "Auth0 Labs",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A Visual Studio Code extension for training lab automation and quick access to tenant information.",
   "main": "./dist/extension.js",
   "publisher": "auth0",

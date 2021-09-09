@@ -4,7 +4,11 @@ import type { TokenSet } from 'openid-client';
 import { Auth } from '../auth';
 
 let managementClient: ManagementClient;
-let tokenSet: TokenSet;
+let tokenSet: TokenSet | undefined;
+
+Auth.onAuthStatusChanged(async (newTokenSet) => {
+  tokenSet = newTokenSet;
+});
 
 export async function getClient(): Promise<ManagementClient> {
   if (!tokenSet || tokenSet?.expired()) {

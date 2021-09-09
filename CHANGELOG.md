@@ -27,3 +27,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Updated dependencies
+
+## [1.1.2] - 2021-09-09
+### Changed
+- fixed bug that caused incorrect tokenset to be used when switching tenants.
