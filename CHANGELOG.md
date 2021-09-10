@@ -31,3 +31,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.1.2] - 2021-09-09
 ### Changed
 - fixed bug that caused incorrect tokenset to be used when switching tenants.
+
+## [1.1.3] - 2021-09-10
+### Changed
+- fixed bug that caused incorrect management client to be used when switching tenants.
