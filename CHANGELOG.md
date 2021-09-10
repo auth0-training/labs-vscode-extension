@@ -36,6 +36,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 - fixed bug that caused incorrect management client to be used when switching tenants.
 
-## [1.1.3] - 2021-09-10
+## [1.1.4] - 2021-09-10
 ### Changed
 - updated deploy context menu to work for variations of `tenant.yaml` and `auth0.yml`.
