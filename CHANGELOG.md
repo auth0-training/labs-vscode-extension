@@ -39,3 +39,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.1.4] - 2021-09-10
 ### Changed
 - updated deploy context menu to work for variations of `tenant.yaml` and `auth0.yml`.
+
+## [1.2.0] - 2021-09-14
+### Added
+- Implemented the `auth0.lab.promptForAuthentication` command.
+- Added `unauthenticatedTour` to the local environment model.
+
+### Changed
+- Renamed `auth0.lab.notification` to `auth0.lab.promptForConfiguration`
+- Updated dependencies

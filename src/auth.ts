@@ -20,7 +20,7 @@ export class Auth {
   }
 
   private static async getClient(): Promise<Client> {
-    console.log('auth0:auth:getClient');
+    console.log('auth0.auth.getClient');
     if (this.client) {
       return this.client;
     }
@@ -35,7 +35,7 @@ export class Auth {
   }
 
   public static async getTokenSet(): Promise<TokenSet | undefined> {
-    console.log('auth0:auth:getTokenSet');
+    console.log('auth0.auth.getTokenSet');
     const secret = await this.storage.get(SECRET_KEY_SERVICE_NAME);
 
     if (secret) {
@@ -49,7 +49,7 @@ export class Auth {
   }
 
   private static async refreshTokenSet(current: TokenSet): Promise<TokenSet> {
-    console.log('auth0:auth:refreshTokenSet');
+    console.log('auth0.auth.refreshTokenSet');
     const client = await this.getClient();
     const newTokenSet = await client.refresh(current);
     await this.storage.store(
@@ -63,14 +63,14 @@ export class Auth {
   }
 
   public static async silentSignIn(): Promise<void> {
-    console.log('auth0:auth:silentSignIn');
+    console.log('auth0.auth.silentSignIn');
     const tokenSet = await this.getTokenSet();
 
     authStatusEventEmitter.fire(tokenSet);
   }
 
   public static async signIn(): Promise<void> {
-    console.log('auth0:auth:signIn');
+    console.log('auth0.auth.signIn');
     const client = await this.getClient();
     const handle = await client.deviceAuthorization({
       audience: OIDC_CONFIG.AUDIENCE,
@@ -111,14 +111,14 @@ export class Auth {
   }
 
   public static async signOut(): Promise<void> {
-    console.log('auth0:auth:signOut');
+    console.log('auth0.auth.signOut');
     await this.storage.delete(SECRET_KEY_SERVICE_NAME);
 
     authStatusEventEmitter.fire(undefined);
   }
 
   public static async isAuthenticated(): Promise<boolean> {
-    console.log('auth0:auth:isAuthenticated');
+    console.log('auth0.auth.isAuthenticated');
     const tokenSet = await this.getTokenSet();
     if (tokenSet) {
       return !tokenSet.expired();
