@@ -84,10 +84,13 @@ export async function activate(this: any, context: vscode.ExtensionContext) {
       'auth0:authenticated',
       authenticated
     );
-    await appCommands.refresh();
-    await apiCommands.refresh();
+
     if (authenticated) {
-      await vscode.commands.executeCommand('auth0.lab.notification');
+      await appCommands.refresh();
+      await apiCommands.refresh();
+      await vscode.commands.executeCommand('auth0.lab.promptForConfiguration');
+    } else {
+      await vscode.commands.executeCommand('auth0.lab.promptForAuthentication');
     }
   };
   Auth.useStorage(context.secrets);

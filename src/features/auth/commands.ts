@@ -17,16 +17,18 @@ export class AuthCommands {
   }
 
   silentSignIn = async (): Promise<void> => {
-    console.log('auth0:authCommands:silentSignIn');
+    console.log('auth0.authCommands.silentSignIn');
     try {
       await Auth.silentSignIn();
     } catch (e: any) {
       console.log(e.message);
+      //if silent sign in fails, clear any stored tokensets
+      vscode.commands.executeCommand('auth0.auth.signOut');
     }
   };
 
   signIn = async (): Promise<void> => {
-    console.log('auth0:authCommands:signIn');
+    console.log('auth0.authCommands.signIn');
     try {
       await Auth.signIn();
     } catch (e: any) {
@@ -35,7 +37,7 @@ export class AuthCommands {
   };
 
   switchTenant = async (): Promise<void> => {
-    console.log('auth0:authCommands:switchTenant');
+    console.log('auth0.authCommands.switchTenant');
     const actions = (await Auth.isAuthenticated())
       ? ['Sign Out', 'Switch Tenant']
       : ['Sign In'];

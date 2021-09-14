@@ -3,7 +3,6 @@ import * as path from 'path';
 import { getLabEnvironment, getLabWorkspace } from './workspace';
 import { LabResourceResolverBuilder } from './resolver';
 import { LabEnvWriter } from './writer';
-import { LocalEnvironment } from './models';
 import { getUrlForPort, getFileUri, startTour } from '../../utils';
 
 const registerCommand = commands.registerCommand;
@@ -15,7 +14,14 @@ export class LabCommands {
   ) {
     subscriptions.push(
       ...[
-        registerCommand('auth0.lab.notification', this.checkLab),
+        registerCommand(
+          'auth0.lab.promptForConfiguration',
+          this.promptForConfiguration
+        ),
+        registerCommand(
+          'auth0.lab.promptForAuthentication',
+          this.promptForAuthentication
+        ),
         registerCommand('auth0.lab.configure', this.configureLab),
         registerCommand('auth0.lab.localConfigure', this.localConfigure),
         registerCommand('auth0.lab.tenantConfigure', this.tenantConfigure),
@@ -59,14 +65,26 @@ export class LabCommands {
     return false;
   };
 
-  checkLab = async (): Promise<void> => {
-    console.log('auth0:labs:checkLab');
+  promptForAuthentication = async (): Promise<void> => {
+    console.log('auth0.labs.promptForAuthentication');
+    const workspace = getLabWorkspace();
+    const labEnv = await getLabEnvironment();
+
+    if (labEnv?.unauthenticatedTour) {
+      const uri = getFileUri(`${labEnv.unauthenticatedTour}`, workspace?.uri);
+
+      await startTour(uri);
+    }
+  };
+
+  promptForConfiguration = async (): Promise<void> => {
+    console.log('auth0.labs.promptForConfiguration');
     const lab = await getLabEnvironment();
     if (lab !== undefined) {
       executeCommand('setContext', 'auth0:isLabWorkspace', true);
       window
         .showInformationMessage(
-          'We detected an .auth0/lab folder. Would you like to configure the Auth0 lab?',
+          'We detected an Auth0 Lab. Would you like to configure your tenant and local environment?',
           ...['Configure', 'Cancel']
         )
         .then((selection) => {
@@ -78,7 +96,7 @@ export class LabCommands {
   };
 
   configureLab = async (): Promise<void> => {
-    console.log('auth0:labs:configureLab');
+    console.log('auth0.labs.configureLab');
     const workspace = getLabWorkspace();
     const labEnv = await getLabEnvironment();
 
@@ -151,7 +169,7 @@ export class LabCommands {
   };
 
   tenantConfigure = async (): Promise<void> => {
-    console.log('auth0:labs:tenantConfigure');
+    console.log('auth0.labs.tenantConfigure');
     const workspace = getLabWorkspace();
     const labEnv = await getLabEnvironment();
 
@@ -163,7 +181,7 @@ export class LabCommands {
   };
 
   localConfigure = async (): Promise<void> => {
-    console.log('auth0:labs:localConfigure');
+    console.log('auth0.labs.localConfigure');
     const workspace = getLabWorkspace();
     const labEnv = await getLabEnvironment();
 
