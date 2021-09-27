@@ -48,3 +48,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 - Renamed `auth0.lab.notification` to `auth0.lab.promptForConfiguration`
 - Updated dependencies
+
+## [1.2.1] - 2021-09-27
+
+### Changed
+- Fixed issue with local configure when no `resourceServers` or `clients` are defined in `environment.json`
+- Added temporary webpack fix for node-auth0 build errors
+- Added temporary webpack fix for auth0-deploy-cli build warnings
+- Updated dependencies
