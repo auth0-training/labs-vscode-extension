@@ -26,8 +26,12 @@ const config = {
     extensions: ['.ts', '.js'],
     //fix: added to resolve issue with node-auth0 v2.36.2
     alias: {
-      'coffee-script': false,
-      'vm2': false,
+      'coffee-script': false, // unused dependency of node-auth0
+      'vm2': false, // unused dependency of node-auth0
+      'yargs': false, // unused dependency of auth0-deploy-cli
+      'keyv': false, // unused dependency of openid-client
+      'formidable': false, // unused dependency of node-auth0
+      'colors': false, // unused dependency of auth0-deploy-cli
     },
   },
   module: {
