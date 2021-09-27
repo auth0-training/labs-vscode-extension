@@ -25,12 +25,12 @@ export class LabResourceResolverBuilder {
   ): Promise<ClientResolver[]> => {
     const tenantDomain = await getTenantDomain();
     const resolvers = await Promise.all(
-      localEnvironment.clients.map(async (resource) => {
+      localEnvironment.clients?.map(async (resource) => {
         const client = await this.getClientByName(resource.name);
         if (client) {
           return new ClientResolver(tenantDomain, resource, client);
         }
-      })
+      }) || []
     );
     return resolvers.filter(isPresent);
   };
@@ -40,7 +40,7 @@ export class LabResourceResolverBuilder {
   ): Promise<ResourceServerResolver[]> => {
     const tenantDomain = await getTenantDomain();
     const resolvers = await Promise.all(
-      localEnvironment.resourceServers.map(async (resource) => {
+      localEnvironment.resourceServers?.map(async (resource) => {
         const resourceServer = await this.getResourceServerByName(
           resource.name
         );
@@ -51,7 +51,7 @@ export class LabResourceResolverBuilder {
             resourceServer
           );
         }
-      })
+      }) || []
     );
 
     return resolvers.filter(isPresent);
