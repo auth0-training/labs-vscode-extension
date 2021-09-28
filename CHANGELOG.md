@@ -56,3 +56,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added temporary webpack fix for node-auth0 build errors
 - Added temporary webpack fix for auth0-deploy-cli build warnings
 - Updated dependencies
+
+## [1.2.2] - 2021-09-28
+
+### Removed
+- Removed temporary webpack fix for auth0-deploy-cli build warnings

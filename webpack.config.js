@@ -28,10 +28,6 @@ const config = {
     alias: {
       'coffee-script': false, // unused dependency of node-auth0
       'vm2': false, // unused dependency of node-auth0
-      'yargs': false, // unused dependency of auth0-deploy-cli
-      'keyv': false, // unused dependency of openid-client
-      'formidable': false, // unused dependency of node-auth0
-      'colors': false, // unused dependency of auth0-deploy-cli
     },
   },
   module: {
