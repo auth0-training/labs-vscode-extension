@@ -24,7 +24,7 @@
     "url": "https://github.com/auth0-training/labs-vscode-extension/issues"
   },
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.61.0"
   },
   "galleryBanner": {
     "color": "#373436",
