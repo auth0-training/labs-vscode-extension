@@ -61,3 +61,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Removed
 - Removed temporary webpack fix for auth0-deploy-cli build warnings
+
+## [1.3.0] - 2021-10-20
+
+### Changed
+- Updated dependencies
