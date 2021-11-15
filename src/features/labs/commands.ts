@@ -186,6 +186,8 @@ export class LabCommands {
     const labEnv = await getLabEnvironment();
 
     if (workspace && labEnv) {
+      await executeCommand('auth0.app.refresh');
+      await executeCommand('auth0.api.refresh');
       const resolvers = await this.labDataResolver.build(labEnv);
       new LabEnvWriter(workspace.uri).writeAll(resolvers);
     }
