@@ -66,3 +66,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Updated dependencies
+
+## [1.3.1] - 2021-11-15
+
+### Changed
+- Ensured data is fresh before attempting to write .env files on local configure command.
