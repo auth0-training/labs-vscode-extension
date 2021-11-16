@@ -71,3 +71,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Ensured data is fresh before attempting to write .env files on local configure command.
+
+## [1.3.2] - 2021-11-16
+
+### Changed
+- Pushed refresh functionality into the LabResourceResolverBuilder to avoid executeCommand
