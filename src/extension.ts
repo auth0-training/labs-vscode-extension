@@ -33,6 +33,10 @@ export async function activate(this: any, context: vscode.ExtensionContext) {
   const labCommands = new LabCommands(
     subscriptions,
     new LabResourceResolverBuilder(
+      async () => {
+        appViewDataProvider.refresh();
+        apiViewDataProvider.refresh();
+      },
       appViewDataProvider.getClients,
       apiViewDataProvider.getResourceServers
     )
