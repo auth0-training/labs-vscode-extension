@@ -76,3 +76,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Pushed refresh functionality into the LabResourceResolverBuilder to avoid executeCommand
+
+## [1.3.3] - 2021-11-16
+
+### Changed
+- Gave resolver direct access to data proviers

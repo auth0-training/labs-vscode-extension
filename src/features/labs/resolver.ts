@@ -1,18 +1,15 @@
 import type { Client, ResourceServer } from 'auth0';
+import { ApplicationsViewDataProvider } from '../../features/applications';
+import { ApisViewDataProvider } from '../../features/apis';
 import { LocalEnvironment, Resource } from './models';
 import { isPresent } from 'ts-is-present';
 import { getTenantDomain } from '../../auth';
 import { getUrlForPort } from '../../utils';
 
-type ClientFetch = () => Promise<Client[]>;
-type ResourceServerFetch = () => Promise<ResourceServer[]>;
-type Refresh = () => Promise<void>;
-
 export class LabResourceResolverBuilder {
   constructor(
-    private refresh: Refresh,
-    private getClients: ClientFetch,
-    private getResourceServers: ResourceServerFetch
+    private applicationsViewDataProvider: ApplicationsViewDataProvider,
+    private apiViewDataProvider: ApisViewDataProvider
   ) {}
 
   build = async (localEnvironment: LocalEnvironment): Promise<Resolver[]> => {
@@ -60,8 +57,8 @@ export class LabResourceResolverBuilder {
   };
 
   getClientByName = async (name: string): Promise<Client | undefined> => {
-    await this.refresh();
-    const clients = await this.getClients();
+    await this.applicationsViewDataProvider.refresh();
+    const clients = await this.applicationsViewDataProvider.getClients();
     return clients.find((client) => {
       return client.name === name;
     });
@@ -70,8 +67,8 @@ export class LabResourceResolverBuilder {
   getResourceServerByName = async (
     name: string
   ): Promise<ResourceServer | undefined> => {
-    await this.refresh();
-    const resourceServers = await this.getResourceServers();
+    await this.apiViewDataProvider.refresh();
+    const resourceServers = await this.apiViewDataProvider.getResourceServers();
     return resourceServers.find((resourceServers) => {
       return resourceServers.name === name;
     });
