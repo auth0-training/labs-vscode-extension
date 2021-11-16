@@ -40,7 +40,7 @@ To start contributing new features to the Auth0 Labs VSCode extension, you can d
 
 ```
 git clone https://github.com/auth0-training/labs-vscode-extension.git
-cd vscode-extension
+cd labs-vscode-extension
 npm install
 ```
 
