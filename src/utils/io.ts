@@ -1,3 +1,4 @@
+import { TextDecoder } from 'util';
 import { Uri, workspace } from 'vscode';
 
 export async function readUriContents(uri: Uri) {
