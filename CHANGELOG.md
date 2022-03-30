@@ -82,7 +82,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 - Gave resolver direct access to data providers
 
-## [1.3.4] - 2022-02-23
+## [1.3.4] - 2022-03-30
 
 ### Changed
 - Updated dependencies
