@@ -80,4 +80,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.3.3] - 2021-11-16
 
 ### Changed
-- Gave resolver direct access to data proviers
+- Gave resolver direct access to data providers
+
+## [1.3.4] - 2022-02-23
+
+### Changed
+- Updated dependencies
