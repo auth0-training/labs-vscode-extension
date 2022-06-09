@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Auth } from '../../auth';
+import * as utils from '../../utils';
 import { StatusBar } from './views/StatusBar';
 
 const registerCommand = vscode.commands.registerCommand;
@@ -11,33 +12,45 @@ export class AuthCommands {
         registerCommand('auth0.auth.signIn', this.signIn),
         registerCommand('auth0.auth.switchTenant', this.switchTenant),
         registerCommand('auth0.auth.signOut', this.signOut),
+        registerCommand('auth0.auth.logger', this.logger),
         StatusBar,
       ]
     );
   }
 
   silentSignIn = async (): Promise<void> => {
-    console.log('auth0.authCommands.silentSignIn');
+    utils.logger('SILENT_SIGNIN', 'Silent sign in registred');
     try {
       await Auth.silentSignIn();
     } catch (e: any) {
-      console.log(e.message);
+      utils.logger('ERROR', 'Silent sign in failed');
       //if silent sign in fails, clear any stored tokensets
       vscode.commands.executeCommand('auth0.auth.signOut');
     }
   };
 
   signIn = async (): Promise<void> => {
-    console.log('auth0.authCommands.signIn');
+    utils.logger('SIGNIN', 'Sign in registred');
     try {
       await Auth.signIn();
     } catch (e: any) {
+      utils.logger('ERROR', 'Sign in failed');
       vscode.window.showErrorMessage(e.message);
     }
   };
 
+  /**  Step logger, allows to log individual steps; requires
+    ```
+    "commands": ["auth0.auth.logger"]
+    ```
+    in the first step of tour's `.tour`
+  */
+  logger = async (): Promise<void> => {
+    utils.logger('STEP_REACHED', await utils.stepReached());
+  };
+
   switchTenant = async (): Promise<void> => {
-    console.log('auth0.authCommands.switchTenant');
+    utils.logger('SWITCH_TENANT', 'Switch tenant registred');
     const actions = (await Auth.isAuthenticated())
       ? ['Sign Out', 'Switch Tenant']
       : ['Sign In'];
@@ -54,7 +67,7 @@ export class AuthCommands {
   };
 
   signOut = async (): Promise<void> => {
-    console.log('auth0:authCommands:signOut');
+    utils.logger('SIGNOUT', 'Signout registered');
     await Auth.signOut();
   };
 }

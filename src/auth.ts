@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { OIDC_CONFIG } from './auth.config';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import { AbortController } from 'abort-controller';
-import { getDomainFromToken } from './utils';
+import { getDomainFromToken, logger } from './utils';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
 const authStatusEventEmitter = new vscode.EventEmitter<TokenSet | undefined>();
@@ -63,14 +63,14 @@ export class Auth {
   }
 
   public static async silentSignIn(): Promise<void> {
-    console.log('auth0.auth.silentSignIn');
+    logger('SILENT_SIGNIN', 'Silent Sign in started');
     const tokenSet = await this.getTokenSet();
 
     authStatusEventEmitter.fire(tokenSet);
   }
 
   public static async signIn(): Promise<void> {
-    console.log('auth0.auth.signIn');
+    logger('SIGNIN', 'Sign in started');
     const client = await this.getClient();
     const handle = await client.deviceAuthorization({
       audience: OIDC_CONFIG.AUDIENCE,
@@ -91,6 +91,7 @@ export class Auth {
 
         const abort = new AbortController();
         token.onCancellationRequested(() => {
+          logger('ERROR', 'Sign in cancelled');
           abort.abort();
         });
 
@@ -111,7 +112,7 @@ export class Auth {
   }
 
   public static async signOut(): Promise<void> {
-    console.log('auth0.auth.signOut');
+    logger('SIGNOUT', 'Sign out started');
     await this.storage.delete(SECRET_KEY_SERVICE_NAME);
 
     authStatusEventEmitter.fire(undefined);
