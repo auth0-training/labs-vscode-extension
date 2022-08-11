@@ -86,3 +86,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Updated dependencies
+
+## [1.3.5] - 2022-08-11
+
+### Changed
+- Updated dependencies
