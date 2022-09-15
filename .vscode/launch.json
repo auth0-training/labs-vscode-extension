@@ -3,33 +3,34 @@
 // Hover to view descriptions of existing attributes.
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
+  "version": "0.2.0",
+  "configurations": [
+    {
       "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "${defaultBuildTask}",
-	  "env": {
-		"TOKEN_STORAGE_URL": "http://localhost:4000",
-		"THEIA_CLOUD_SESSION_UID": "abc123"
-	  }
+      "env": {
+        "TOKEN_STORAGE_URL": "http://localhost:4000",
+        "THEIA_CLOUD_SESSION_UID": "my-session",
+        "AUTH0_VSCODE_EXTENSION_ISSUER": "https://login0.local.dev.auth0.com",
+        "AUTH0_VSCODE_EXTENSION_CLIENT_ID": "iNIR1W0PmbSWio3f011MhuyabBLLSBKv",
+        "AUTH0_VSCODE_EXTENSION_AUDIENCE": "https://*.local.dev.auth0.com/api/v2/"
+      }
     },
     {
-			"name": "Extension Tests",
-			"type": "extensionHost",
-			"request": "launch",
-			"runtimeExecutable": "${execPath}",
-			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
-			],
-			"outFiles": [
-				"${workspaceFolder}/out/test/**/*.js"
-			],
-			"preLaunchTask": "npm: pretest"
-		}
-	]
+      "name": "Extension Tests",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+      ],
+      "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+      "preLaunchTask": "npm: pretest"
+    }
+  ]
 }
