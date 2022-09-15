@@ -31,6 +31,16 @@ npm install
 vsce package
 code --install-extension release.vsix
 ```
+### Getting Auth Tokens from Storage
+
+You can also get tokens from storage. When installing from source, there are two environment variables you can define `.vscode/launch.json`:
+
+`TOKEN_STORAGE_URL`: Base URL to fetch tokens from
+`THEIA_CLOUD_SESSION_UID`: Session UID
+
+The fully qualified URL from which tokens will be fetched is:
+
+`<TOKEN_STORAGE_URL>/token/THEIA_CLOUD_SESSION_UID`
 
 ### Uninstall
 To remove the extension, run `code --uninstall-extension release.vsix`
