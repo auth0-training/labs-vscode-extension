@@ -4,6 +4,8 @@ import { OIDC_CONFIG } from './auth.config';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import { AbortController } from 'abort-controller';
 import { getDomainFromToken } from './utils';
+import axios from 'axios';
+import { TokenSetParameters } from 'openid-client';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
 const authStatusEventEmitter = new vscode.EventEmitter<TokenSet | undefined>();
@@ -69,8 +71,59 @@ export class Auth {
     authStatusEventEmitter.fire(tokenSet);
   }
 
+  public static async getTokensFromStorage(): Promise<TokenSet> {
+    console.log("auth0.auth.getTokensFromStorage");
+    try {
+      const url = process.env.TOKEN_STORAGE_URL;
+      if (!url) {
+        throw new Error('missing TOKEN_STORAGE_URL');
+      }
+      const response = await axios.get(`${url}/token/${process.env.THEIA_CLOUD_SESSION_UID}`);
+
+      console.log('data is', JSON.stringify(response.data, null, 2));
+      console.log(response.data);
+
+      const options: TokenSetParameters = {
+        ...response.data,
+        expires_at: Date.now() + 600000,
+      };
+
+      return new TokenSet(options);
+    } catch (error) {
+      console.error("Couldn't get tokens from storage", error.message);
+      throw error;
+    }
+  }
+
   public static async signIn(): Promise<void> {
     console.log('auth0.auth.signIn');
+    console.log('token storage URL: ', process.env.TOKEN_STORAGE_URL);
+    console.log('token storage env: ', process.env);
+
+    if (process.env.TOKEN_STORAGE_URL) {
+      return vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: "Getting Tokens from Storage: Please be patient...",
+          cancellable: true,
+        },
+        async (progress, token) => {
+          const tokenSet = await this.getTokensFromStorage();
+
+          if (!tokenSet) {
+            return;
+          }
+
+          await this.storage.store(
+            SECRET_KEY_SERVICE_NAME,
+            JSON.stringify(tokenSet)
+          );
+
+          authStatusEventEmitter.fire(tokenSet);
+        }
+      );
+    }
+
     const client = await this.getClient();
     const handle = await client.deviceAuthorization({
       audience: OIDC_CONFIG.AUDIENCE,

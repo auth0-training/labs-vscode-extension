@@ -11,7 +11,11 @@
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}"
+      "preLaunchTask": "${defaultBuildTask}",
+	  "env": {
+		"TOKEN_STORAGE_URL": "http://localhost:4000",
+		"THEIA_CLOUD_SESSION_UID": "abc123"
+	  }
     },
     {
 			"name": "Extension Tests",
