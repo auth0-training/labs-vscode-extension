@@ -41,7 +41,7 @@ You can also get tokens from storage. When installing from source, there are two
 
 The fully qualified URL from which tokens will be fetched is:
 
-`<TOKEN_STORAGE_URL>/token/THEIA_CLOUD_SESSION_UID`
+`<TOKEN_STORAGE_URL>/token/<THEIA_CLOUD_SESSION_UID>`
 
 ### Uninstall
 To remove the extension, run `code --uninstall-extension release.vsix`
