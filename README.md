@@ -35,8 +35,9 @@ code --install-extension release.vsix
 
 You can also get tokens from storage. When installing from source, there are two environment variables you can define `.vscode/launch.json`:
 
-`TOKEN_STORAGE_URL`: Base URL to fetch tokens from
-`THEIA_CLOUD_SESSION_UID`: Session UID
+- `TOKEN_STORAGE_URL`: Base URL to fetch tokens from
+
+- `THEIA_CLOUD_SESSION_UID`: Session UID
 
 The fully qualified URL from which tokens will be fetched is:
 
