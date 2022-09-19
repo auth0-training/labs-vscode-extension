@@ -91,3 +91,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Updated dependencies
+
+## [1.3.6] - 2022-09-19
+
+### Added
+- Ability to provide alternative root tenant authority via envvars
