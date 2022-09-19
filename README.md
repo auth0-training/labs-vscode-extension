@@ -28,7 +28,8 @@ Complete commands:
 git clone https://github.com/auth0-training/labs-vscode-extension.git
 cd labs-vscode-extension
 npm install
-vsce package
+npm run build:production
+npm run package
 code --install-extension release.vsix
 ```
 
@@ -49,7 +50,12 @@ Under the Debug Tab in Visual Studio Code, select `Run Extension`.
 
 ## Features
 ---
+## Alternative Root Tenant Authority
+If you are attempting to work on labs for Layer0 based cloud environments, you can tell the extension to use an alternate root tnenant by passing the following environment variables.
 
+- **VSCODE_EXTENSION_ISSUER** - Default:`https://auth0.auth0.com` The root tenant authority to use.
+- **AUTH0_VSCODE_EXTENSION_CLIENT_ID** - Default: `w94YV1qvYFMH2PnmFSIQVxkGJwk0tBGt` The client id that was created specifically for the extension with the altenrative root tenant authority.
+- **AUTH0_VSCODE_EXTENSION_AUDIENCE** - Default: `https://*.auth0.com/api/v2/` The Management API audience specific to your environment. **Note:** The wild card tenant segment is required. This enables the RTA to prompt the user for a specific tenant to authorize.
 ### Contributed Commands
 In addition to the visual features listed below, the Labs extension also contributes the following commands to the command palette:
 
