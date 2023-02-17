@@ -101,6 +101,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - updated dependencies
+- updated auth0 deploy cli to 7.16.1
 - updated auth to remove dependency on abort-controller
   - openid-client now handles this directly
 - updated required vscode version to 1.75.1
