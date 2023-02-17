@@ -2,7 +2,6 @@
 import * as vscode from 'vscode';
 import { OIDC_CONFIG } from './auth.config';
 import { Client, Issuer, TokenSet } from 'openid-client';
-import { AbortController } from 'abort-controller';
 import { getDomainFromToken } from './utils';
 
 const SECRET_KEY_SERVICE_NAME = 'auth0-vsc-token-set';
@@ -89,12 +88,11 @@ export class Auth {
           vscode.Uri.parse(handle.verification_uri_complete)
         );
 
-        const abort = new AbortController();
         token.onCancellationRequested(() => {
-          abort.abort();
+          handle.abort();
         });
 
-        const tokenSet = await handle.poll(abort);
+        const tokenSet = await handle.poll();
 
         if (!tokenSet) {
           return;

@@ -96,3 +96,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 - Ability to provide alternative root tenant authority via envvars
+
+## [1.3.7] - 2023-02-17
+
+### Changed
+- updated dependencies
+- updated auth to remove dependency on abort-controller
+  - openid-client now handles this directly
+- updated required vscode version to 1.75.1
+- updated test runner to use vscode version 1.75.1
