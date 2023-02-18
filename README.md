@@ -2,7 +2,7 @@
 
 ---
 
-[![Marketplace](https://vsmarketplacebadge.apphb.com/version/auth0.vscode-labs.svg?color=blue?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/auth0.vscode-labs?color=%23ff00ff&logo=Auth0)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=%2300ffff)](https://opensource.org/licenses/MIT)
+[![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/auth0.vscode-labs?color=%23ff00ff&logo=Auth0)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=%2300ffff)](https://opensource.org/licenses/MIT)
 
 ## Auth0 Labs VSCode Extension (Experimental)
 
