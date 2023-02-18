@@ -113,7 +113,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - updated required vscode version to 1.75.1
 - updated test runner to use vscode version 1.75.1
 
-## [1.3.7.1] - 2023-02-18
+## [1.3.8] - 2023-02-18
 
 ### Removed
 - Removed marketplace badge from readme
