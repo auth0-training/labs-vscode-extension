@@ -99,9 +99,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.3.7] - 2023-02-17
 
+### Added
+- Ability to export tenant settings via deploy cli to a directory
+  named **tenant**
+
 ### Changed
 - updated dependencies
 - updated auth0 deploy cli to 7.16.1
+- updated tenant export and import code to latest version
+  - removed dependency on js-yaml delpoy cli handles directly
 - updated auth to remove dependency on abort-controller
   - openid-client now handles this directly
 - updated required vscode version to 1.75.1

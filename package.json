@@ -88,7 +88,6 @@
     "auth0": "3.2.0",
     "auth0-deploy-cli": "7.16.1",
     "axios": "1.3.3",
-    "js-yaml": "4.1.0",
     "openid-client": "5.4.0",
     "qs": "6.11.0",
     "ts-is-present": "1.2.2"
@@ -583,7 +582,7 @@
       ],
       "explorer/context": [
         {
-          "when": "auth0:authenticated && explorerResourceIsFolder && resourcePath =~ /lab/",
+          "when": "auth0:authenticated && explorerResourceIsFolder && resourcePath =~ /lab|tenant/",
           "command": "auth0.exportTenant",
           "group": "navigation"
         },
