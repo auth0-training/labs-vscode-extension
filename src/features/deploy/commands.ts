@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as auth0DeployCli from 'auth0-deploy-cli';
+import { load } from 'js-yaml';
+import { tools, dump } from 'auth0-deploy-cli';
 import { getClient } from '../../client';
 import { getDomainFromToken } from '../../utils';
 
@@ -33,7 +34,7 @@ export class DeployCommands {
         `Exporting: ${getDomainFromToken(accessToken)} to ${outputFolder}`
       );
 
-      await auth0DeployCli.default.dump({
+      await dump({
         output_folder: outputFolder,
         format: 'yaml',
         config: {
@@ -62,15 +63,8 @@ export class DeployCommands {
       return;
     }
     try {
-      await auth0DeployCli.default.deploy({
-        input_file: filePath,
-        config: {
-          AUTH0_ACCESS_TOKEN: accessToken,
-          AUTH0_DOMAIN: getDomainFromToken(accessToken),
-          AUTH0_ALLOW_DELETE: false,
-        },
-        env: process.env,
-      });
+      const assets = load(tools.loadFile(filePath, process.env));
+      await tools.deploy(assets, client, () => null);
     } catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
