@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as auth0DeployCli from 'auth0-deploy-cli';
-import { deploy } from 'auth0-deploy-cli';
+
+import { dump, deploy } from 'auth0-deploy-cli';
+
 import { getClient } from '../../client';
 import { getDomainFromToken, getFileUri, readUriContents } from '../../utils';
 
@@ -34,7 +35,7 @@ export class DeployCommands {
         `Exporting: ${getDomainFromToken(accessToken)} to ${outputFolder}`
       );
 
-      await auth0DeployCli.default.dump({
+      await dump({
         output_folder: outputFolder,
         format: 'yaml',
         config: await this.mergeConfig(outputFolder, {
@@ -64,16 +65,21 @@ export class DeployCommands {
       return;
     }
     try {
-      await deploy({
-        input_file: filePath,
+      const opts = {
+        //must be relative path to BASE_PATH?
+        input_file: path.relative(fileDir, filePath),
+        base_path: fileDir,
         config: await this.mergeConfig(fileDir, {
           AUTH0_ACCESS_TOKEN: accessToken,
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
           AUTH0_BASE_PATH: fileDir,
           AUTH0_ALLOW_DELETE: false,
+
         }),
         env: process.env,
-      });
+      };
+      await deploy(opts);
+
     } catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
@@ -108,6 +114,9 @@ export class DeployCommands {
     defaultConfig: any
   ): Promise<any> => {
     console.log('auth0.mergeConfig');
+
+    return defaultConfig;
+
     try {
       const uri = getFileUri(`${outputFolder}/config.json`);
       const data = await readUriContents(uri);
