@@ -67,19 +67,17 @@ export class DeployCommands {
     try {
       const opts = {
         //must be relative path to BASE_PATH?
-        input_file: path.relative(fileDir, filePath),
+        input_file: filePath,
         base_path: fileDir,
         config: await this.mergeConfig(fileDir, {
           AUTH0_ACCESS_TOKEN: accessToken,
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
           AUTH0_BASE_PATH: fileDir,
           AUTH0_ALLOW_DELETE: false,
-
         }),
         env: process.env,
       };
       await deploy(opts);
-
     } catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
