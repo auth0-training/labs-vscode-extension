@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { load } from 'js-yaml';
-import { tools, dump } from 'auth0-deploy-cli';
+import { dump, deploy } from 'auth0-deploy-cli/';
 import { getClient } from '../../client';
-import { getDomainFromToken } from '../../utils';
+import { getDomainFromToken, getFileUri, readUriContents } from '../../utils';
+import { ImportParams } from 'auth0-deploy-cli/lib/args';
 
 const registerCommand = vscode.commands.registerCommand;
 
@@ -37,10 +37,10 @@ export class DeployCommands {
       await dump({
         output_folder: outputFolder,
         format: 'yaml',
-        config: {
+        config: await this.mergeConfig(outputFolder, {
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
           AUTH0_ACCESS_TOKEN: accessToken,
-        },
+        }),
       });
 
       vscode.window.showInformationMessage(
@@ -56,6 +56,7 @@ export class DeployCommands {
   silentDeploy = async (e: vscode.Uri) => {
     console.log('auth0.silentDeploy');
     const filePath = e.path;
+    const fileDir = path.dirname(filePath);
     const client = await getClient();
     const accessToken = await client.getAccessToken();
 
@@ -63,8 +64,16 @@ export class DeployCommands {
       return;
     }
     try {
-      const assets = load(tools.loadFile(filePath, process.env));
-      await tools.deploy(assets, client, () => null);
+      const opts: ImportParams = {
+        input_file: filePath,
+        config: await this.mergeConfig(fileDir, {
+          AUTH0_ACCESS_TOKEN: accessToken,
+          AUTH0_DOMAIN: getDomainFromToken(accessToken),
+          AUTH0_CLIENT_ID: 'NEEDED FOR v7.17.0 Deploy CLI',
+          AUTH0_ALLOW_DELETE: false,
+        }),
+      };
+      await deploy(opts);
     } catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
@@ -92,5 +101,23 @@ export class DeployCommands {
     vscode.window.showInformationMessage(
       `Successfully deployed  ${path.basename(filePath)}`
     );
+  };
+
+  mergeConfig = async (
+    outputFolder: string,
+    defaultConfig: any
+  ): Promise<any> => {
+    console.log('auth0.mergeConfig');
+
+    return defaultConfig;
+
+    try {
+      const uri = getFileUri(`${outputFolder}/config.json`);
+      const data = await readUriContents(uri);
+      const localConfig = JSON.parse(data);
+      return { ...defaultConfig, ...localConfig };
+    } catch (e: any) {
+      return defaultConfig;
+    }
   };
 }
