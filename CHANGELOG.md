@@ -117,3 +117,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Removed
 - Removed marketplace badge from readme
+
+## [1.3.9] - 2023-03-02
+
+### Removed
+- Reverted deploy cli back to previous version
