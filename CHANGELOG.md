@@ -122,3 +122,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Removed
 - Reverted deploy cli back to previous version
+
+## [1.4.0] - 2023-03-28
+
+### Changed
+- updated dependencies
+- updated auth0 deploy cli to 7.17.0
+- updated tenant export and import code to latest version
+  - removed dependency on js-yaml delpoy cli handles directly
+- updated required vscode version to 1.76.2
+- updated test runner to use vscode version 1.76.2
