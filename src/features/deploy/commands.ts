@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from 'vscode';
 import * as path from 'path';
-
-import { dump, deploy } from 'auth0-deploy-cli';
-
+import { dump, deploy } from 'auth0-deploy-cli/';
 import { getClient } from '../../client';
 import { getDomainFromToken, getFileUri, readUriContents } from '../../utils';
+import { ImportParams } from 'auth0-deploy-cli/lib/args';
 
 const registerCommand = vscode.commands.registerCommand;
 
@@ -65,17 +64,14 @@ export class DeployCommands {
       return;
     }
     try {
-      const opts = {
-        //must be relative path to BASE_PATH?
+      const opts: ImportParams = {
         input_file: filePath,
-        base_path: fileDir,
         config: await this.mergeConfig(fileDir, {
           AUTH0_ACCESS_TOKEN: accessToken,
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
-          AUTH0_BASE_PATH: fileDir,
+          AUTH0_CLIENT_ID: 'NEEDED FOR v7.17.0 Deploy CLI',
           AUTH0_ALLOW_DELETE: false,
         }),
-        env: process.env,
       };
       await deploy(opts);
     } catch (e: any) {
