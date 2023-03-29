@@ -132,3 +132,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - removed dependency on js-yaml delpoy cli handles directly
 - updated required vscode version to 1.76.2
 - updated test runner to use vscode version 1.76.2
+
+## [1.4.1] - 2023-03-29
+
+### Added
+- deploy cli config.json placed next to tenant.yml will be merged into deploy configuration.
+
+### Changed
+- reverted to auth0 v2.42.0

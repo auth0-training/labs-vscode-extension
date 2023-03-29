@@ -109,10 +109,9 @@ export class DeployCommands {
   ): Promise<any> => {
     console.log('auth0.mergeConfig');
 
-    return defaultConfig;
-
     try {
-      const uri = getFileUri(`${outputFolder}/config.json`);
+      const file = path.join(outputFolder, 'config.json');
+      const uri = getFileUri(file);
       const data = await readUriContents(uri);
       const localConfig = JSON.parse(data);
       return { ...defaultConfig, ...localConfig };
