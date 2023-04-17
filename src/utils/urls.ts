@@ -1,7 +1,7 @@
 export function getUrlForPort(port: number) {
   //if running in codespaces
   if (process.env['CODESPACES']) {
-    return `https://${process.env.CLOUDENV_ENVIRONMENT_ID}-${port}.apps.codespaces.githubusercontent.com`;
+    return `https://${process.env.CODESPACE_NAME}-${PORT}.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`;
   }
   if (process.env['INSTANCE_ID']) {
     return `https://${port}-0-${process.env.INSTANCE_ID}.auth0-labs.appsembler.com`;
