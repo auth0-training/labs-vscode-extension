@@ -71,6 +71,10 @@ export class DeployCommands {
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
           AUTH0_CLIENT_ID: 'NEEDED FOR v7.17.0 Deploy CLI',
           AUTH0_ALLOW_DELETE: false,
+          AUTH0_KEYWORD_REPLACE_MAPPINGS: {
+            AUTH0_DOMAIN: getDomainFromToken(accessToken),
+            CODESPACE_NAME: process.env.CODESPACE_NAME
+          }
         }),
       };
       await deploy(opts);
