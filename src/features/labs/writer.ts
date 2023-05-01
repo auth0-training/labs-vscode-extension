@@ -26,7 +26,7 @@ export class LabEnvWriter {
     }
 
 
-  }
+  };
 
   writeAll = async (resolvers: Resolver[]) => {
     resolvers.forEach(async (resolver) => {
@@ -38,7 +38,7 @@ export class LabEnvWriter {
 
 
       const existingEnv = await this.getExisting(uri);
-      const newEnv = resolver.resolveEnv(resolvers)
+      const newEnv = resolver.resolveEnv(resolvers);
       const unique = [
         ...new Map(
           existingEnv.concat(newEnv).map(m => [m.name, m])
@@ -48,7 +48,7 @@ export class LabEnvWriter {
 
       const env = unique
         .map((i) => `${i.name}=${i.value}`)
-        .join('\n')
+        .join('\n');
 
 
       await fs.writeFile(uri, Buffer.from(env, 'utf8'));
