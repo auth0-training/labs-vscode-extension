@@ -69,6 +69,9 @@ In addition to the visual features listed below, the Labs extension also contrib
 - **Auth0: Configure Tenant Resources** - `auth0.lab.tenantConfigure` Configures tenant for the current lab materials. Only available when lab materials are present in workspace.
 - **Auth0: Export Tenant** - `auth0.exportTenant` Exports tenant configuration yml to the root directory. This exports everything and needs to be edited down for a lab. 
 - **Auth0: Open Endpoint Url** - `auth0.lab.openEndpointByName?["Endpoint 1, Endpoint 2"]` Opens the URL associated with a specific named endpoint in the default browser. Multiple endpoints can be opened by supplying a comma seperated list. Only available when lab materials are present in workspace.
+- **Auth0: Run Post Configure Command** `auth0.lab.postConfigureCommand` Allows you to specify the path of a shell script in `environment.json` (i.e., `"postConfigureCommand": "<script-path>"`), that will execute upon configuration completion. Enables you to run a script to perform actions like storing values client id and client secret as secrets in the environment. This command currently has access to the following environment variables:
+  - `AUTH0_DOMAIN`: Your Auth0 domain URI
+  - `AUTH0_TOKEN`: The access token issued to your client from the authorization server.
 
 ### Authenticating
 
