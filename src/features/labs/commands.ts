@@ -3,7 +3,13 @@ import * as path from 'path';
 import { getLabEnvironment, getLabWorkspace } from './workspace';
 import { LabResourceResolverBuilder } from './resolver';
 import { LabEnvWriter } from './writer';
-import { getUrlForPort, getFileUri, startTour } from '../../utils';
+import { getClient } from '../../client';
+import {
+  getDomainFromToken,
+  getUrlForPort,
+  getFileUri,
+  startTour,
+} from '../../utils';
 
 const registerCommand = commands.registerCommand;
 const executeCommand = commands.executeCommand;
@@ -25,6 +31,10 @@ export class LabCommands {
         registerCommand('auth0.lab.configure', this.configureLab),
         registerCommand('auth0.lab.localConfigure', this.localConfigure),
         registerCommand('auth0.lab.tenantConfigure', this.tenantConfigure),
+        registerCommand(
+          'auth0.lab.postConfigureCommand',
+          this.postConfigureCommand
+        ),
         registerCommand('auth0.lab.openLocalEndpoint', this.openLocalEndpoint),
         registerCommand(
           'auth0.lab.openEndpointByName',
@@ -144,11 +154,20 @@ export class LabCommands {
             await executeCommand('auth0.lab.localConfigure');
           }
 
+          if (labEnv.postConfigureCommand && !token.isCancellationRequested) {
+            progress.report({
+              message: 'running post configure command',
+              increment: 4,
+            });
+
+            await executeCommand('auth0.lab.postConfigureCommand');
+          }
+
           //issue post command to kick off next process
           if (labEnv.postConfigureTour && !token.isCancellationRequested) {
             progress.report({
               message: 'Starting Lab',
-              increment: 4,
+              increment: 5,
             });
 
             const uri = getFileUri(
@@ -188,6 +207,31 @@ export class LabCommands {
     if (workspace && labEnv) {
       const resolvers = await this.labDataResolver.build(labEnv);
       new LabEnvWriter(workspace.uri).writeAll(resolvers);
+    }
+  };
+
+  postConfigureCommand = async (): Promise<void> => {
+    console.log('auth0.labs.postConfigure');
+    const workspace = getLabWorkspace();
+    const labEnv = await getLabEnvironment();
+    const client = await getClient();
+    const accessToken = await client.getAccessToken();
+
+    if (workspace && labEnv && labEnv.postConfigureCommand) {
+      const uri = getFileUri(
+        `/.auth0/lab/${labEnv.postConfigureCommand}`,
+        workspace.uri
+      );
+
+      const terminal = window.createTerminal({
+        name: 'Post Configure Script',
+        env: {
+          AUTH0_DOMAIN: getDomainFromToken(accessToken),
+          AUTH0_TOKEN: accessToken,
+        },
+      });
+      terminal.show();
+      terminal.sendText(uri.fsPath);
     }
   };
 }
