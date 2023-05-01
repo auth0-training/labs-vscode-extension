@@ -226,7 +226,9 @@ export class LabCommands {
       const terminal = window.createTerminal({
         name: 'Post Configure Script',
         env: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           AUTH0_DOMAIN: getDomainFromToken(accessToken),
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           AUTH0_TOKEN: accessToken,
         },
       });
