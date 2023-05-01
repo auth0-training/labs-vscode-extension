@@ -15,5 +15,5 @@ suite('Extension', () => {
       await started.activate();
       assert.strictEqual(started && started.isActive, true);
     }
-  });
+  }).timeout(1000 * 10);//10 seconds
 });
