@@ -2,7 +2,7 @@
   "name": "vscode-labs",
   "preview": true,
   "displayName": "Auth0 Labs",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A Visual Studio Code extension for training lab automation and quick access to tenant information.",
   "main": "./dist/extension.js",
   "publisher": "auth0",
@@ -221,6 +221,13 @@
         "category": "Auth0",
         "command": "auth0.lab.tenantConfigure",
         "title": "Configure Tenant Resources",
+        "icon": "$(beaker)",
+        "enablement": "auth0:authenticated && auth0:isLabWorkspace"
+      },
+      {
+        "category": "Auth0",
+        "command": "auth0.lab.postConfigureCommand",
+        "title": "Run Post Configure Command",
         "icon": "$(beaker)",
         "enablement": "auth0:authenticated && auth0:isLabWorkspace"
       },

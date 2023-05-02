@@ -4,6 +4,7 @@ export interface LocalEnvironment {
   resources: string | null;
   unauthenticatedTour: string | null;
   postConfigureTour: string | null;
+  postConfigureCommand: string | null;
   clients: Array<Resource>;
   resourceServers: Array<Resource>;
 }

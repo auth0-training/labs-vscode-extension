@@ -140,3 +140,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - reverted to auth0 v2.42.0
+
+## [1.4.2] - 2023-04-19
+### Added
+- Support for Codespaces added so that when the registered command `openEndpointByName` is used, it resolves the correct URL for apps launched in the Codespaces environment.
+
+## [1.4.3] - 2023-05-01
+### Added
+- Implemented `auth0.lab.postConfigureCommand` command
+- Support for writing more than one app config to a single `.env` without overwriting values
+- Added runtime-specific replacement values for tenant configuration from yaml: `CODESPACE_NAME` (same as defined [here]( https://docs.github.com/en/codespaces/developing-in-codespaces/default-environment-variables-for-your-codespace)) and `AUTH0_DOMAIN` (your tenant domain). 
