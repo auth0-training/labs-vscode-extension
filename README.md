@@ -51,10 +51,10 @@ Under the Debug Tab in Visual Studio Code, select `Run Extension`.
 ## Features
 ---
 ## Alternative Root Tenant Authority
-If you are attempting to work on labs for Layer0 based cloud environments, you can tell the extension to use an alternate root tnenant by passing the following environment variables.
+If you are attempting to work on labs for Layer0 based cloud environments, you can tell the extension to use an alternate root tenant by passing the following environment variables.
 
 - **VSCODE_EXTENSION_ISSUER** - Default:`https://auth0.auth0.com` The root tenant authority to use.
-- **AUTH0_VSCODE_EXTENSION_CLIENT_ID** - Default: `w94YV1qvYFMH2PnmFSIQVxkGJwk0tBGt` The client id that was created specifically for the extension with the altenrative root tenant authority.
+- **AUTH0_VSCODE_EXTENSION_CLIENT_ID** - Default: `w94YV1qvYFMH2PnmFSIQVxkGJwk0tBGt` The client id that was created specifically for the extension with the alternative root tenant authority.
 - **AUTH0_VSCODE_EXTENSION_AUDIENCE** - Default: `https://*.auth0.com/api/v2/` The Management API audience specific to your environment. **Note:** The wild card tenant segment is required. This enables the RTA to prompt the user for a specific tenant to authorize.
 ### Contributed Commands
 In addition to the visual features listed below, the Labs extension also contributes the following commands to the command palette:
@@ -68,7 +68,7 @@ In addition to the visual features listed below, the Labs extension also contrib
 - **Auth0: Configure Local Environment** - `auth0.lab.localConfigure` Configures local environment for the current lab materials. Only available when lab materials are present in workspace.
 - **Auth0: Configure Tenant Resources** - `auth0.lab.tenantConfigure` Configures tenant for the current lab materials. Only available when lab materials are present in workspace.
 - **Auth0: Export Tenant** - `auth0.exportTenant` Exports tenant configuration yml to the root directory. This exports everything and needs to be edited down for a lab. 
-- **Auth0: Open Endpoint Url** - `auth0.lab.openEndpointByName?["Endpoint 1, Endpoint 2"]` Opens the URL associated with a specific named endpoint in the default browser. Multiple endpoints can be opened by supplying a comma seperated list. Only available when lab materials are present in workspace.
+- **Auth0: Open Endpoint Url** - `auth0.lab.openEndpointByName?["Endpoint 1, Endpoint 2"]` Opens the URL associated with a specific named endpoint in the default browser. Multiple endpoints can be opened by supplying a comma-separated list. Only available when lab materials are present in the workspace.
 - **Auth0: Run Post Configure Command** `auth0.lab.postConfigureCommand` Allows you to specify the path of a shell script in `environment.json` (i.e., `"postConfigureCommand": "<script-path>"`), that will execute upon configuration completion. Enables you to run a script to perform actions like storing values client id and client secret as secrets in the environment. This command currently has access to the following environment variables:
   - `AUTH0_DOMAIN`: Your Auth0 domain URI
   - `AUTH0_TOKEN`: The access token issued to your client from the authorization server.
