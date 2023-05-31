@@ -62,7 +62,7 @@
     "@types/vscode": "1.76.0",
     "@typescript-eslint/eslint-plugin": "5.57.0",
     "@typescript-eslint/parser": "5.57.0",
-    "@vscode/vsce": "^2.18.0",
+    "@vscode/vsce": "^2.19.0",
     "chai": "4.3.7",
     "copy-webpack-plugin": "11.0.0",
     "eslint": "8.36.0",
