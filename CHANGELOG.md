@@ -150,3 +150,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Implemented `auth0.lab.postConfigureCommand` command
 - Support for writing more than one app config to a single `.env` without overwriting values
 - Added runtime-specific replacement values for tenant configuration from yaml: `CODESPACE_NAME` (same as defined [here]( https://docs.github.com/en/codespaces/developing-in-codespaces/default-environment-variables-for-your-codespace)) and `AUTH0_DOMAIN` (your tenant domain). 
+
+## [1.4.4] - 2023-05-31
+### Changed
+- Auth0 Training logo (branding)
