@@ -1,4 +1,4 @@
-[![Auth0 Training](https://cdn.auth0.com/website/auth0/labs/auth0-training-logo.png "Auth0 Training")(https://training.auth0.com)
+[![Auth0 Training](https://cdn.auth0.com/website/auth0/labs/auth0-training-logo.png "Auth0 Training")](https://training.auth0.com)
 
 ---
 
