@@ -155,6 +155,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 - Auth0 Training logo (branding)
 
-- ## [1.4.5] - 2023-08-18
+## [1.4.5] - 2023-08-18
 ### Added
 - Added environment-specific replacement value for tenant configuration from yaml: `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN` (same as defined [here]( https://docs.github.com/en/codespaces/developing-in-codespaces/default-environment-variables-for-your-codespace)
