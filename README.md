@@ -73,6 +73,12 @@ In addition to the visual features listed below, the Labs extension also contrib
   - `AUTH0_DOMAIN`: Your Auth0 domain URI
   - `AUTH0_TOKEN`: The access token issued to your client from the authorization server.
 
+### Auth0 Deploy CLI Keyword Replacement
+This extension uses the Auth0 Deploy CLI, which makes it possible to leverage environment-specific [keyword replacement](https://auth0.com/docs/deploy-monitor/deploy-cli-tool/keyword-replacement) in resource files (e.g., yml and json). These are the current keywords supported:
+- `CODESPACE_NAME`: Returns the domain of the GitHub Codespaces forwarded port. For example, `app.github.dev` (when using a Codespaces environment)
+- `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN`: Returns the name of the GitHub Codespace (when using a Codespaces environment)
+- `AUTH0_DOMAIN`: Your Auth0 domain URI
+
 ### Authenticating
 
 The first thing to do is connect to your Auth0 account.
