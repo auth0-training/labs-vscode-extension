@@ -16,11 +16,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3.3.0
+      uses: actions/checkout@v5
     - name: Install Node.js
-      uses: actions/setup-node@v3.6.0
+      uses: actions/setup-node@v6
       with:
-        node-version: '16'
+        node-version: '24'
     - name: Install Dependencies
       run: npm install
     - name: Run Lint
@@ -39,7 +39,7 @@ jobs:
       if: runner.os == 'Linux'
     - name: Upload Artifact
       if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v4
       with:
         name: test-vscode
         path: release.vsix
