@@ -93,7 +93,8 @@
     "winston": "3.8.2"
   },
   "overrides": {
-    "winston": "3.8.2"
+    "winston": "3.8.2",
+    "promise-pool-executor": { "promise-batcher": "1.0.2" } 
   },
   "prettier": {
     "printWidth": 80,
