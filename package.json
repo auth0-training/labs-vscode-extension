@@ -45,7 +45,8 @@
     "pretest": "tsc -p ./ && npm run build",
     "test": "node ./out/tests/runTest.js",
     "package": "npx vsce package -o release.vsix",
-    "deploy": "vsce publish --packagePath ./release.vsix"
+    "deploy": "vsce publish --packagePath ./release.vsix",
+    "prepack": "npm prune --production"
   },
   "homepage": "https://auth0.com",
   "categories": [
