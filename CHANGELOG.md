@@ -161,6 +161,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.4.6] - 2025-12-26
 ### Changed
-- Migrate to auth0v4
+- Migrate to auth0 v4
+- Migrate to auth0-deploy-cli v8
 - Updated dependencies
 - Updated logos
