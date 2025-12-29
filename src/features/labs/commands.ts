@@ -3,7 +3,7 @@ import * as path from 'path';
 import { getLabEnvironment, getLabWorkspace } from './workspace';
 import { LabResourceResolverBuilder } from './resolver';
 import { LabEnvWriter } from './writer';
-import { getClient } from '../../client';
+import { getAccessToken } from '../../client';
 import {
   getDomainFromToken,
   getUrlForPort,
@@ -214,8 +214,14 @@ export class LabCommands {
     console.log('auth0.labs.postConfigure');
     const workspace = getLabWorkspace();
     const labEnv = await getLabEnvironment();
-    const client = await getClient();
-    const accessToken = await client.getAccessToken();
+    const accessToken = await getAccessToken();
+
+    if (!accessToken) {
+      window.showErrorMessage(
+        'Unable to run post configure command: missing Auth0 access token. Please authenticate and try again.'
+      );
+      return;
+    }
 
     if (workspace && labEnv && labEnv.postConfigureCommand) {
       const uri = getFileUri(
@@ -227,7 +233,7 @@ export class LabCommands {
         name: 'Post Configure Script',
         env: {
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          AUTH0_DOMAIN: getDomainFromToken(accessToken),
+          AUTH0_DOMAIN: getDomainFromToken(accessToken!),
           // eslint-disable-next-line @typescript-eslint/naming-convention
           AUTH0_TOKEN: accessToken,
         },

@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { dump, deploy } from 'auth0-deploy-cli/';
-import { getClient } from '../../client';
+import { getAccessToken } from '../../client';
 import { getDomainFromToken, getFileUri, readUriContents } from '../../utils';
 import { ImportParams } from 'auth0-deploy-cli/lib/args';
 
@@ -21,8 +21,7 @@ export class DeployCommands {
 
   exportTenant = async (e: vscode.Uri) => {
     console.log('auth0.exportTenant');
-    const client = await getClient();
-    const accessToken = await client.getAccessToken();
+    const accessToken = await getAccessToken();
     const outputFolder =
       e?.fsPath || vscode.workspace.workspaceFolders![0].uri.fsPath;
 
@@ -57,8 +56,7 @@ export class DeployCommands {
     console.log('auth0.silentDeploy');
     const filePath = e.path;
     const fileDir = path.dirname(filePath);
-    const client = await getClient();
-    const accessToken = await client.getAccessToken();
+    const accessToken = await getAccessToken();
 
     if (!filePath || !accessToken) {
       return;
