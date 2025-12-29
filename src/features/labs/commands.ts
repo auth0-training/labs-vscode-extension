@@ -51,7 +51,7 @@ export class LabCommands {
       const port =
         lab?.clients.find((c) => c.name === endpointName.trim())?.env['PORT'] ||
         lab?.resourceServers.find((c) => c.name === endpointName.trim())?.env[
-          'PORT'
+        'PORT'
         ];
       if (port) {
         const url = Uri.parse(getUrlForPort(port as number));
