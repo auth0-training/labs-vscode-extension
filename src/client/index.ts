@@ -15,7 +15,7 @@ Auth.onAuthStatusChanged(async (newTokenSet) => {
 
 function createManagementClient(tokenSet: TokenSet): ManagementClient {
   return (managementClient = new ManagementClient({
-    token: tokenSet.access_token,
+    token: tokenSet.access_token!,
     domain: getDomainFromToken(tokenSet.access_token!),
   }));
 }

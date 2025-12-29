@@ -58,7 +58,7 @@ export class ApiCommands {
         progress.report({ increment: 0 });
 
         const client = await getClient();
-        await client.createResourceServer({
+        await client.resourceServers.create({
           name,
           identifier,
         });
@@ -94,7 +94,7 @@ export class ApiCommands {
       async (progress) => {
         progress.report({ increment: 0 });
 
-        await client.deleteResourceServer({
+        await client.resourceServers.delete({
           id,
         });
 
@@ -136,7 +136,7 @@ export class ApiCommands {
     }
 
     const client = await getClient();
-    await (await client).updateResourceServer(
+    await (await client).resourceServers.update(
       {
         id: resourceServer.id,
       },
@@ -165,7 +165,7 @@ export class ApiCommands {
     }
 
     const client = await getClient();
-    await client.updateResourceServer(
+    await client.resourceServers.update(
       {
         id: resourceServer.id,
       },
@@ -194,12 +194,12 @@ export class ApiCommands {
     }
 
     const client = await getClient();
-    await client.updateResourceServer(
+    await client.resourceServers.update(
       {
         id: resourceServer.id,
       },
       {
-        token_lifetime_for_web: Number(tokenLifetime),
+        token_lifetime: Number(tokenLifetime),
       }
     );
 

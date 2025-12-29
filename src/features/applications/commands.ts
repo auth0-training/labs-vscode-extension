@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Client } from 'auth0';
+import { ClientCreateAppTypeEnum } from "auth0";
 import * as vscode from 'vscode';
 import { getClient } from '../../client';
 import { ApplicationsViewDataProvider } from './provider';
@@ -11,11 +12,11 @@ import { ApplicationValueTreeItem } from './views/application-value.tree-item';
 
 const registerCommand = vscode.commands.registerCommand;
 
-const appTypes: { [key: string]: string } = {
-  'Regular Web App': 'regular_web',
-  'Single Page App': 'spa',
-  'Machine to Machine': 'non_interactive',
-  'Native': 'native',
+const appTypes: Record<string, ClientCreateAppTypeEnum> = {
+  'Single Page App': ClientCreateAppTypeEnum.spa,
+  'Native': ClientCreateAppTypeEnum.native,
+  'Regular Web App': ClientCreateAppTypeEnum.regular_web,
+  'Machine to Machine': ClientCreateAppTypeEnum.non_interactive,
 };
 
 const rotationTypes: { [key: string]: string } = {
@@ -70,7 +71,7 @@ export class ApplicationCommands {
 
         const client = await getClient();
 
-        await client.createClient({
+        await client.clients.create({
           name,
           app_type: appTypes[appType],
         });
@@ -110,7 +111,7 @@ export class ApplicationCommands {
 
         const client = await getClient();
 
-        await client.deleteClient({
+        await client.clients.delete({
           client_id: e.clientId,
         });
 
@@ -151,7 +152,7 @@ export class ApplicationCommands {
     }
     const callbacks: string[] = [...(client?.callbacks || []), url || ''];
     const managementClient = await getClient();
-    await managementClient.updateClient(
+    await managementClient.clients.update(
       {
         client_id: client?.client_id || '',
       },
@@ -170,7 +171,7 @@ export class ApplicationCommands {
     const url = e.label;
     const callbacks = (client?.callbacks || []).filter((cb) => cb !== url);
     const managementClient = await getClient();
-    await managementClient.updateClient(
+    await managementClient.clients.update(
       {
         client_id: client?.client_id || '',
       },
@@ -188,7 +189,7 @@ export class ApplicationCommands {
     ) as Client & { refresh_token: any };
     const rotationType = (await promptForRotationType()) || '';
     const managementClient = await getClient();
-    await managementClient.updateClient(
+    await managementClient.clients.update(
       {
         client_id: client?.client_id || '',
       },
@@ -229,7 +230,7 @@ export class ApplicationCommands {
     ) as Client & { refresh_token: any };
     const token_lifetime = await promptForTokenLifetime();
     const managementClient = await getClient();
-    await managementClient.updateClient(
+    await managementClient.clients.update(
       {
         client_id: client?.client_id || '',
       },
@@ -254,7 +255,7 @@ export class ApplicationCommands {
     ) as Client & { refresh_token: any };
     const leeway = await promptForLeeway();
     const managementClient = await getClient();
-    await managementClient.updateClient(
+    await managementClient.clients.update(
       {
         client_id: client?.client_id || '',
       },
