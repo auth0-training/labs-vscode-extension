@@ -158,3 +158,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.4.5] - 2023-08-18
 ### Added
 - Added environment-specific replacement value for tenant configuration from yaml: `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN` (same as defined [here]( https://docs.github.com/en/codespaces/developing-in-codespaces/default-environment-variables-for-your-codespace)
+
+## [1.4.6] - 2025-12-26
+### Changed
+- Migrate to auth0 v4
+- Migrate to auth0-deploy-cli v8
+- Updated dependencies
+- Updated logos

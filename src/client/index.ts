@@ -15,7 +15,7 @@ Auth.onAuthStatusChanged(async (newTokenSet) => {
 
 function createManagementClient(tokenSet: TokenSet): ManagementClient {
   return (managementClient = new ManagementClient({
-    token: tokenSet.access_token,
+    token: tokenSet.access_token!,
     domain: getDomainFromToken(tokenSet.access_token!),
   }));
 }
@@ -30,3 +30,14 @@ export async function getClient(): Promise<ManagementClient> {
   }
   return managementClient;
 }
+
+export async function getAccessToken(): Promise<string | undefined> {
+  if (!tokenSet || tokenSet.expired()) {
+    const newTokenSet = await Auth.getTokenSet();
+    if (newTokenSet && newTokenSet.access_token) {
+      tokenSet = newTokenSet;
+      managementClient = createManagementClient(newTokenSet);
+    }
+  }
+  return tokenSet?.access_token;
+} 

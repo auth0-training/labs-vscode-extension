@@ -46,8 +46,8 @@ export class ApplicationsViewDataProvider
 
   async refresh() {
     const client = await getClient();
-    const clients = await client.getClients();
-    this._clients = clients
+    const clients = await client.clients.getAll();
+    this._clients = clients.data
       .filter((c: any) => !c.global)
       .sort(sortAlphabetically<Client>((item) => item.name || ''));
     this._onDidChangeTreeData.fire();
@@ -61,8 +61,8 @@ export class ApplicationsViewDataProvider
   async getClients() {
     if (!this._clients) {
       const client = await getClient();
-      const clients = await client.getClients();
-      this._clients = clients
+      const clients = await client.clients.getAll();
+      this._clients = clients.data
         .filter((c: any) => !c.global)
         .sort(sortAlphabetically<Client>((item) => item.name || ''));
     }

@@ -30,19 +30,15 @@ export class ApisViewDataProvider
   }
 
   async refresh() {
-    const client = await getClient();
-    const resourceServers = await client.getResourceServers();
-    this._resourceServers = resourceServers.sort(
-      sortAlphabetically<ResourceServer>((item) => item.name || '')
-    );
+    await this.getResourceServers();
     this._onDidChangeTreeData.fire();
   }
 
   async getResourceServers() {
     if (!this._resourceServers) {
       const client = await getClient();
-      const resourceServers = await client.getResourceServers();
-      this._resourceServers = resourceServers.sort(
+      const resourceServers = await client.resourceServers.getAll();
+      this._resourceServers = resourceServers.data.sort(
         sortAlphabetically<ResourceServer>((item) => item.name || '')
       );
     }

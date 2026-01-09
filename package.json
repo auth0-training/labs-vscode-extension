@@ -2,7 +2,7 @@
   "name": "vscode-labs",
   "preview": true,
   "displayName": "Auth0 Labs",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "A Visual Studio Code extension for training lab automation and quick access to tenant information.",
   "main": "./dist/extension.js",
   "publisher": "auth0",
@@ -45,7 +45,8 @@
     "pretest": "tsc -p ./ && npm run build",
     "test": "node ./out/tests/runTest.js",
     "package": "npx vsce package -o release.vsix",
-    "deploy": "vsce publish --packagePath ./release.vsix"
+    "deploy": "vsce publish --packagePath ./release.vsix",
+    "prepack": "npm prune --production"
   },
   "homepage": "https://auth0.com",
   "categories": [
@@ -68,32 +69,35 @@
     "eslint": "8.36.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
-    "express": "4.18.2",
+    "express": "^4.22.1",
     "glob": "8.1.0",
-    "mocha": "10.2.0",
-    "prettier": "2.8.7",
+    "mocha": "^10.8.2",
+    "prettier": "^3.7.4",
     "sinon": "15.0.3",
     "string-replace-loader": "3.1.0",
     "superagent": "8.0.9",
-    "superagent-proxy": "3.0.0",
+    "superagent-proxy": "^1.0.3",
     "supports-color": "9.3.1",
     "ts-loader": "9.4.2",
     "typescript": "5.0.2",
     "vscode-test": "1.6.1",
-    "webpack": "5.76.3",
+    "webpack": "^5.104.1",
     "webpack-cli": "5.0.1"
   },
   "dependencies": {
-    "auth0": "2.42.0",
-    "auth0-deploy-cli": "7.17.3",
-    "axios": "1.3.4",
+    "auth0": "^4.37.0",
+    "auth0-deploy-cli": "8.8.3",
+    "axios": "^1.13.2",
     "openid-client": "5.4.0",
     "qs": "6.11.1",
     "ts-is-present": "1.2.2",
     "winston": "3.8.2"
   },
   "overrides": {
-    "winston": "3.8.2"
+    "winston": "3.8.2",
+    "promise-pool-executor": {
+      "promise-batcher": "1.0.2"
+    }
   },
   "prettier": {
     "printWidth": 80,
