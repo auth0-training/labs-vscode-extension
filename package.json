@@ -87,7 +87,7 @@
   "dependencies": {
     "auth0": "^4.37.0",
     "auth0-deploy-cli": "8.8.3",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "openid-client": "5.4.0",
     "qs": "6.11.1",
     "ts-is-present": "1.2.2",
