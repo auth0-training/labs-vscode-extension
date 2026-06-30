@@ -34,9 +34,6 @@ jobs:
     - name: Build Production
       run: npm run build:production
       if: runner.os == 'Linux'
-    - name: Prune for Release
-      run: npm prune --production
-      if: runner.os == 'Linux'
     - name: Package VSIX
       run: npm run package
       if: runner.os == 'Linux'
