@@ -1,9 +1,9 @@
 
-[![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/auth0.vscode-labs?color=%23ff00ff&logo=Auth0)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs) [![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=%2300ffff)](https://opensource.org/licenses/MIT)
+[![Visual Studio Marketplace Installs](https://badgen.net/vs-marketplace/i/auth0.vscode-labs?color=9921fe)](https://marketplace.visualstudio.com/items?itemName=auth0.vscode-labs)[![MIT](https://img.shields.io/badge/license-MIT-orange.svg?color=490186)](https://opensource.org/licenses/MIT)
 
 # Auth0 Labs VSCode Extension (Experimental)
 
-A Visual Studio Code extension that provides a rich IDE experience for Auth0 Training Labs.
+A Visual Studio Code extension that provides a rich IDE experience for Auth0 Learning labs.
 
 > Note: This extension is an experimental release, and is built on a best-efforts basis by some Auth0 developers in their available innovation time. It is open-source licensed and free to use, and is not covered by any Auth0 Terms of Service or Agreements. If you have issues with this extension you can engage with the project's developer community through the repository GitHub Issues list, or contribute fixes and enhancements of your own via a Pull Request.
 
@@ -76,69 +76,6 @@ This extension uses the Auth0 Deploy CLI, which makes it possible to leverage en
 - `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN`: Returns the name of the GitHub Codespace (when using a Codespaces environment)
 - `AUTH0_DOMAIN`: Your Auth0 domain URI
 
-### Authenticating
-
-The first thing to do is connect to your Auth0 account.
-
-<div align="center">
-  <a href="https://auth0-1.wistia.com/medias/djjvi6h7ht">
- <img 
-  src="https://cdn.auth0.com/website/hackathon/21/vscode-extension/install-cover-2.png" 
-  alt="Authentication" 
-  style="width:100%;">
-  </a>
-</div>
-
-
-You can also log out, or switch your selected tenant
-
-<div align="center">
-  <a href="https://auth0-1.wistia.com/medias/dr73hybglz">
- <img 
-  src="https://cdn.auth0.com/website/hackathon/21/vscode-extension/logout-switch-tenant.png" 
-  alt="Authentication" 
-  style="width:100%;">
-  </a>
-</div>
-
-### Managing Auth0 Resources
-
-From within VSCode, you can now:
-
-View your Applications and APIs, and also see or copy their pertinent details into your code
-
-<div align="center">
-  <a href="https://auth0-1.wistia.com/medias/ht4bd62rvx">
- <img 
-  src="https://cdn.auth0.com/website/hackathon/21/vscode-extension/view-lists.png" 
-  alt="Authentication" 
-  style="width:100%;">
-  </a>
-</div>
-
-Create or Update Applications, including setting up your applications to use a local callback URL for development purposes
-
-<div align="center">
-  <a href="https://auth0-1.wistia.com/medias/lyvhjrat86">
- <img 
-  src="https://cdn.auth0.com/website/hackathon/21/vscode-extension/add-update-application.png" 
-  alt="Authentication" 
-  style="width:100%;">
-  </a>
-</div>
-
-### Advanced Auth0 Resource Updates
-
-You can also take advantage of our `yaml` configuration integration to make more complex changes to your Auth0 resources, then deploy them right from within VSCode.
-
-<div align="center">
-  <a href="https://auth0-1.wistia.com/medias/yx9li5sz1i">
- <img 
-  src="https://cdn.auth0.com/website/hackathon/21/vscode-extension/auth0-yml-deploy.png" 
-  alt="Authentication" 
-  style="width:100%;">
-  </a>
-</div>
 
 ### Contributing
 ---
