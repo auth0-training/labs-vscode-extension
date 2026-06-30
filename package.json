@@ -44,9 +44,8 @@
     "lint:fix": "npm run lint -- --fix",
     "pretest": "tsc -p ./ && npm run build",
     "test": "node ./out/tests/runTest.js",
-    "package": "npx vsce package -o release.vsix",
-    "deploy": "vsce publish --packagePath ./release.vsix",
-    "prepack": "npm prune --production"
+    "package": "npx @vscode/vsce package -o release.vsix",
+    "deploy": "npx @vscode/vsce publish --packagePath ./release.vsix",
   },
   "homepage": "https://auth0.com",
   "categories": [
